@@ -1,3 +1,4 @@
+
 /////////////////////////////////////////////////////////////////////////
 // This program is free software; you can redistribute it and/or       //
 // modify it under the terms of the GNU General Public License         //
@@ -12,39 +13,38 @@
 // Contact <aurelien.lucchi@gmail.com> for comments & bug reports      //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef F_Dft_H
-#define F_Dft_H
+#ifndef F_GAUSSIAN_H
+#define F_GAUSSIAN_H
 
-#include "opencv2/core/core.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
-
-// SliceMe
-#include "Feature.h"
-#include "oSVM.h"
 #include "Slice.h"
+#include "Slice3d.h"
+#include "Feature.h"
 
-class F_Dft : public Feature
+//-------------------------------------------------------------------------TYPES
+
+//-------------------------------------------------------------------------CLASS
+
+class F_Gaussian : public Feature
 {
  public:	
 
+  F_Gaussian();
+
+  int getSizeFeatureVector();
+
   /**
-   * Constructor
+   * Extract a feature vector for a given supernode in a 2d slice
    */
-  F_Dft(const char* image_name,
-        int _n_rows, int _n_cols);
+  bool getFeatureVectorForOneSupernode(osvm_node *x,
+                                       Slice* slice,
+                                       const int supernodeId);
 
-  ~F_Dft();
-
-  bool getFeatureVectorForOneSupernode(osvm_node *n, Slice* slice, int supernodeId);
-
-  int getSizeFeatureVectorForOneSupernode();
-
- private:
-  cv::Mat mag;
-  int n_cols;
-  int n_rows;
-
+  /**
+   * Extract a feature vector for a given supernode in a 3d volume
+   */
+  bool getFeatureVectorForOneSupernode(osvm_node *x,
+                                       Slice3d* slice3d,
+                                       const int supernodeId);
 };
 
-#endif // F_Dft_H
+#endif // F_GAUSSIAN_H

@@ -287,4 +287,81 @@ void F_GradientStats::computeGradientCube(Slice3d& slice3d, eGradientType gradie
   for(int s = 0; s < numScales; ++s) {
     if(gradientType == GRADIENT_MAG) {
       gradientMagnitude<unsigned char, float>(slice3d.raw_data,
-                                              (l
+                                              (long)slice3d.width,(long)slice3d.height,(long)slice3d.depth,(long)slice3d.nChannels,
+                                              scales[s], fGradientCube[s]);
+    } else {
+      gaussianFilter<unsigned char, float>(slice3d.raw_data,
+                                           (long)slice3d.width,(long)slice3d.height,(long)slice3d.depth,(long)slice3d.nChannels,
+                                           (int)gradientType,
+                                           fGradientCube[s]);
+    }
+
+    minGradientValue[s] = fGradientCube[s][0];
+    maxGradientValue[s] = fGradientCube[s][0];
+
+#if 0
+    for(sizeSliceType i = 0; i < cubeSize; i++) {
+      if(minGradientValue[s] > fGradientCube[s][i])
+        minGradientValue[s] = fGradientCube[s][i];
+      if(maxGradientValue[s] < fGradientCube[s][i])
+        maxGradientValue[s] = fGradientCube[s][i];
+    }
+#else
+    ulong idx_min = 0.01*cubeSize;
+    ulong idx_max = 0.99*cubeSize; 
+
+    vector<float> vfGradientCube(cubeSize);
+    for(sizeSliceType i = 0; i < cubeSize; i++) {
+      vfGradientCube[i] = fGradientCube[s][i];
+    }
+
+    nth_element(vfGradientCube.begin(), vfGradientCube.begin()+idx_min, vfGradientCube.end());
+    minGradientValue[s] = vfGradientCube[idx_min];                                                                                           
+                                                                                                                                 
+    nth_element(vfGradientCube.begin(), vfGradientCube.begin()+idx_max, vfGradientCube.end());
+    maxGradientValue[s] = vfGradientCube[idx_max];                                                                                            
+#endif
+
+    PRINT_MESSAGE("[F_GradientStats] minGradientValue scale %f : %f\n", scales[s], minGradientValue[s]);
+    PRINT_MESSAGE("[F_GradientStats] maxGradientValue scale %f : %f\n", scales[s], maxGradientValue[s]);
+  }
+}
+
+bool F_GradientStats::getFeatureVectorForOneSupernode(osvm_node *x,
+                                                      Slice3d* slice3d,
+                                                      const int supernodeId)
+{
+  Histogram hist(nBinsPerScale*numScales);
+
+  supernode* s = slice3d->getSupernode(supernodeId);
+  float value;
+  const ulong size_slice = slice3d->width * slice3d->height;
+  node n;
+  int idx;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+
+    for(int sc = 0; sc < numScales; ++sc) {
+      double valToIdx = hist.nBins/(double)(maxGradientValue[sc]-minGradientValue[sc]);
+      value = fGradientCube[sc][n.z*size_slice + n.y*slice3d->width + n.x];
+      value -= minGradientValue[sc];
+      idx = (int)(value*valToIdx+0.5f); // rounding
+      if(idx < 0) {
+        idx = 0;
+      }
+      if(idx >= nBinsPerScale) {
+        idx = nBinsPerScale - 1;
+      }
+      hist.histData[(sc*nBinsPerScale) + idx]++;
+    }
+  }
+
+  for(int i = 0; i < hist.nBins; i++) {
+    x[i].value = hist.histData[i];
+  }
+
+  return true;
+}

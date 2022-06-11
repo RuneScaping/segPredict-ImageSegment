@@ -581,4 +581,313 @@ void F_LoadFromFile::init(Slice_P& slice_p, const char* filename)
   }
 }
 
-void F_L
+void F_LoadFromFile::init(Slice3d& slice3d, const char* filename)
+{
+  vector<string> lFeatureFilenames;
+  loadFeatureFilenames(filename, &lFeatureFilenames);
+
+  if(lFeatureFilenames.size() == 0) {
+    // no feature filename specified. Check if there is a file with a name
+    // matching filename
+    string featName = getNameFromPathWithoutExtension(slice3d.getName());
+    featName += ".bin";
+    string fullpath = featurePath + "/";
+    fullpath += featName;
+    printf("[F_LoadFromFile] Checking binary file %s\n", fullpath.c_str());
+    if(fileExists(fullpath)) {
+      printf("[F_LoadFromFile] Loading features from binary file %s\n", fullpath.c_str());
+      vector<string> lFiles;
+      lFiles.push_back(featName);
+      vector<sidType> lSamples;
+      for(map<sidType, supernode* >::iterator it = slice3d.mSupervoxels->begin();
+          it != slice3d.mSupervoxels->end(); it++) {
+        lSamples.push_back(it->first);
+      }
+      loadSupervoxelBasedFeaturesFromBinary(slice3d, lFiles, lSamples);
+    } else {
+      printf("[F_LoadFromFile] No features to be loaded in %s\n", filename);
+    }
+  } else {
+    string ext = getExtension(lFeatureFilenames[0]);
+    if(ext == "tif" || ext == "nrrd") {
+      PRINT_MESSAGE("[F_LoadFromFile] Loading feature cube %s\n", lFeatureFilenames[0].c_str());
+      //loadVoxelBasedFeaturesFromTIF(slice3d, lFeatureFilenames);
+      vector<sidType> lSamples;
+      for(map<sidType, supernode* >::iterator it = slice3d.mSupervoxels->begin();
+          it != slice3d.mSupervoxels->end(); it++) {
+        lSamples.push_back(it->first);
+      }
+      loadSupervoxelBasedFeaturesFromTIF(slice3d, lFeatureFilenames, lSamples);
+    } else {
+      if(ext == "bin") {
+        PRINT_MESSAGE("[F_LoadFromFile] Loading features from binary file %s\n", lFeatureFilenames[0].c_str());
+        vector<sidType> lSamples;
+        for(map<sidType, supernode* >::iterator it = slice3d.mSupervoxels->begin();
+            it != slice3d.mSupervoxels->end(); it++) {
+          lSamples.push_back(it->first);
+        }
+        loadSupervoxelBasedFeaturesFromBinary(slice3d, lFeatureFilenames, lSamples);
+      } else {
+        PRINT_MESSAGE("[F_LoadFromFile] Loading features from text file %s\n", lFeatureFilenames[0].c_str());
+        loadTextFeatures(slice3d, lFeatureFilenames);
+      }
+    }
+  }
+}
+
+void F_LoadFromFile::loadVoxelBasedFeaturesFromTIF(Slice3d& slice3d,
+                                                   const vector<string>& lFeatureFilenames)
+{
+  featureSize = lFeatureFilenames.size();
+  ulong cubeSize = slice3d.getSize();
+  nFeatures = cubeSize;
+#if !USE_SPARSE_STRUCTURE
+  features = new fileFeatureType*[nFeatures];
+#endif
+  for(ulong i = 0; i < cubeSize; ++i) {
+    features[i] = new fileFeatureType[featureSize];
+  }
+
+  // store features in memory
+  fileFeatureType value;
+  ulong idx;
+  int fileId = 0;
+  node center;
+  for(vector<string>::const_iterator itFile = lFeatureFilenames.begin();
+      itFile != lFeatureFilenames.end(); itFile++)
+    {
+      //printf("[F_LoadFromFile] Loading %s\n", itFile->c_str());
+
+#if OUTPUT_FEATURES_TO_TXT_FILE
+      stringstream sout;
+      sout << "features_" << fileId << ".txt";
+      ofstream ofsFeat(sout.str().c_str());
+#endif
+
+      string fullpath = getAbsoluteFeaturePath(featurePath, slice3d.inputDir);
+      fullpath += *itFile;
+      PRINT_MESSAGE("[F_LoadFromFile] Loading %s\n", fullpath.c_str());
+      Slice3d* inputCube = new Slice3d(fullpath.c_str());
+      PRINT_MESSAGE("[F_LoadFromFile] Loading %s. Dimension = (%d,%d,%d)\n",
+                    fullpath.c_str(), inputCube->getWidth(), inputCube->getHeight(), inputCube->getDepth());
+      ulong featIdx = 0;
+      for(int z = 0; z < inputCube->depth; ++z) {
+        for(int y = 0; y < inputCube->height; ++y) {
+          for(int x = 0; x < inputCube->width; ++x) {
+
+#if UPSIDE_DOWN_FEATURES
+            // Bug fix : Feture cubes from Yunpeng are upside-down
+            idx = slice3d.getIndex(x, slice3d.height-y, z);
+#else
+            idx = slice3d.getIndex(x, y, z);
+#endif
+
+            // read data
+            value = inputCube->raw_data[idx];
+            features[featIdx][fileId] = (fileFeatureType)value;
+            ++featIdx;
+#if OUTPUT_FEATURES_TO_TXT_FILE
+            ofsFeat << (double) value << endl;
+#endif
+          //printf("f %ld %d %d %d %d\n",idx,(int)value,*itNode,fileId,(int)features[*itNode][fileId]);
+          }
+        }
+      }
+      delete inputCube;
+
+#if OUTPUT_FEATURES_TO_TXT_FILE
+      ofsFeat.close();
+#endif
+
+      fileId++;
+    }
+}
+
+void F_LoadFromFile::init(Slice3d& slice3d, const char* filename,
+                          const node& start, const node& end)
+{
+  vector<string> lFeatureFilenames;
+  loadFeatureFilenames(filename, &lFeatureFilenames);
+
+  featureSize = lFeatureFilenames.size();
+  ulong cubeSize = slice3d.getSize();
+  nFeatures = cubeSize;
+#if !USE_SPARSE_STRUCTURE
+  features = new fileFeatureType*[nFeatures];
+#endif
+  for(ulong i = 0; i < cubeSize; ++i) {
+    features[i] = new fileFeatureType[featureSize];
+  }
+
+  // store features in memory
+  fileFeatureType value;
+  ulong idx;
+  int fileId = 0;
+  node center;
+  for(vector<string>::iterator itFile = lFeatureFilenames.begin();
+      itFile != lFeatureFilenames.end(); itFile++)
+    {
+      //printf("[F_LoadFromFile] Loading %s\n", itFile->c_str());
+
+#if OUTPUT_FEATURES_TO_TXT_FILE
+      stringstream sout;
+      sout << "features_" << fileId << ".txt";
+      ofstream ofsFeat(sout.str().c_str());
+#endif
+
+      string fullpath = getAbsoluteFeaturePath(featurePath, slice3d.inputDir);
+      fullpath += *itFile;
+      PRINT_MESSAGE("[F_LoadFromFile] Loading %s\n", fullpath.c_str());
+      Slice3d* inputCube = new Slice3d(fullpath.c_str());
+      ulong featIdx = 0;
+      for(int z = start.z; z < end.z; ++z) {
+        for(int y = start.y;  y < end.y; ++y) {
+          for(int x = start.x; x < end.x; ++x) {
+#if UPSIDE_DOWN_FEATURES
+            // Bug fix : Feture cubes from Yunpeng are upside-down
+            idx = slice3d.getIndex(x, slice3d.height-y, z);
+#else
+            idx = slice3d.getIndex(x, y, z);
+#endif
+            // read data
+            value = inputCube->raw_data[idx];
+            features[featIdx][fileId] = (fileFeatureType)value;
+            ++featIdx;
+#if OUTPUT_FEATURES_TO_TXT_FILE
+            ofsFeat << (double) value << endl;
+#endif
+          //printf("f %ld %d %d %d %d\n",idx,(int)value,*itNode,fileId,(int)features[*itNode][fileId]);
+          }
+        }
+      }
+      delete inputCube;
+
+#if OUTPUT_FEATURES_TO_TXT_FILE
+      ofsFeat.close();
+#endif
+
+      fileId++;
+    }
+}
+
+F_LoadFromFile::~F_LoadFromFile()
+{
+  clearFeatures();
+}
+
+int F_LoadFromFile::getSizeFeatureVectorForOneSupernode()
+{
+  return featureSize;
+}
+
+bool F_LoadFromFile::getFeatureVector(osvm_node *n,
+                                      const int x,
+                                      const int y)
+{
+  return false;
+}
+
+bool F_LoadFromFile::getFeatureVectorForOneSupernode(osvm_node *x, Slice* slice,
+                                                     int supernodeId)
+{
+  for(int i = 0; i < featureSize; i++) {
+    x[i].value = (double)(features[supernodeId][i]);
+  }
+  return true;
+}
+
+bool F_LoadFromFile::getFeatureVectorForOneSupernode(osvm_node *x, Slice3d* slice3d,
+                                                     int supernodeId)
+{
+  for(int i = 0; i < featureSize; i++) {
+    x[i].value = (double)(features[supernodeId][i]);
+  }
+  return true;
+}
+
+bool F_LoadFromFile::getFeatureVector(osvm_node *x,
+                                      Slice3d* slice3d,
+                                      const int gx,
+                                      const int gy,
+                                      const int gz)
+{
+  int idx = slice3d->getIndex(gx,gy,gz);
+  for(int i = 0; i < featureSize; i++) {
+    x[i].value = features[idx][i];
+  }
+  return true;
+}
+
+
+void F_LoadFromFile::init(Slice& slice, const char* filename)
+{
+  vector<string> lFeatureFilenames;
+ 
+  // TODO(al) : quick fix for the ECCV12 deadline...
+  bool isDir = isDirectory(filename);
+  if(isDir) {
+    featurePath = string(filename);
+  } else {
+    loadFeatureFilenames(filename, &lFeatureFilenames);
+  }
+
+  if(lFeatureFilenames.size() == 0) {
+    string fullpath = getNameFromPathWithoutExtension(slice.getName());
+    fullpath += ".txt";
+    lFeatureFilenames.push_back(fullpath);
+  }
+
+  loadTextFeatures(slice, lFeatureFilenames);
+}
+
+// Load text file
+void F_LoadFromFile::loadTextFeatures(Slice_P& slice,
+                                      const vector<string>& lFeatureFilenames)
+{
+  int label_offset = 1;
+  // Open first file to get feature size
+  string fullFeaturePath;
+  string fullpath;
+  switch(slice.getType())
+    {
+    case SLICEP_SLICE:
+      {
+        fullFeaturePath = featurePath + "/";
+        fullpath = fullFeaturePath;
+        fullpath += getNameFromPathWithoutExtension(slice.getName());
+        fullpath += ".txt";
+        break;
+      }
+    case SLICEP_SLICE3D:
+      {
+        fullFeaturePath = featurePath + "/";
+        fullFeaturePath += slice.getName();
+        fullFeaturePath += "/";
+        fullpath = fullFeaturePath + lFeatureFilenames[0].c_str();
+        break;
+      }
+    default:
+      printf("[F_LoadFromFile] Unknown type of feature %d\n", (int)slice.getType());
+      exit(-1);
+      break;
+  }
+
+  printf("[F_LoadFromFile] featurePath = %s, slice.getName = %s, fullpath = %s\n", featurePath.c_str(), slice.getName().c_str(), fullpath.c_str());
+  ifstream ifsF(fullpath.c_str());
+  string tmp_line;
+  if(ifsF.fail()) {
+    printf("[F_LoadFromFile] Failed to load first text file %s\n", fullpath.c_str());
+    exit(-1);
+  }
+
+  uint featureSizePerFile = 0;
+  string config_tmp;
+  if(Config::Instance()->getParameter("featureSizePerFile", config_tmp)) {
+    featureSizePerFile = atoi(config_tmp.c_str());
+  }
+
+  vector<string> tmp_tokens;
+  if(featureSizePerFile == 0) {
+    // Estimate size by sampling lines in the first file
+    // Read the first 100 lines. Feature vector size is assumed to be the maximum
+    // vector siz

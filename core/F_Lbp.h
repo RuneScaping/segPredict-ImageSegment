@@ -41,4 +41,20 @@ class F_Lbp : public Feature
    * Extract a feature vector for a given supernode in a 2d slice
    */
   bool getFeatureVector(osvm_node *x,
-      
+                        Slice* slice,
+                        const int supernodeId);
+
+  /**
+   * Extract a feature vector for a given supernode in a 3d volume
+   */
+  bool getFeatureVector(osvm_node *x,
+                        Slice3d* slice3d,
+                        const int supernodeId);
+
+ private:
+  int nItensityLevels;
+  int maxIntensity;
+  double* glcm_data;
+};
+
+#endif // F_LBP_H

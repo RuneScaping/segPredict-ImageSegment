@@ -607,3 +607,153 @@ bool Feature::getFeatureVectorGivenDistance(osvm_node *x, Slice_P* slice_p, int 
   for(map<sidType, int>::iterator it = distances.begin(); it != distances.end(); ++it) {
     sidType sidn = it->first;
     supernode* sn = slice_p->getSupernode(sidn);
+    int distance = it->second;
+
+    if(slice_p->isFeatureComputed(sidn)) {
+      // Feature already exists. Copy relevant part of the vector.
+      osvm_node* xn = slice_p->getFeature(sidn);
+      for(int i = 0; i < sizeFV; ++i) {
+        x[distance*sizeFV+i].value += xn[i].value;
+      }
+    } else {
+      getFeatureVectorForOneSupernode(xt, slice_p, sn->id);
+      for(int i = 0; i < sizeFV; ++i) {
+        x[distance*sizeFV+i].value += xt[i].value;
+      }
+    }
+  }
+  delete[] xt;
+
+  // normalize
+  for(int d = 0; d < nDistances; ++d) {
+    if(countPerDistance[d] != 0) {
+      for(int i = 0;i < sizeFV; i++) {
+        x[sizeFV*d + i].value /= countPerDistance[d];
+      }
+    }
+  }
+
+  /*
+  // todo: also add l1 and l2 normalization
+  if(normalize_l1_norm) {
+    for(int d = 0; d < nDistances; ++d) {
+      double count = 0;
+      for(int i = 0;i < sizeFV; i++) {
+        count += x[sizeFV*d + i].value;
+      }
+      if(count != 0) {
+        for(int i = 0;i < sizeFV; i++) {
+          x[sizeFV*d + i].value /= count;
+        }
+      }
+    }
+  }
+  */
+
+  delete [] countPerDistance;
+  return true;
+}
+
+void Feature::updateFeatureStats(Slice_P* slice)
+{
+  PRINT_MESSAGE("[Feature] Update feature mean and variance\n");
+
+  int fvSize = getSizeFeatureVector();
+  int max_index = fvSize + 1;
+
+  osvm_node* x;
+  oSVM::initSVMNode(x, max_index);
+  if(mean != 0) {
+    delete[] mean;
+  }
+  oSVM::initSVMNode(mean, max_index);
+  if(variance != 0) {
+    delete[] variance;
+  }
+  oSVM::initSVMNode(variance, max_index);
+
+  for(int i = 0;x[i].index != -1; i++) {
+    mean[i].value = 0;
+  }
+  for(int i = 0;x[i].index != -1; i++) {
+    variance[i].value = 0;
+  }
+
+  const map<sidType, supernode* >& _supernodes = slice->getSupernodes();
+  double n = 1;
+  for(map<sidType, supernode* >::const_iterator it = _supernodes.begin();
+      it != _supernodes.end(); it++) {
+
+    this->getFeatureVector(x, slice, it->first);
+
+    // use running average to avoid overflow
+    for(int i = 0;x[i].index != -1; i++) {
+      mean[i].value = ((n-1.0)/n*mean[i].value) + x[i].value/n;
+    }
+
+    // New variance V(n) = (n-1*V(n-1) + (x(n)-M(n))^2)/(n)
+    for(int i = 0;x[i].index != -1; i++) {
+      variance[i].value = (((n-1.0)*variance[i].value) + (x[i].value-mean[i].value)*(x[i].value-mean[i].value))/n;
+    }
+
+    ++n;
+  }
+
+  delete[] x;
+}
+
+void Feature::precomputeFeatures(Slice_P* slice, Feature* feature, float**& output)
+{
+  int fvSize = feature->getSizeFeatureVector();
+  int max_index = fvSize + 1;
+
+  // allocate memory
+  ulong nSupernodes = slice->getNbSupernodes();
+  output = new float*[nSupernodes];
+  for(ulong s = 0; s < nSupernodes; ++s) {
+    output[s] = new float[fvSize];
+  }
+
+  osvm_node* n = new osvm_node[max_index];
+  int i = 0;
+  for(i = 0;i < max_index-1; i++)
+    n[i].index = i+1;
+  n[i].index = -1;
+
+  const map<sidType, supernode* >& _supernodes = slice->getSupernodes();
+  for(map<sidType, supernode* >::const_iterator it = _supernodes.begin();
+      it != _supernodes.end(); it++) {
+
+    feature->getFeatureVector(n, slice, it->first);
+    for(i = 0;i < max_index-1; i++) {
+      output[it->first][i] = n[i].value;
+    }
+  }
+
+  delete[] n;
+}
+
+void Feature::precomputeFeatures(Slice_P* slice, Feature* feature, map<ulong, float*> output)
+{
+  int fvSize = feature->getSizeFeatureVector();
+  int max_index = fvSize + 1;
+
+  osvm_node* n = new osvm_node[max_index];
+  int i = 0;
+  for(i = 0;i < max_index-1; i++)
+    n[i].index = i+1;
+  n[i].index = -1;
+
+  const map<sidType, supernode* >& _supernodes = slice->getSupernodes();
+  for(map<sidType, supernode* >::const_iterator it = _supernodes.begin();
+      it != _supernodes.end(); it++) {
+
+    feature->getFeatureVector(n, slice, it->first);
+
+    output[it->first] = new float[fvSize];
+    for(i = 0;i < max_index-1; i++) {
+      output[it->first][i] = n[i].value;
+    }
+  }
+  delete[] n;
+}

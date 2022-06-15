@@ -890,4 +890,302 @@ void F_LoadFromFile::loadTextFeatures(Slice_P& slice,
   if(featureSizePerFile == 0) {
     // Estimate size by sampling lines in the first file
     // Read the first 100 lines. Feature vector size is assumed to be the maximum
-    // vector siz
+    // vector size found among those 100 lines.
+    const int nTries = 10;
+    for(int t = 0; t < nTries; ++t) {
+      if(!getline(ifsF, tmp_line)) {
+        break;
+      }
+      tmp_tokens.clear();
+      splitString(tmp_line, tmp_tokens);
+      for(uint i = 0; i < tmp_tokens.size()-1; ++i) {
+        string field = tmp_tokens[i+label_offset];
+        size_t index_ch = field.find(FEATURE_FIELD_SEPARATOR);
+        assert(index_ch != string::npos);
+        string str_field_index = field.substr(0,index_ch);
+        int field_index = atoi(str_field_index.c_str());
+        if(featureSizePerFile < (uint)field_index) {
+          featureSizePerFile = field_index;
+        }
+      }
+    }
+  }
+
+  featureSize = (featureSizePerFile*lFeatureFilenames.size());
+  ifsF.close();
+
+  const map<sidType, supernode* >& _supernodes = slice.getSupernodes();
+  nFeatures = _supernodes.size();
+  PRINT_MESSAGE("[F_LoadFromFile] Allocating memory to store %ld vectors of size %d\n",
+		_supernodes.size(), featureSize);
+#if !USE_SPARSE_STRUCTURE
+  features = new fileFeatureType*[nFeatures];
+#endif
+  for(uint i = 0; i < _supernodes.size(); ++i) {
+    features[i] = new fileFeatureType[featureSizePerFile];
+  }
+
+  bool node_based_features = false;
+  if(Config::Instance()->getParameter("node_based_features", config_tmp)) {
+    if(config_tmp[0] == '1') {
+      node_based_features = true;
+    }
+  }
+  PRINT_MESSAGE("[F_LoadFromFile] node_based_features = %d\n", (int)node_based_features);
+
+  ulong nNodes = slice.getNbNodes();
+  fileFeatureType** node_features = 0;
+  if(node_based_features) {
+    node_features = new fileFeatureType*[nNodes];
+    for(uint i = 0; i < nNodes; ++i) {
+      node_features[i] = new fileFeatureType[featureSizePerFile];
+    }
+
+    label_offset = 0; // no labels
+  }
+
+  // store features in memory
+  int fileIdx = 0;
+  node center;
+  for(vector<string>::const_iterator itFile = lFeatureFilenames.begin();
+      itFile != lFeatureFilenames.end(); itFile++) {
+    string fullpath = fullFeaturePath + *itFile;
+    PRINT_MESSAGE("[F_LoadFromFile] Loading %s\n", fullpath.c_str());
+    ifstream ifsF(fullpath.c_str());
+    if(ifsF.fail()) {
+      printf("[F_LoadFromFile] Failed to load text file %s\n", fullpath.c_str());
+      exit(-1);
+    }
+    
+    uint featIdx = fileIdx*featureSizePerFile;
+
+    if(node_based_features) {
+
+      string line;
+      vector<string> tokens;
+      ulong nodeId = 0;
+      while(getline(ifsF, line)) {
+        tokens.clear();
+        splitString(line, tokens);
+        // check that size of the feature vector is equal to the number of tokens-1
+        // -1 is due to the ground truth label stored in the text file
+        if(featureSizePerFile < (tokens.size()-1)) {
+          printf("[F_LoadFromFile] featureSizePerFile < tokens.size()-1 : %d != %ld\n",
+                 featureSizePerFile, tokens.size()-1);
+          exit(-1);
+        }
+        for(uint i = 0; i < featureSizePerFile; ++i) {
+          node_features[nodeId][i] = 0;
+        }
+        for(uint i = 0; i < tokens.size()-1; ++i) {
+          string field = tokens[i+label_offset];
+          size_t index_ch = field.find(FEATURE_FIELD_SEPARATOR);
+          int field_index = i + FEATURE_FIRST_INDEX;
+          float value = 0;
+          if(index_ch != string::npos) {
+            assert(0);
+            string str_field_index = field.substr(0,index_ch);
+            field_index = atoi(str_field_index.c_str());
+            assert(field_index <= (int)featureSizePerFile);
+            assert(field_index >= FEATURE_FIRST_INDEX);
+            string str_field_value = field.substr(index_ch+1);
+            value = atof(str_field_value.c_str());
+          } else {
+            value = atof(field.c_str());
+          }
+          node_features[nodeId][field_index - FEATURE_FIRST_INDEX] = value;
+        }
+        ++nodeId;
+      }
+
+      if(nodeId < nNodes) {
+         printf("[F_LoadFromFile] Error: Feature file contains %ld lines but %ld are expected\n", nodeId, nNodes);
+         exit(-1);
+      }
+
+      // aggregate values
+      fileFeatureType *feature_values = new fileFeatureType[featureSizePerFile];
+      const map<sidType, supernode* >& _supernodes = slice.getSupernodes();
+      for(map<sidType, supernode* >::const_iterator it = _supernodes.begin();
+          it != _supernodes.end(); it++)
+        {
+
+          for(uint i = 0; i < featureSizePerFile; ++i) {
+            feature_values[i] = 0;
+          }
+
+          supernode* s = it->second;
+          node n;
+          nodeIterator ni = s->getIterator();
+          ni.goToBegin();
+          while(!ni.isAtEnd()) {
+            ni.get(n);
+
+            ulong nodeId = (n.z * slice.getDepth()) + (n.y*slice.getWidth()) + n.x;
+
+            for(uint i = 0; i < featureSizePerFile; ++i) {
+              feature_values[i] += node_features[nodeId][i];
+            }
+
+            ni.next();
+          }
+
+          for(uint i = 0; i < featureSizePerFile; ++i) {
+            features[it->first][featIdx+i] = feature_values[i]/s->size();
+          }
+      }
+      delete [] feature_values;
+    } else {
+      string line;
+      vector<string> tokens;
+      for(uint sid = 0; sid < _supernodes.size(); ++sid) {
+        if(!getline(ifsF, line)) {
+          printf("[F_LoadFromFile] Error : Feature file contains %d lines but %ld are expected\n", sid, _supernodes.size());
+          exit(-1);
+        }
+        tokens.clear();
+        splitString(line, tokens);
+        // check that size of the feature vector is equal to the number of tokens-1
+        // -1 is due to the ground truth label stored in the text file
+        if(featureSizePerFile < (tokens.size()-1)) {
+          printf("[F_LoadFromFile] featureSizePerFile < tokens.size()-1 : %d != %ld\n",
+                 featureSizePerFile, tokens.size()-1);
+          exit(-1);
+        }
+        //uint featIdx = fileIdx*featureSizePerFile;
+        for(uint i = 0; i < featureSizePerFile; ++i) {
+          features[sid][featIdx+i] = 0;
+        }
+        for(uint i = 0; i < tokens.size()-1; ++i) {
+          string field = tokens[i+label_offset];
+          size_t index_ch = field.find(FEATURE_FIELD_SEPARATOR);
+          assert(index_ch != string::npos);
+          string str_field_index = field.substr(0,index_ch);
+          int field_index = atoi(str_field_index.c_str());
+          assert(field_index <= (int)featureSizePerFile);
+          assert(field_index >= FEATURE_FIRST_INDEX);
+          string field_value = field.substr(index_ch+1);
+          features[sid][featIdx+field_index - FEATURE_FIRST_INDEX] = atof(field_value.c_str());
+        }
+      }
+    }
+
+    ifsF.close();
+    ++fileIdx;
+  }
+
+  if(node_based_features) {
+    for(uint i = 0; i < nNodes; ++i) {
+      delete[] node_features[i];
+    }
+    delete[] node_features;
+  }
+
+}
+
+void F_LoadFromFile::clearFeatures()
+{
+  for(int featIdx = 0; featIdx < nFeatures; ++featIdx) {
+    delete[] features[featIdx];
+  }
+#if !USE_SPARSE_STRUCTURE
+  delete[] features;
+#endif
+
+  initialized = false;
+}
+
+//todo: delete this
+void F_LoadFromFile::rescale(Slice_P* slice)
+{
+  printf("[F_LoadFromFile] rescaling features\n");
+  for(int i = 0; i < nFeatures; ++i) {
+    for(int j = 0; j < featureSize; ++j) {
+      features[i][j] *= 1e3;
+    }
+  }
+}
+
+void F_LoadFromFile::rescale()
+{
+  int max_index = featureSize + 1;
+
+  osvm_node* mean;
+  oSVM::initSVMNode(mean, max_index);
+  osvm_node* variance;
+  oSVM::initSVMNode(variance, max_index);
+
+  for(int i = 0; i < featureSize; ++i) {
+    mean[i].value = 0;
+  }
+  for(int i = 0; i < featureSize; ++i) {
+    variance[i].value = 0;
+  }
+
+  for(int n = 1; n <= nFeatures; ++n) {
+
+    fileFeatureType* x = features[n-1];
+
+    // use running average to avoid overflow
+    for(int i = 0; i < featureSize; ++i) {
+      mean[i].value = ((n-1.0)/n*mean[i].value) + x[i]/n;
+    }
+
+    // New variance V(n) = (n-1*V(n-1) + (x(n)-M(n))^2)/(n)
+    for(int i = 0; i < featureSize; ++i) {
+      variance[i].value = (((n-1.0)*variance[i].value) + (x[i]-mean[i].value)*(x[i]-mean[i].value))/n;
+    }
+
+  }
+
+  printf("Mean:");
+  for(int i = 0; i < featureSize; ++i) {
+    printf("%g ", mean[i].value);
+  }
+  printf("\n");
+
+  printf("Variance:");
+  for(int i = 0; i < featureSize; ++i) {
+    printf("%g ", variance[i].value);
+  }
+  printf("\n");
+
+  // prevent division by 0
+  for(int i = 0; i < featureSize; ++i) {
+    if(variance[i].value == 0) {
+      variance[i].value = 1.0;
+    }
+  }
+
+  const int sid_to_print = 100;
+
+  for(int n = 0; n < nFeatures; ++n) {
+
+    fileFeatureType* x = features[n];
+
+    if(n == sid_to_print) {
+      printf("x:");
+      for(int i = 0; i < featureSize; ++i) {
+        printf("%g ", x[i]);
+      }
+      printf("\n");
+    }
+
+    for(int i = 0; i < featureSize; ++i) {
+      x[i] -= mean[i].value;
+      x[i] /= variance[i].value;
+    }
+
+    if(n == sid_to_print) {
+      printf("x:");
+      for(int i = 0; i < featureSize; ++i) {
+        printf("%g ", x[i]);
+      }
+      printf("\n");
+    }
+
+  }
+
+  delete[] mean;
+  delete[] variance;
+}

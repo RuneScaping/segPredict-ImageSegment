@@ -272,4 +272,391 @@ void Slice::generateSuperpixels(int superpixelStepSize, float M)
   default:
     {
       int n = img->height*img->width;
-      uint* ubuff
+      uint* ubuff = new uint[n];
+      uint pValue = 0;
+      char c;
+      uint r,g,b;
+      int idx = 0;
+      for(int j=0;j<img->height;j++)
+        for(int i=0;i<img->width;i++)
+          {
+            if(img->nChannels == 3)
+              {
+                // image is assumed to have data in BGR order
+                b = ((uchar*)(img->imageData + img->widthStep*(j)))[(i)*img->nChannels];
+                g = ((uchar*)(img->imageData + img->widthStep*(j)))[(i)*img->nChannels+1];
+                r = ((uchar*)(img->imageData + img->widthStep*(j)))[(i)*img->nChannels+2];
+                pValue = b | (g << 8) | (r << 16);
+              }
+            else if(img->nChannels == 1)
+              {
+                c = ((uchar*)(img->imageData + img->widthStep*(j)))[(i)*img->nChannels];
+                pValue = c | (c << 8) | (c << 16);
+              }
+            else
+              {
+                printf("[Slice] Unknown number of channels %d\n", img->nChannels);
+                assert(0);
+              }          
+            ubuff[idx] = pValue;
+            idx++;
+          }
+
+      LKM* lkm = new LKM;
+      int nSupernodes;
+      PRINT_MESSAGE("[Slice] Generating SLIC superpixels. superpixelStepSize=%d, M=%f\n", superpixelStepSize, M);
+      lkm->DoSuperpixelSegmentation(ubuff,
+                                    (const int)img_width, (const int)img_height,
+                                    pixelLabels, nSupernodes,
+                                    superpixelStepSize, M);
+
+      delete lkm;
+      init(img->width,img->height);
+      delete[] ubuff;
+    }
+    break;
+  }
+}
+
+Slice::~Slice()
+{
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    delete it->second;
+  }
+
+  delete[] pixelLabels;
+
+  if(img != 0) {
+    if(eraseImage == false) {
+      PRINT_MESSAGE("[Slice] Do not erase image\n");
+    } else {
+      cvReleaseImage(&img);
+    }
+  }
+
+  if(colorImg != 0) {
+    cvReleaseImage(&colorImg);
+  }
+}
+
+void Slice::exportSuperpixels(const char* filename)
+{
+  ofstream ofs(filename, ios::binary);
+  ofs.write((char*)(pixelLabels), sizeof(sidType)*img->width*img->height);
+  ofs.close();
+}
+
+bool Slice::loadNeighborhoodMap(const char* fn_neighbors)
+{
+  if(!neighborhoodMapLoaded)
+    {
+      PRINT_MESSAGE("[Slice] Loading neighborhood map %s\n", fn_neighbors);
+      const int MAX_LENGTH = 2000;
+      char line[MAX_LENGTH];
+      int key; // supernode key
+      int n; // neighbors key
+
+      ifstream ifs(fn_neighbors);
+      if(!ifs) {
+        printf("[Slice] Error while loading %s\n",fn_neighbors);
+        printf("[Slice] Generating neighborhood map\n");
+        generateNeighborhoodMap(pixelLabels, img_width, img_height);
+      } else {
+          nbEdges = 0;
+          while(ifs.getline(line, MAX_LENGTH)) {
+            istringstream iss(line);
+            iss >> key;
+            supernode* s = getSupernode(key);
+
+            // load neighbors
+            while(!(iss >> n).fail()) {
+              supernode* sn = getSupernode(n);
+              s->neighbors.push_back(sn);
+              nbEdges++;
+            }
+          }
+          ifs.close();
+        }
+
+      nbEdges /= 2; // number of undirected edges
+    }
+
+  return true;
+}
+
+bool Slice::generateNeighborhoodMap()
+{
+  if(!neighborhoodMapLoaded) {
+    generateNeighborhoodMap(pixelLabels, img->width, img->height);
+    neighborhoodMapLoaded = true;
+  }
+  return neighborhoodMapLoaded;
+}
+
+bool Slice::generateNeighborhoodMap(sidType* klabels,
+                                    const int width,
+                                    const int height)
+{
+
+#if USE_LONG_RANGE_EDGES
+  addLongRangeEdges();
+  return true;
+#endif
+
+  int nSupernodes = mSupernodes.size();
+  PRINT_MESSAGE("[Slice] Generating neighborhood map for %d labels.\n", nSupernodes);
+
+  const int nh_size = 1; // neighborhood size
+  sidType sid;
+  sidType nsid;
+  vector<supernode*>* ptrNeighbors;
+  supernode* s;
+  supernode* sn;
+  bool existingSupernode;
+  nbEdges = 0;
+  for(int x = nh_size; x < width - nh_size; x++) {
+    for(int y = nh_size; y < height - nh_size; y++) {
+      sid = klabels[y*width+x];
+      for(int nx = x-nh_size; nx <= x+nh_size; nx++) {
+        for(int ny = y-nh_size; ny <= y+nh_size; ny++) {
+          nsid = klabels[ny*width+nx];
+          if(sid > nsid) {
+            s = mSupernodes[sid];
+            sn = mSupernodes[nsid];
+            if(sn == 0) {
+              printf("[Slice3d] Error : supernode %d is null (coordinate=(%d,%d))\n",nsid,nx,ny);
+              exit(-1);
+            }
+            ptrNeighbors = &(s->neighbors);
+            existingSupernode = false;
+            // Searching in a hash map would be faster but it would also consume
+            // more memory ...
+            for(vector<supernode*>::iterator itN = ptrNeighbors->begin();
+                itN != ptrNeighbors->end(); itN++) {
+              if((*itN)->id == nsid) {
+                existingSupernode = true;
+                break;
+              }
+            }
+            if(!existingSupernode) {
+              s->neighbors.push_back(sn);
+              sn->neighbors.push_back(s);
+              nbEdges++;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // compute average degree
+  double avgDegree = 0;
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    s = it->second;
+    avgDegree += s->neighbors.size();
+  }
+  avgDegree /= mSupernodes.size();
+  PRINT_MESSAGE("[Slice] %ld supernodes avgDegree %g\n", mSupernodes.size(), avgDegree);
+
+  return true;
+}
+
+bool Slice::computeStats(int supernodeId, double& pMean, double& pVar)
+{
+  supernode* s = getSupernode(supernodeId);
+  int pValue;
+  pMean = 0;
+  node n;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+    pValue = (int)(((uchar*)(img->imageData + n.y*img->widthStep))[n.x*img->nChannels]);
+    pMean += pValue;
+  }
+
+  pMean /= s->size();
+
+  // Compute variance
+  pVar = 0;
+  ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+
+    pValue = (int)(((uchar*)(img->imageData + n.y*img->widthStep))[n.x*img->nChannels]) - pMean;
+    pVar += pValue*pValue;
+  }
+  pVar /= s->size();
+
+  return true;
+}
+
+bool Slice::getCenter(int supernodeId, node& center)
+{
+  supernode* s = getSupernode(supernodeId);
+  s->getCenter(center);
+  return true;
+}
+
+ulong Slice::getNbEdges()
+{
+  return nbEdges;
+}
+
+ulong Slice::getNbSupernodes()
+{
+  return mSupernodes.size();
+}
+
+ulong Slice::getNbNodes()
+{
+  return img_height*img_width;
+}
+
+int Slice::getIntensity(int x, int y, int z)
+{
+  // returns intensity of the first channel
+  return (int)cvGet2D(img, y, x).val[0];
+}
+
+float Slice::getAvgIntensity(sidType supernodeId)
+{
+  supernode* s = getSupernode(supernodeId);
+  float intensity = 0;
+  node n;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+    for(int c = 0; c < img->nChannels; c++)
+      intensity += (float)cvGet2D(img, n.y, n.x).val[c];
+  }
+  intensity /= s->size()*img->nChannels;
+  return intensity;
+}
+
+float Slice::getAvgIntensity(int supernodeId, int& r, int &g, int &b)
+{
+  supernode* s = getSupernode(supernodeId);
+
+  IplImage* _img = img;
+  // check if color image was loaded
+  if(colorImg) {
+    _img = colorImg;
+  }
+
+  ulong lr = 0;
+  ulong lg = 0;
+  ulong lb = 0;
+
+  node n;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+    lr += cvGet2D(_img, n.y, n.x).val[2];
+    lg += cvGet2D(_img, n.y, n.x).val[1];
+    lb += cvGet2D(_img, n.y, n.x).val[0];
+  }
+  ulong t = s->size();
+  r = lr/t;
+  g = lg/t;
+  b = lb/t;
+  return 0;
+}
+
+labelType Slice::computeSupernodeLabel(supernode* s, IplImage* imAnnotation)
+{
+  labelType label;
+  int countObject = 0;
+  int countBackground = 0;
+  node n;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+    if(((uchar*)(imAnnotation->imageData + n.y*imAnnotation->widthStep))[n.x*imAnnotation->nChannels] == BACKGROUND_MASKVALUE)
+      countBackground++;
+    else
+      countObject++;
+  }
+
+  if(includeOtherLabel) {
+    int total = ni.size();
+    if(countObject>minPercentToAssignLabel*total) {
+        label = FOREGROUND;
+    } else {
+      if(countBackground>minPercentToAssignLabel*total)
+        label = BACKGROUND;
+      else {
+        label = OTHER_LABEL;
+      }
+    }
+  } else {
+    if(countObject>countBackground) {
+      label = FOREGROUND;
+    } else {
+      label = BACKGROUND;
+    }
+  }
+  
+  return label;
+}
+
+void Slice::generateSupernodeLabelFromTextFile(const char* fn_annotation,
+                                               int _nLabels)
+{
+  ifstream ifs(fn_annotation);
+  if(!ifs) {
+    printf("[Slice] Error while loading text file %s\n",fn_annotation);
+    return;
+  }
+
+  const int MAX_LENGTH = 100;
+  char line[MAX_LENGTH];
+  int label;
+  supernode* s;
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    s = it->second;
+    ifs.getline(line, MAX_LENGTH);
+    label = (int)atof(line);
+    s->setData(label,_nLabels);
+  }
+  ifs.close();
+}
+
+void Slice::generateSupernodeLabels(const char* fn_annotation,
+                                    bool includeBoundaryLabels,
+                                    bool useColorImages)
+{
+  if(supernodeLabelsLoaded) {      
+    printf("[Slice] Warning : Supernode labels have already been loaded\n");
+    return;
+  }
+
+  if(useColorImages) {
+    // use dummy classIdxToLabel map
+    map<ulong, labelType> classIdxToLabel;
+    generateSupernodeLabelsFromMultiClassMaskImage(fn_annotation,
+                                                   classIdxToLabel);
+  } else {
+    generateSupernodeLabelFromMaskImage(fn_annotation,
+                                        includeBoundaryLabels);
+  }
+  supernodeLabelsLoaded = true;
+}
+
+void Slice::generateSupernodeLabelFromMaskImage(const char* fn_annotation,
+                                                bool includeBoundaryLabels)
+{
+  // Load annotation image
+  IplImage* imAnnotation = cvLoadImage(fn_annotation);

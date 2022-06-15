@@ -12,9 +12,10 @@
 // Contact <aurelien.lucchi@gmail.com> for comments & bug reports      //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef F_ORIENTEDHISTOGRAM_H
-#define F_ORIENTEDHISTOGRAM_H
+#ifndef F_Position_H
+#define F_Position_H
 
+#include "Feature.h"
 #include "Slice.h"
 #include "Slice3d.h"
 
@@ -22,30 +23,42 @@
 
 //-------------------------------------------------------------------------CLASS
 
-class F_OrientedHistogram
+class F_Position : public Feature
 {
  public:	
 
-  F_OrientedHistogram(int _nOrientation);
+  F_Position(const char* image_name=0);
+
+  ~F_Position();
 
   int getSizeFeatureVector();
 
+  bool getFeatureVector(osvm_node *n,
+                        const int x,
+                        const int y);
   /**
    * Extract a feature vector for a given supernode in a 2d slice
    */
   bool getFeatureVector(osvm_node *x,
                         Slice* slice,
-                        int sid, int nsid);
+                        const int supernodeId);
 
   /**
    * Extract a feature vector for a given supernode in a 3d volume
    */
   bool getFeatureVector(osvm_node *x,
                         Slice3d* slice3d,
-                        int sid, int nsid);
+                        const int supernodeId);
 
- private:
-  int nOrientation;
+  bool getFeatureVector(osvm_node *x,
+                        Slice3d* slice3d,
+                        const int gx,
+                        const int gy,
+                        const int gz);
+
+private:
+  IplImage* img;
+
 };
 
-#endif // F_ORIENTEDHISTOGRAM_H
+#endif // F_Position_H

@@ -8,44 +8,55 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU   //
 // General Public License for more details.                            //
 //                                                                     //
-// Written and (C) by Aurelien Lucchi                                  //
+// Written and (C) by Aurelien Lucchi and Kevin Smith                  //
 // Contact <aurelien.lucchi@gmail.com> for comments & bug reports      //
+// Contact <kevin.smith@epfl.ch> for comments & bug reports            //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef F_ORIENTEDHISTOGRAM_H
-#define F_ORIENTEDHISTOGRAM_H
+#ifndef F_PRECOMPUTED_H
+#define F_PRECOMPUTED_H
 
-#include "Slice.h"
-#include "Slice3d.h"
+#include "Feature.h"
 
-//-------------------------------------------------------------------------TYPES
+#include <string>
+#include <vector>
 
-//-------------------------------------------------------------------------CLASS
+//------------------------------------------------------------------------------
 
-class F_OrientedHistogram
+class F_Precomputed : public Feature
 {
  public:	
 
-  F_OrientedHistogram(int _nOrientation);
+  F_Precomputed(map<sidType, osvm_node*>* _features, int _feature_size);
 
-  int getSizeFeatureVector();
+  ~F_Precomputed();
+
+ protected:
+
+  int getSizeFeatureVectorForOneSupernode();
 
   /**
    * Extract a feature vector for a given supernode in a 2d slice
    */
-  bool getFeatureVector(osvm_node *x,
-                        Slice* slice,
-                        int sid, int nsid);
+  bool getFeatureVectorForOneSupernode(osvm_node *x,
+                                       Slice* slice,
+                                       const int supernodeId);
 
   /**
    * Extract a feature vector for a given supernode in a 3d volume
    */
-  bool getFeatureVector(osvm_node *x,
-                        Slice3d* slice3d,
-                        int sid, int nsid);
+  bool getFeatureVectorForOneSupernode(osvm_node *x,
+                                       Slice3d* slice3d,
+                                       const int supernodeId);
+
+  void setFeatureSize(int _feature_size) { feature_size = _feature_size; }
 
  private:
-  int nOrientation;
+
+  int feature_size;
+
+  // precomputed quantities for nodes
+  map<sidType, osvm_node*>* features;
 };
 
-#endif // F_ORIENTEDHISTOGRAM_H
+#endif // F_PRECOMPUTED_H

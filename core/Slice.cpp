@@ -660,3 +660,350 @@ void Slice::generateSupernodeLabelFromMaskImage(const char* fn_annotation,
 {
   // Load annotation image
   IplImage* imAnnotation = cvLoadImage(fn_annotation);
+  if(!imAnnotation) {
+    printf("[Slice] Error while loading %s\n", fn_annotation);
+    return;
+  }
+
+  supernode* s;
+  nLabels = 2;
+  if(includeBoundaryLabels) {
+    nLabels = 3;
+  }
+
+  // first pass to compute labels
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    s = it->second;
+    s->setData(computeSupernodeLabel(s, imAnnotation),nLabels);
+  }
+
+  if(includeBoundaryLabels) {
+    // second pass to change foreground labels to boundary labels if they are
+    // touching background labels
+    for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+        it != mSupernodes.end(); it++) {
+      s = it->second;
+      if(s->getLabel() == FOREGROUND) {
+        for(vector < supernode* >::iterator itN = s->neighbors.begin();
+            itN != s->neighbors.end();itN++) {
+          supernode* ns = *itN;
+          if(s->id == ns->id) {
+            printf("[Slice] Error : supernode %d has a neighbor with the same sid\n", s->id);
+            continue;
+          }
+
+          if(ns->getLabel() == BACKGROUND) {
+            // BACKGROUND label was found among the neighbors
+            // switch label to BOUNDARY
+            s->setLabel(BOUNDARY);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  cvReleaseImage(&imAnnotation);
+}
+
+ulong Slice::computeSupernodeLabelFromMulticlassImage(sidType sid,
+                 IplImage* mask, map<ulong, labelType>& classIdxToLabel)
+{
+  ulong sLabel = 0; // returned label
+  ulong classIdx;
+  map<ulong, ulong> lPixelsPerClass;
+  uchar pixelValue;
+  supernode* s = mSupernodes[sid];
+  node n;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd()) {
+    ni.get(n);
+    ni.next();
+    classIdx = 0;
+    for(int c = 0; c < mask->nChannels; c++) {
+      pixelValue = ((uchar*)(mask->imageData + mask->widthStep*n.y))[n.x*mask->nChannels+c];
+      classIdx += pow(255.0,c)*pixelValue;
+    }
+    
+    if(lPixelsPerClass.count(classIdx) == 0) {
+      lPixelsPerClass[classIdx] = 0;
+    } else {
+      lPixelsPerClass[classIdx]++;
+    }
+  }
+
+  // pick class with maximum number of pixels
+  ulong maxPixels = 0;
+  bool init = false;
+  for(map<ulong, ulong>::iterator itClass = lPixelsPerClass.begin();
+      itClass != lPixelsPerClass.end(); itClass++) {
+    if(!init || itClass->second > maxPixels) {
+      init = true;
+      maxPixels = itClass->second;
+
+      if (classIdxToLabel.count(itClass->first) == 0) {
+        sLabel = itClass->first;
+      } else {
+        sLabel = classIdxToLabel[itClass->first];
+      }
+    }
+  }
+
+  return sLabel;
+}
+
+void Slice::generateSupernodeLabelsFromMultiClassMaskImage(const char* fn_annotation,
+                                                           map<ulong, labelType>& classIdxToLabel)
+{
+  // Load annotation image
+  IplImage* imAnnotation = cvLoadImage(fn_annotation);
+  if(!imAnnotation) {
+    printf("[Slice] Error while loading %s\n",fn_annotation);
+    return;
+  }
+
+  // compute labels
+  supernode* s;
+  labelType label;
+  int nLabels = classIdxToLabel.size();
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+      s = it->second;
+      label = computeSupernodeLabelFromMulticlassImage(s->id, imAnnotation, classIdxToLabel);
+      s->setData(label, nLabels);
+    }
+
+  cvReleaseImage(&imAnnotation);
+}
+
+
+int Slice::search(int x, int y)
+{
+  float dx,dy,d;
+  float minDist = FLT_MAX;
+  int sid = -1;
+  node n;
+  supernode* s;
+
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    s = it->second;
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+
+      dx = n.x - x;
+      dy = n.y - y;
+      d = dx*dx + dy*dy;
+      if(d<minDist) {
+        minDist = d;
+        sid = it->first;
+      }
+    }
+  }
+  return sid;
+}
+
+void Slice::generateColorImage()
+{
+  if(colorImg == 0 && img->nChannels == 3) {
+    colorImg = cvCreateImage(cvGetSize(img),IPL_DEPTH_8U,3);
+
+    // OpenCv resizes each channel to be between 0 and 255
+    //cvCvtColor(img,colorImg,CV_RGB2Lab);
+    cvCvtColor(img,colorImg,CV_BGR2HSV);
+  }
+}
+
+void Slice::exportTextLabels(const char* filename)
+{
+  ofstream ofs(filename);
+  for(map<sidType, supernode* >::iterator it = this->mSupernodes.begin();
+      it != this->mSupernodes.end(); it++) {
+    ofs << (int)it->second->getLabel() << endl;
+  }
+  ofs.close();
+}
+
+void Slice::exportSupernodeLabels(const char* filename, int nClasses,
+			   labelType* labels,
+			   int nLabels,
+			   const map<labelType, ulong>* labelToClassIdx)
+{
+  createColoredAnnotationImage(filename, nClasses, labels, nLabels,
+			       labelToClassIdx);
+}
+
+int Slice::createColoredAnnotationImage(const char* outputFilename,
+                                        int nstates,
+                                        labelType* labels,
+                                        int nLabels,
+                                        const map<labelType, ulong>* labelToClassIdx)
+{
+  IplImage* img = getColoredAnnotationImage(nstates,
+                                            labels,
+                                            nLabels,
+                                            labelToClassIdx);
+  cvSaveImage(outputFilename,img);
+  cvReleaseImage(&img);
+  return 0;
+}
+
+IplImage* Slice::getColoredAnnotationImage(int nstates,
+                                           labelType* labels,
+                                           int nLabels,
+                                           const map<labelType, ulong>* labelToClassIdx)
+{
+  IplImage* img = cvCreateImage(cvSize(this->img_width, this->img_height),
+                                IPL_DEPTH_8U,3);
+
+  supernode* s;
+  uchar *pData;
+  node n;
+  uchar r,g,b;
+  ulong classIdx = 0;
+  int label;
+  int *counter = new int[nstates];
+  for(int i = 0; i < nstates; i++) {
+    counter[i]=0;
+  }
+
+  for(map<sidType, supernode* >::iterator it = this->mSupernodes.begin();
+      it != this->mSupernodes.end(); it++) {
+    label = labels[it->first];
+    counter[label]++;
+
+    if(labelToClassIdx == 0) {
+      r = g = b = label;
+    } else {
+      classIdx = labelToClassIdx->find(label)->second;
+      classIdxToRGB(classIdx,r,g,b);
+    }
+
+    s = it->second;
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd())
+      {
+        ni.get(n);
+        ni.next();
+        pData = (((uchar*)(img->imageData + n.y*img->widthStep)+n.x*img->nChannels));
+        pData[0] = b;
+        pData[1] = g;
+        pData[2] = r;
+      }
+  }
+
+  /*
+  PRINT_MESSAGE("[Slice] ");
+  for(int i = 0; i < nstates; i++)
+    PRINT_MESSAGE("local[%d]=%d ",i,counter[i]);
+  PRINT_MESSAGE("\n");
+  */
+
+  delete [] counter;
+  return img;
+}
+
+void Slice::exportOverlay(const char* filename)
+{
+  if(!this->img) {
+    printf("[Slice] Error : no image provided\n");
+    exit(-1);
+  }
+  IplImage* _img = cvCloneImage(this->img);
+
+  uchar *pData;
+  int label;
+  node n;
+  supernode* s;
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    s = it->second;
+    label = s->getLabel();
+    if(label == T_FOREGROUND) {
+      nodeIterator ni = s->getIterator();
+      ni.goToBegin();
+      while(!ni.isAtEnd()) {
+        ni.get(n);
+        ni.next();
+        
+        pData = (((uchar*)(_img->imageData + n.y*_img->widthStep)+n.x*_img->nChannels));
+        pData[0] = 255;
+        //pData[1] = g;
+        //pData[2] = r;
+      }
+    }
+  }
+
+  cvSaveImage(filename, _img);
+  cvReleaseImage(&_img);
+}
+
+void Slice::exportOverlay(const char* filename, labelType* labels)
+{
+  if(!this->img) {
+    printf("[Slice] Error : no image provided\n");
+    exit(-1);
+  }
+  IplImage* _img = cvCloneImage(this->img);
+
+  uchar *pData;
+  int label;
+  node n;
+  supernode* s;
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    label = labels[it->first];
+    if(label == T_FOREGROUND) {
+      s = it->second;
+      nodeIterator ni = s->getIterator();
+      ni.goToBegin();
+      while(!ni.isAtEnd()) {
+        ni.get(n);
+        ni.next();
+        
+        pData = (((uchar*)(_img->imageData + n.y*_img->widthStep)+n.x*_img->nChannels));
+        pData[0] = 255;
+        //pData[1] = g;
+        //pData[2] = r;
+      }
+    }
+  }
+
+  cvSaveImage(filename, _img);
+  cvReleaseImage(&_img);
+}
+
+void Slice::exportProbabilities(const char* filename, int nClasses,
+                                float* pbs)
+{
+  IplImage* _img = cvCreateImage(cvGetSize(img),IPL_DEPTH_8U,1);
+
+  uchar *pData;
+  float pb;
+  node n;
+  supernode* s;
+  for(map<sidType, supernode* >::iterator it = mSupernodes.begin();
+      it != mSupernodes.end(); it++) {
+    pb = pbs[it->first];
+
+    s = it->second;
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+        
+      pData = (((uchar*)(_img->imageData + n.y*_img->widthStep)+n.x*_img->nChannels));
+      pData[0] = pb*255;
+    }
+  }
+
+  cvSaveImage(filename, _img);
+  cvReleaseImage(&_img);  
+}

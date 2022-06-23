@@ -389,4 +389,367 @@ void Slice3d::createIndexingStructures(sidType** _klabels, bool force)
         s = itVoxel->second;
       }
 
-      s->addLine(line)
+      s->addLine(line);
+
+      previousSid = sid;
+
+      for(int x = 0;x < width;x++) {
+        sid = _klabels[d][y*width+x];
+        if(sid == previousSid) {
+          line->length++;
+        } else {
+          // create new line
+          line = new lineContainer;
+          line->coord.x = x;
+          line->coord.y = y;
+          line->coord.z = d;
+          line->length = 1;
+          previousSid = sid;
+
+          // add line to supernode
+          itVoxel = mSupervoxels->find(sid);
+          if(itVoxel == mSupervoxels->end()) {
+            // Create new supernode and add it to the list
+            s = new supernode;
+            s->id = sid;
+            (*mSupervoxels)[sid] = s;
+          } else {
+            // Supernode already exists
+            s = itVoxel->second;
+          }
+
+          s->addLine(line);
+        }
+      }
+    }
+  }
+#else
+  for(int d=0;d<depth;d++)
+    for(int y=0;y<height;y++)
+      for(int x=0;x<width;x++) {
+        sid = _klabels[d][y*width+x];
+        itVoxel = mSupervoxels->find(sid);
+        if(itVoxel == mSupervoxels->end()) {
+          // Create new supernode and add it to the list
+          s = new supernode;
+          s->id = sid;
+          (*mSupervoxels)[sid] = s;
+        } else {
+          // Supernode already exists
+          s = itVoxel->second;
+        }
+
+        // Add node to the supernode
+        node* p = new node;
+        p->z = d;
+        p->y = y;
+        p->x = x;
+        s->addNode(p);
+      }
+#endif
+
+  PRINT_MESSAGE("[Slice3d] %d supervoxels created\n", (int)mSupervoxels->size());
+
+  /*
+#if USE_LONG_RANGE_EDGES
+  PRINT_MESSAGE("[Slice3d] Adding long range edges...\n");
+  addLongRangeEdges();
+  return;
+#endif
+  */
+
+  if(loadNeighbors) {
+    PRINT_MESSAGE("[Slice3d] Indexing neighbors...\n");
+
+    stringstream sout_neighbors;
+    sout_neighbors << inputDir << "neighbors_" << supernode_step << "_" << cubeness;
+    if(fileExists(sout_neighbors.str().c_str())) {
+      PRINT_MESSAGE("[Slice3d] Loading neighbors from %s\n", sout_neighbors.str().c_str());
+      ifstream ifs(sout_neighbors.str().c_str());
+      string line;
+      while(getline(ifs,line)) {
+        vector<string> tokens;
+        splitString(line, tokens);
+        int sid = atoi(tokens[0].c_str());
+        supernode* s = (*mSupervoxels)[sid];
+        vector<supernode*>* ptrNeighbors = &(s->neighbors);
+        for(int i = 1; i < tokens.size(); ++i) {
+          int nsid = atoi(tokens[i].c_str());
+          supernode* sn = (*mSupervoxels)[nsid];
+          s->neighbors.push_back(sn);
+        }
+      }
+      ifs.close();
+    } else {
+      const int nh_size = 1; // neighborhood size
+      sidType nsid;
+      vector<supernode*>* ptrNeighbors;
+      supernode* sn;
+      bool existingSupernode;
+      nbEdges = 0;
+      for(int z = nh_size; z < depth - nh_size; z++) {
+        for(int x = nh_size; x < width - nh_size; x++) {
+          for(int y = nh_size; y < height - nh_size; y++) {
+            sid = _klabels[z][y*width+x];
+            for(int nx = x-nh_size; nx <= x+nh_size; nx++) {
+              for(int ny = y-nh_size; ny <= y+nh_size; ny++) {
+                for(int nz = z-nh_size; nz <= z+nh_size; nz++) {
+                  nsid = _klabels[nz][ny*width+nx];
+                  if(sid > nsid) {
+                    s = (*mSupervoxels)[sid];
+                    sn = (*mSupervoxels)[nsid];
+                    if(sn == 0) {
+                      printf("[Slice3d] Error : supernode %d is null (coordinate=(%d,%d,%d))\n",nsid,nx,ny,nz);
+                      exit(-1);
+                    }
+                    ptrNeighbors = &(s->neighbors);
+                    existingSupernode = false;
+                    // Searching in a hash map would be faster but it would also consume
+                    // more memory ...
+                    for(vector<supernode*>::iterator itN = ptrNeighbors->begin();
+                        itN != ptrNeighbors->end(); itN++) {
+                      if((*itN)->id == nsid) {
+                        existingSupernode = true;
+                        break;
+                      }
+                    }
+                    if(!existingSupernode) {
+                      s->neighbors.push_back(sn);
+                      sn->neighbors.push_back(s);
+                      nbEdges++;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      PRINT_MESSAGE("Exporting neighbors to %s\n", sout_neighbors.str().c_str());
+      ofstream ofs(sout_neighbors.str().c_str());
+      for(map<sidType, supernode* >::iterator it = mSupervoxels->begin();
+          it != mSupervoxels->end(); it++) {
+        s = it->second;
+        stringstream sout;
+        sout << s->id;
+        for(vector < supernode* >::iterator itN = s->neighbors.begin();
+            itN != s->neighbors.end();itN++) {
+          supernode* ns = *itN;
+          sout << " " << ns->id;
+        }
+        ofs << sout.str() << endl;
+      }
+      ofs.close();
+
+    }
+
+    maxDegree = -1;
+    int d;
+    for(map<sidType, supernode* >::iterator it = mSupervoxels->begin();
+        it != mSupervoxels->end(); it++) {
+      d = it->second->neighbors.size();
+      if(maxDegree < d) {
+        maxDegree = d;
+      }
+    }    
+    PRINT_MESSAGE("[Slice3d] %ld undirected edges created. Maximum degree = %d\n", nbEdges, maxDegree);
+  }
+}
+
+uchar* Slice3d::createNodeLabelVolume()
+{
+  ulong sliceSize = width*height;
+  ulong volSize = sliceSize*depth;
+  uchar* labelVolume = new uchar[volSize];
+  memcpy(labelVolume,raw_data,sizeof(char)*volSize);
+
+  // Loop through supernodes and their neighbors
+  supernode* s;
+  node n;
+  int superpixelLabel;
+
+  for(map<sidType, supernode* >::iterator it = mSupervoxels->begin();
+      it != mSupervoxels->end(); it++) {
+    s = it->second;
+    superpixelLabel = s->getLabel();
+
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+      labelVolume[n.z*sliceSize
+                  +n.y*width
+                  +n.x] = superpixelLabel*(255.0f/NUMBER_TYPE);
+    }  
+  }
+
+  return labelVolume;
+}
+
+int Slice3d::getIntensity(int x, int y, int z)
+{
+  ulong sliceSize = width*height;
+  return raw_data[z*sliceSize + y*width + x];
+}
+
+// TODO : Using the first channel is only OK for grey images
+float Slice3d::getAvgIntensity(sidType supernodeId)
+{
+  map<sidType, supernode* >::iterator iLabel = mSupervoxels->find(supernodeId);
+  if(iLabel == mSupervoxels->end()) {
+    printf("[Slice3d] Error for sid %d : iLabel==g->mSupernodes.end()\n",supernodeId);
+    return -1;
+  }
+
+  float intensity = 0;
+  ulong idx = 0;
+  supernode* s = iLabel->second;
+  node n;
+  nodeIterator ni = s->getIterator();
+  ni.goToBegin();
+  while(!ni.isAtEnd())
+    {
+      ni.get(n);
+      ni.next();
+      idx = ((ulong)n.z)*width*height + (n.y*width) + n.x;
+      intensity += (float) raw_data[idx];
+    }
+  intensity /= s->size();
+  return intensity;
+}
+
+void Slice3d::importSupervoxelsFromBinaryFile(const char* filename)
+{
+#ifndef USE_REVERSE_INDEXING
+  sidType** klabels = 0;
+#endif
+
+  if(klabels != 0) {
+    printf("[Slice3d] Error in importSupervoxels : supervoxels have already been generated\n");
+    return;
+  }
+  PRINT_MESSAGE("[Slice3d] Importing supervoxel labels from binary file %s. depth=%d, height=%d, width=%d, supernode_step=%d\n",
+                filename,depth,height,width,supernode_step);
+
+  klabels = new sidType*[depth];
+  ulong sliceSize = width*height;
+
+  ifstream ifs(filename, ios::binary);
+  for(int z = 0; z < depth;z++) {
+    klabels[z] = new sidType[sliceSize];
+    ifs.read((char*)klabels[z],sliceSize*sizeof(sidType));
+  }
+  ifs.close();
+
+  createIndexingStructures(klabels);
+
+#ifndef USE_REVERSE_INDEXING
+  for(int z = 0; z < depth;z++) {
+    delete[] klabels[z];
+  }
+  delete[] klabels;
+#endif
+}
+
+void Slice3d::importSupervoxelsFromBuffer(const uint* buffer, int _width, int _height, int _depth)
+{
+#ifndef USE_REVERSE_INDEXING
+  sidType** klabels = 0;
+#endif
+
+  printf("[Slice3d] Importing supervoxel labels from buffer. size = (%d,%d,%d) =? (%d,%d,%d), supernode_step=%d\n",
+         width, height, depth, _width, _height, _depth, supernode_step);
+
+  assert(_width == width);
+  assert(_height == height);
+  assert(_depth == depth);
+
+  if(klabels != 0) {
+    printf("[Slice3d] Error in importSupervoxels : supervoxels have already been generated\n");
+    return;
+  }
+
+  klabels = new sidType*[depth];
+  ulong sliceSize = width*height;
+
+  ulong idx = 0;
+  for(int z=0; z<depth; z++) {
+    klabels[z] = new sidType[sliceSize];
+    for(ulong s = 0; s < sliceSize; ++s) {
+      klabels[z][s] = buffer[idx];
+      ++idx;
+    }
+  }
+
+  createIndexingStructures(klabels);
+
+#ifndef USE_REVERSE_INDEXING
+  for(int z = 0; z < depth;z++)
+    delete[] klabels[z];
+  delete[] klabels;
+#endif
+}
+
+void Slice3d::importSupervoxels(const char* filename)
+{
+#ifndef USE_REVERSE_INDEXING
+  sidType** klabels = 0;
+#endif
+
+  if(klabels != 0) {
+    printf("[Slice3d] Error in importSupervoxels : supervoxels have already been generated\n");
+    return;
+  }
+
+  const int MAX_SIZE = 100;
+  char line[MAX_SIZE];
+
+  ifstream ifs(filename);
+  ifs.getline(line,MAX_SIZE);
+  sscanf(line,"%d %d %d %d",&depth,&height,&width,&supernode_step);
+
+  PRINT_MESSAGE("[Slice3d] Importing supervoxel labels from %s. depth=%d, height=%d, width=%d, supernode_step=%d\n",
+                filename,depth,height,width,supernode_step);
+
+  klabels = new sidType*[depth];
+  ulong slice_size = width*height;
+  for(int z=0;z<depth;z++)
+    klabels[z] = new sidType[slice_size];
+
+  for(int z = 0;z<depth;z++) {
+    for(int y = 0;y<height;y++) {
+      for(int x = 0;x<width;x++) {
+        ifs.getline(line,MAX_SIZE);
+        klabels[z][y*width+x] = (sidType)atoi(line);
+      }
+    }
+  }
+  ifs.close();
+
+  createIndexingStructures(klabels);
+
+#ifndef USE_REVERSE_INDEXING
+  for(int z = 0;z < depth;z++)
+    delete[] klabels[z];
+  delete[] klabels;
+#endif
+}
+
+void Slice3d::createReverseIndexing(sidType**& _klabels)
+{
+  _klabels = new sidType*[depth];
+  ulong slice_size = width*height;
+  for(int z=0;z<depth;z++) {
+    _klabels[z] = new sidType[slice_size];
+  }
+
+  supernode* s;
+  int sid = 0;
+  node n;
+  for(map<sidType, supernode* >::iterator it = mSupervoxels->begin();
+      it != mSupervoxels->end(); it++) {
+    sid = it->first;
+    s = it->second;
+    nodeI

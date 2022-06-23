@@ -752,4 +752,381 @@ void Slice3d::createReverseIndexing(sidType**& _klabels)
       it != mSupervoxels->end(); it++) {
     sid = it->first;
     s = it->second;
-    nodeI
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd())
+      {
+        ni.get(n);
+        ni.next();
+        _klabels[n.z][n.y*width + n.x] = sid;
+      }
+  }
+}
+
+void Slice3d::exportSupervoxels(const char* filename)
+{
+  sidType** _klabels;
+#ifndef USE_REVERSE_INDEXING
+  createReverseIndexing(_klabels);
+#else
+  _klabels = this->klabels;
+#endif
+
+  if(_klabels == 0) {
+    printf("[Slice3d] Error in exportSupervoxels : supervoxels have been generated yet\n");
+    return;
+  }
+
+  ofstream ofs(filename, ios::binary);
+  ofs << depth << " " << height << " " << width << " " << supernode_step << endl;
+
+  // TODO : use write function to avoid looping
+  // export data
+  for(int z=0;z<depth;z++) {
+    for(int y=0;y<height;y++) {
+      for(int x=0;x<width;x++) {
+        ofs << _klabels[z][y*width+x] << endl;
+      }
+    }
+  }
+  ofs.close();
+
+  // NFO file used by VIVA
+  stringstream snfo;
+  snfo << filename << ".nfo";
+  ofstream nfo(snfo.str().c_str());
+  nfo << "cubeDepth " << depth << endl;
+  nfo << "cubeHeight " << height << endl;
+  nfo << "cubeWidth " << width << endl;
+  nfo << "cubeFile " << getNameFromPath(filename) << endl;
+  nfo << "type uchar" << endl;
+}
+
+void Slice3d::exportSupervoxelsToBinaryFile(const char* filename)
+{
+  sidType** _klabels;
+#ifndef USE_REVERSE_INDEXING
+  PRINT_MESSAGE("[Slice3d] Creating reverse index\n");
+  createReverseIndexing(_klabels);
+#else
+  _klabels = this->klabels;
+#endif
+
+  if(_klabels == 0) {
+    printf("[Slice3d] Error in exportSupervoxels : supervoxels have been generated yet\n");
+    return;
+  }
+
+  ofstream ofs(filename, ios::binary);
+  ulong sliceSize = width*height;
+  for(int z=0;z<depth;z++) {
+    ofs.write((char*)_klabels[z],sliceSize*sizeof(sidType));
+  }
+  ofs.close();
+
+  // NFO file used by VIVA
+  stringstream snfo;
+  snfo << filename << ".nfo";
+  ofstream nfo(snfo.str().c_str());
+  nfo << "cubeDepth " << depth << endl;
+  nfo << "cubeHeight " << height << endl;
+  nfo << "cubeWidth " << width << endl;
+  nfo << "cubeFile " << getNameFromPath(filename) << endl;
+  nfo << "type int" << endl;
+}
+
+
+#ifdef USE_REVERSE_INDEXING
+sidType Slice3d::getSID(uint x,uint y,uint z)
+{
+  return klabels[z][y*width+x];
+}
+#endif
+
+void Slice3d::loadFromDir(const char* dir, int nImgs)
+{
+  node end;
+  end.x = start_x + width;
+  end.y = start_y + height;
+  end.z = nImgs;
+  node start;
+  start.x = start_x;
+  start.y = start_y;
+  start.z = start_z;
+  loadFromDir(dir, start, end);
+}
+
+void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
+{
+  const int bytes_per_pixel = 1;
+  IplImage* img;
+  IplImage* gray_img;
+  int nImgs = end.z-start.z;
+
+  // load files
+  vector<string> files;
+  getFilesInDir(dir, files, start.z, "png", true);
+  if(files.size() == 0) {
+    getFilesInDir(dir, files, start.z, "tif", true);
+  }
+
+  int nValidImgs = 0;
+  for(vector<string>::iterator itFile = files.begin();
+      itFile != files.end(); itFile++) {
+    if(width == UNITIALIZED_SIZE) {
+      IplImage* img_slice = cvLoadImage(itFile->c_str(),0);
+      if(!img_slice)
+        continue;
+
+      width = img_slice->width;
+      height = img_slice->height;
+
+      cvReleaseImage(&img_slice);
+    }
+
+    nValidImgs++;
+  }
+
+  if(nImgs != -1) {
+    if(nImgs > nValidImgs) {
+      printf("[Slice3d] Warning : nImgs=%d > nValidImgs=%d\n", nImgs, nValidImgs);
+      nImgs = nValidImgs;
+    }
+  }
+  else {
+    nImgs = nValidImgs;
+  }
+
+  // ask for enough memory for the texels and make sure we got it before proceeding
+  depth = nImgs; //files.size();
+
+  if(!isDirectory(dir)) {
+    PRINT_MESSAGE("[Slice3d] Loading data from file %s\n", dir);
+    importData(dir);
+    return;
+  }
+
+  stringstream sVolDataFile;
+  sVolDataFile << dir;
+  sVolDataFile << "/volumedata";
+
+  if(fileExists(sVolDataFile.str().c_str())) {
+    PRINT_MESSAGE("[Slice3d] Loading data from %s\n", sVolDataFile.str().c_str());
+    importData(sVolDataFile.str().c_str());
+    return;
+  }
+
+  ulong n = width*height*sizeof(char);
+  raw_data = new uchar[n*depth];
+
+  PRINT_MESSAGE("[Slice3d] Loading %d %dx%d images (%ld pixels) from directory %s\n",
+                nImgs, width, height, n, dir);
+  int d = 0;
+  for(int iImage = 0; iImage < nImgs; iImage++)
+    {
+      string image = files[iImage];
+
+      // Load image in black and white
+      // Do no handle 3d cubes in color for now !
+      IplImage* img_slice = cvLoadImage(image.c_str(),0);
+
+      if(!img_slice) {
+	PRINT_MESSAGE("[Slice3d] Warning : image %s not loaded properly\n", image.c_str());
+        continue;
+      }
+
+      if(img_slice->width != width || img_slice->height != height)
+        {
+          PRINT_MESSAGE("[Slice3d] Warning : (img_slice->width != width || img_slice->height != height)\n");
+          if(img_slice->nChannels != bytes_per_pixel)
+            {
+              gray_img = cvCreateImage(cvSize(img_slice->width,img_slice->height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvCvtColor(img_slice,gray_img,CV_RGB2GRAY);
+              img = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvResize(gray_img,img);
+              cvReleaseImage(&gray_img);
+            }
+          else
+            {
+              img = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvResize(img_slice,img);
+            }
+
+          memcpy(raw_data+(d*n),img->imageData,n);
+          cvReleaseImage(&img);
+          cvReleaseImage(&img_slice);
+        }
+      else
+        {
+          img = img_slice;
+
+          if(img_slice->nChannels != bytes_per_pixel)
+            {
+              // FIXME
+              printf("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
+              exit(-1);
+            }
+
+          if(img->widthStep != img->width)
+            {
+              int i = 0;
+              for(int y = 0; y < img->height ; y++)
+                for(int x = 0; x < img->width ; x++)
+                  {
+                    raw_data[d*n+i] = ((uchar*)(img->imageData + img->widthStep*y))[x*img->nChannels];
+                    i++;
+                  }
+            }
+          else
+            memcpy(raw_data+(d*n),img->imageData,n);
+
+          cvReleaseImage(&img);
+        }
+      ++d;
+    }
+}
+
+void Slice3d::loadFromDir(const char* dir, uchar*& raw_data,
+                          int& width, int& height, int* nImgs)
+{
+  const int bytes_per_pixel = 1;
+  IplImage* img;
+  IplImage* gray_img;
+
+  // load files
+  vector<string> files;
+  getFilesInDir(dir, files,"png", true);
+  if(files.size() == 0) {
+    getFilesInDir(dir, files,"tif", true);
+  }
+
+  width = -1;
+  int nValidImgs = 0;
+  for(vector<string>::iterator itFile = files.begin();
+      itFile != files.end(); itFile++)
+    {
+      if((itFile->c_str()[0] != '.') && ( (getExtension(*itFile) == "png") || (getExtension(*itFile) == "tif")) )
+        {
+          if(width == -1)
+            {
+              IplImage* img_slice = cvLoadImage(itFile->c_str(),0);
+              if(!img_slice)
+                continue;
+
+              width = img_slice->width;
+              height = img_slice->height;
+
+              cvReleaseImage(&img_slice);
+            }
+
+          nValidImgs++;
+        }
+    }
+
+  if(*nImgs != -1)
+    {
+      if(*nImgs > nValidImgs)
+        {
+          printf("[PixelData] Warning : nImgs=%d > nValidImgs=%d\n", *nImgs, nValidImgs);
+          *nImgs = nValidImgs;
+        }
+    }
+  else
+    *nImgs = nValidImgs;
+
+  // ask for enough memory for the texels and make sure we got it before proceeding
+  uint n = width*height*sizeof(char);
+  raw_data = new uchar[n*(*nImgs)];
+
+  printf("[PixelData] Loading %d images from directory %s, width=%d, height=%d\n", *nImgs, dir, width, height);
+  int d = 0;
+  for(int iImage = 0; d < *nImgs; iImage++)
+    {
+      string image = files[iImage];
+
+      // Load image in black and white
+      // Do no handle 3d cubes in color for now !
+      IplImage* img_slice = cvLoadImage(image.c_str(),0);
+
+      if(!img_slice)
+        continue;
+
+      if(img_slice->width != width || img_slice->height != height)
+        {
+          if(img_slice->nChannels != bytes_per_pixel)
+            {
+              gray_img = cvCreateImage(cvSize(img_slice->width,img_slice->height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvCvtColor(img_slice,gray_img,CV_RGB2GRAY);
+              img = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvResize(gray_img,img);
+              cvReleaseImage(&gray_img);
+            }
+          else
+            {
+              img = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvResize(img_slice,img);
+            }
+
+          memcpy(raw_data+(d*n),img->imageData,n);
+          cvReleaseImage(&img);
+          cvReleaseImage(&img_slice);
+        }
+      else
+        {
+          img = img_slice;
+
+          if(img_slice->nChannels != bytes_per_pixel)
+            {
+              // FIXME
+              printf("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
+              exit(-1);
+            }
+
+          if(img->widthStep != img->width)
+            {
+              int i = 0;
+              for(int y = 0; y < img->height ; y++)
+                for(int x = 0; x < img->width ; x++)
+                  {
+                    raw_data[d*n+i] = ((uchar*)(img->imageData + img->widthStep*y))[x*img->nChannels];
+                    i++;
+                  }
+            }
+          else
+            memcpy(raw_data+(d*n),img->imageData,n);
+
+          cvReleaseImage(&img);
+        }
+
+      d++;
+    }
+}
+
+
+bool Slice3d::importData(const char* filename,
+                          const int iwidth,
+                          const int iheight,
+                          const int idepth)
+{
+  string ext = getExtension(filename);
+  //transform(ext.begin(),ext.end(), ext.begin(), tolower);
+  //if(ext == "tif" || ext == "TIF")
+  if(ext == "nrrd" || ext == "mha")
+    {
+      printf("[Slice3d] Import NRRD/MHA Cube\n");
+#ifdef USE_ITK
+      importCube(filename,
+                 raw_data,
+                 width,
+                 height,
+                 depth);
+#else
+      printf("[Slice3d] Error can not import NRRD Cube without ITK\n");
+      return false;
+#endif
+    }
+  else
+    {
+      if(ext == "tif" || ext == "TIF")
+	{
+	  pri

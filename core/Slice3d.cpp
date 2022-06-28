@@ -1879,4 +1879,107 @@ void Slice3d::exportSupernodeLabels(const char* filename, int nClasses,
   delete[] labelCube;
 }
 
-vo
+void Slice3d::resize(sizeSliceType w, sizeSliceType h, sizeSliceType d, map<sidType, sidType>* sid_mapping)
+{
+  assert(w <= width);
+  assert(h <= height);
+  assert(d <= depth);
+
+  // copy data
+  sizeSliceType new_sliceSize = w*h;
+  sizeSliceType cubeSize = new_sliceSize*d;
+  uchar* new_raw_data = new uchar[cubeSize];
+  ulong new_idx = 0;
+  for(int z = 0; z < d; ++z) {
+    for(int y = 0; y < h; ++y) {
+      for(int x = 0; x < w; ++x) {
+        new_raw_data[new_idx] = raw_data[getIndex(x,y,z)];
+        ++new_idx;
+      }
+    }
+  }
+
+  // iterate over all the nodes and generate new klabels array
+  sidType** new_klabels = new sidType*[d];
+  for(int z = 0;z < d;z++) {
+    new_klabels[z] = new sidType[new_sliceSize];
+  }
+
+  supernode* s;
+  node n;
+  int sid = 0;
+  const map<sidType, supernode* >& _supernodes = getSupernodes();
+  for(map<sidType, supernode* >::const_iterator it = _supernodes.begin();
+      it != _supernodes.end(); it++) {
+    s = it->second;
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    bool used_supernode = false;
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+
+      if(n.z < d && n.y < h && n.x < w) {
+        new_klabels[n.z][n.y*w + n.x] = sid;
+        used_supernode = true;
+      }
+    }
+    if(used_supernode) {
+      if(sid_mapping) {
+        (*sid_mapping)[sid] = it->first;
+      }
+      ++sid;
+    }
+  }
+
+  width = w;
+  height = h;
+  depth = d;
+  sliceSize = new_sliceSize;
+
+  delete[] raw_data;
+  raw_data = new_raw_data;
+
+  createIndexingStructures(new_klabels, true);
+
+#ifndef USE_REVERSE_INDEXING
+  for(int z = 0; z < depth;z++) {
+    delete[] new_klabels[z];
+  }
+  delete[] new_klabels;
+#else
+  klabels = new_klabels;
+#endif
+}
+
+void Slice3d::exportProbabilities(const char* filename, int nClasses,
+                                  float* pbs)
+{
+  sizeSliceType cubeSize = sliceSize*depth;
+  labelType* labelCube = new labelType[cubeSize];
+  memset(labelCube,0,cubeSize*sizeof(labelType));
+  nClasses = max(1, nClasses-1);
+
+  // Make prediction for every superpixel
+  sizeSliceType idx = 0;
+  char pb;
+  supernode* s;
+  node n;
+
+  for(uint sid = 0; sid < getNbSupernodes(); sid++) {
+    s = getSupernode(sid);
+    pb = pbs[sid]*255; 
+
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+      idx = n.z*sliceSize + n.y*width + n.x;
+      labelCube[idx] = pb;
+    }
+  }
+
+  exportCube(labelCube, filename, depth, height, width);
+  delete[] labelCube;
+}

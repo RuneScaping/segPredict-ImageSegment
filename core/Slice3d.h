@@ -259,4 +259,104 @@ class Slice3d : public Slice_P
   /**
    * Load supervoxels using default parameters
    */
-  void loadSupervoxels(const char* 
+  void loadSupervoxels(const char* imageDir);
+
+  void loadSupervoxels(const char* imageDir, const int voxel_step, const float _cubeness);
+
+  void setMutableSupernodes(map<sidType, supernode* >* _supernodes) {
+    mSupervoxels = _supernodes;
+  }
+
+  /**
+   * conversion from raw (uchar, 1 channel) to double (1 channel)
+   */
+  int raw2Double(double**& ptr_data);
+
+  /**
+   * Supervoxel library needs a cube made of ints so we have to convert the cube
+   * Ask for enough memory for the texels and make sure we got it before proceeding
+   */
+  int raw2RGB(unsigned int**& ptr_data);
+
+  void resize(sizeSliceType w, sizeSliceType h, sizeSliceType d,
+              map<sidType, sidType>* sid_mapping);
+
+  void generateSupervoxels(const double _cubeness = 20);
+
+  int getIntensity(int x, int y, int z = 0);
+
+  float getAvgIntensity(sidType supernodeId);
+
+  float getAvgIntensity(int supernodeId, int& r, int &g, int &b) {
+    return -1;
+  }
+
+  sizeSliceType getWidth() { return width; }
+  sizeSliceType getHeight() { return height; }
+  sizeSliceType getDepth() { return depth; }
+
+  inline probType getProb(int sid, int label, int scale = 0) {
+    probType prob = 0;
+    if(label < nLabels) {
+      supernode* s = (*mSupervoxels)[sid];
+      if(s->data) {
+        prob = s->data->prob_estimates[label+(nLabels*scale)];
+      }
+    }
+    return prob;
+  }
+
+  supernode* getSupernode(sidType sid);
+
+  bool isSupernodeLabelsLoaded() { return supernodeLabelsLoaded; }
+
+  void loadFromDir(const char* input_dir, int nImgs = -1);
+
+  void loadFromDir(const char* dir, const node& start, const node& end);
+
+  void loadFromDir(const char* dir, uchar*& raw_data,
+                   int& width, int& height, int* nImgs);
+
+  ulong getNbEdges() { return nbEdges; }
+
+  ulong getNbNodes() { return width*height*depth; }
+
+  ulong getNbSupernodes() { return mSupervoxels->size(); }
+
+  void setVoxelStep(int _voxel_step) { supernode_step = _voxel_step; }
+
+  bool getIncludeOtherLabel() { return includeOtherLabel; }
+
+  void setIncludeOtherLabel(bool _value) { includeOtherLabel = _value; }
+
+  float getMinPercentToAssignLabel() { return minPercentToAssignLabel; }
+  void setMinPercentToAssignLabel(float _minPercentToAssignLabel) { minPercentToAssignLabel = _minPercentToAssignLabel; }
+
+  virtual eSlicePType getType() { return SLICEP_SLICE3D; }
+
+  void rescaleRawData();
+
+  void setDeleteRawData(bool _val) { delete_raw_data = _val; }
+
+  // no need to free memory as functions in Supernode will not reallocate memory.
+  void unloadSupernodeLabels() { supernodeLabelsLoaded = false; }
+
+#ifdef USE_REVERSE_INDEXING
+
+  sidType getSID(uint x,uint y,uint z);
+
+#endif
+
+
+ private:
+
+  bool supernodeLabelsLoaded;
+  bool loadNeighbors;
+  bool delete_raw_data;
+  int start_x;
+  int start_y;
+  int start_z;
+
+};
+
+#endif // SLICE3D_H

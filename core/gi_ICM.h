@@ -12,52 +12,43 @@
 // Contact <aurelien.lucchi@gmail.com> for comments & bug reports      //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef ENERGY_PARAM_H
-#define ENERGY_PARAM_H
+#ifndef GI_ICM_H
+#define GI_ICM_H
 
-#include <fstream>
+// SliceMe
+#include "Slice.h"
+
+#include "graphInference.h"
+#include "energyParam.h"
+
+#include <map>
 #include <vector>
-#include <string>
 
-class EnergyParam
+//------------------------------------------------------------------------------
+
+class GI_ICM : public GraphInference
 {
  public:
+  /**
+   * Constructor for SSVM framework
+   */
+  GI_ICM(Slice_P* _slice,
+         const EnergyParam* _param,
+         double* _smw,
+         labelType* _groundTruthLabels,
+         double* _lossPerLabel,
+         Feature* _feature,
+         std::map<sidType, nodeCoeffType>* _nodeCoeffs);
 
-  EnergyParam();
+  double run(labelType* inferredLabels,
+             int id,
+             size_t maxiter,
+             labelType* nodeLabelsGroundTruth = 0,
+             bool computeEnergyAtEachIteration = false,
+             double* _loss = 0);
 
-   /**
-     * Load global stats from a file
-     */
-  EnergyParam(const char* filename);
+ private:
 
-  EnergyParam(const EnergyParam& _param);
-
-  EnergyParam& operator=(EnergyParam const& _param);
-
-  ~EnergyParam();
-
-  void load(const char* filename);
-  void loadLabelNames(const char* filename);
-  void print() const;
-  void printMetaData();
-  void save(const char* filename);
-
-  int sizePsi;
-  int nUnaryWeights;
-  int nClasses;
-  int nDistances;
-  int nGradientLevels;
-  int nOrientations;
-  int nScales;
-  int nLocalScales;
-  int nScalingCoefficients;
-  bool includeLocalEdges;
-  bool useGlobalClassifier;
-
-  // weight vector
-  double* weights;
-
-  std::vector<std::string> labelNames;
 };
 
-#endif //ENERGY_PARAM_H
+#endif // GI_ICM_H

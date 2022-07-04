@@ -12,50 +12,35 @@
 // Contact <aurelien.lucchi@gmail.com> for comments & bug reports      //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef GI_MF_H
-#define GI_MF_H
+#include "gi_sampling.h"
 
 // SliceMe
-#include "Slice.h"
+#include "Config.h"
+#include "utils.h"
 
-#include "graphInference.h"
-#include "energyParam.h"
+#include "inference_globals.h"
 
-#include <map>
-#include <vector>
+#if USE_GSL_DEBUG
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
+#else
+#ifdef _WIN32
+#include "gettimeofday.h"
+#else
+#include <sys/time.h>
+#include <unistd.h>
+#endif
+#endif
 
 //------------------------------------------------------------------------------
 
-class GI_MF : public GraphInference
-{
- public:
-  /**
-   * Constructor for SSVM framework
-   */
-  GI_MF(Slice_P* _slice,
-        const EnergyParam* _param,
-         double* _smw,
-         labelType* _groundTruthLabels,
-         double* _lossPerLabel,
-         Feature* _feature,
-         std::map<sidType, nodeCoeffType>* _nodeCoeffs);
+#if USE_GSL_DEBUG
+#define GI_SAMPLING_GET_RAND_UNIFORM gsl_rng_uniform(rng);
+#define GI_SAMPLING_GET_RAND(n) gsl_rng_uniform_int(rng, n);
+#else
+#define GI_SAMPLING_GET_RAND_UNIFORM rand() / (double)RAND_MAX;
+#define GI_SAMPLING_GET_RAND(n) rand() * ((double)n/(double)RAND_MAX);
+#endif
 
-  ~GI_MF();
 
-  double run(labelType* inferredLabels,
-             int id,
-             size_t maxiter,
-             labelType* nodeLabelsGroundTruth = 0,
-             bool computeEnergyAtEachIteration = false,
-             double* _loss = 0);
-
-  void setBelieves(double** _b) { believes = _b; ownBelievesBuffer = false; }
-
- private:
-  void exportBelieves(const char* filename);
-
-  bool ownBelievesBuffer;
-  double** believes;
-};
-
-#endif // GI_MF_H
+//---------------------

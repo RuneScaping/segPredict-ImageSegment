@@ -359,4 +359,257 @@ double GI_sampling::runOnce_VOC(labelType* inferredLabels,
                                 double temperature,
                                 ulong* TPs, ulong* FPs, ulong* FNs)
 {
-  double *buf = new double[param
+  double *buf = new double[param->nClasses];
+  int sid = 0;
+  double totalScore_old = 0;
+  double totalScore = 10;
+  supernode *s;
+  bool useLossFunction = lossPerLabel!=0;
+
+  // allocate memory to store features
+  int fvSize = feature->getSizeFeatureVector();
+  int max_index = fvSize + 1;
+  osvm_node* n = new osvm_node[max_index];
+  int i = 0;
+  for(i = 0;i < max_index-1; i++)
+    n[i].index = i+1;
+  n[i].index = -1;
+
+  const map<int, supernode* >& _supernodes = slice->getSupernodes();
+
+  if(!initializedLabels) {
+    if(nodeLabelsGroundTruth) {
+      printf("[gi_sampling] Initializing labels using the ground truth\n");
+      for(map<int, supernode* >::const_iterator its = _supernodes.begin();
+          its != _supernodes.end(); its++) {
+        sid = its->first;
+        inferredLabels[sid] = nodeLabelsGroundTruth[sid];
+      }
+    } else {
+      printf("[gi_sampling] Initializing labels to 0\n");
+      for(map<int, supernode* >::const_iterator its = _supernodes.begin();
+          its != _supernodes.end(); its++) {
+        sid = its->first;
+        inferredLabels[sid] = 0;
+      }
+    }
+  }
+
+  string config_tmp;
+  double sampling_rate = 1.0;
+  if(Config::Instance()->getParameter("sampling_rate", config_tmp)) {
+    sampling_rate = atof(config_tmp.c_str()); 
+    printf("[gi_sampling] sampling_rate = %g\n", sampling_rate);
+  }
+
+  double *probs = new double[param->nClasses];
+  double *cumulated_probs = new double[param->nClasses];
+
+#if USE_GSL_DEBUG
+  gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
+#else
+  //srand(time(NULL));
+
+#ifndef NOTIME
+  struct timeval _t;
+  gettimeofday(&_t, NULL);
+  srand(_t.tv_usec);
+#endif
+#endif
+
+  int maxIter = 1;
+  ulong nSupernodes = slice->getNbSupernodes();
+  for(int iter = 0; iter < maxIter && (totalScore - totalScore_old) > 1.0; ++iter) {
+    
+    printf("[gi_sampling] Iteration %d/%d\n", iter, maxIter);
+
+    totalScore_old = totalScore;
+    totalScore = 0;
+
+    bool draw_samples = sampling_rate != 1.0;
+    for(int i = 0; i < nSupernodes*sampling_rate; ++i) {
+
+      if(draw_samples) {
+        // Select a pixel at random
+        sid = GI_SAMPLING_GET_RAND(nSupernodes);
+      } else {
+        sid = i;
+      }
+      s = slice->getSupernode(sid);
+
+      vector < supernode* >* lNeighbors = &(s->neighbors);
+
+      if(param->nClasses != 2) {
+
+        for(int c = 0; c < (int)param->nClasses; c++) {
+          buf[c] = computeUnaryPotential(slice, sid, c);
+
+          if(iter >= 0) {
+            // add pairwise potential
+            for(vector < supernode* >::iterator itN = lNeighbors->begin();
+                itN != lNeighbors->end(); itN++) {
+#if USE_LONG_RANGE_EDGES
+              double pairwisePotential = computePairwisePotential_distance(slice, s, (*itN),
+                                                                  c, inferredLabels[(*itN)->id]);
+#else
+              double pairwisePotential = computePairwisePotential(slice, s, (*itN),
+                                                                           c, inferredLabels[(*itN)->id]);
+#endif
+
+              buf[c] += pairwisePotential;
+            }
+          }
+        }
+      } else {
+        buf[T_FOREGROUND] = 0;
+
+        int c = T_BACKGROUND;
+        buf[c] = computeUnaryPotential(slice, sid, c);
+
+        if(iter >= 0) {
+          // add pairwise potential
+          for(vector < supernode* >::iterator itN = lNeighbors->begin();
+              itN != lNeighbors->end(); itN++) {
+#if USE_LONG_RANGE_EDGES
+            double pairwisePotential = computePairwisePotential_distance(slice, s, (*itN),
+                                                                c, inferredLabels[(*itN)->id]);
+#else
+            double pairwisePotential = computePairwisePotential(slice, s, (*itN),
+                                                                c, inferredLabels[(*itN)->id]);
+#endif
+            buf[c] += pairwisePotential;
+          }
+        }
+      }
+
+      // debugging
+      //printf("sid %d %d %d\n",sid,inferredLabels[sid],param->nClasses);
+      assert(inferredLabels[sid]<param->nClasses);
+
+      if(useLossFunction) {
+        int g = nodeLabelsGroundTruth[sid];
+        for(int c = 0; c < (int)param->nClasses; c++) {
+
+          // update results of previous prediction
+          int p = (c > 0)?c-1:inferredLabels[sid];
+
+          if(p == g) {
+            --TPs[p];
+          } else {
+            // -1 false positive for class p
+            --FPs[p];
+            // -1 false negative for class g
+            --FNs[g];
+          }
+
+          if(c == g) {
+            ++TPs[c];
+          } else {
+            // +1 false positive for class c
+            ++FPs[c];
+            // +1 false negative for class g
+            ++FNs[g];
+          }
+
+          double score = 0;
+          for(int _c = 0; _c < (int)param->nClasses; _c++) {
+            double d = TPs[_c] + FPs[_c] + FNs[_c];
+            if(fabs(d) > 1e-10) {
+              score += ((double)TPs[_c])/d;
+              //printf("score += %ld/%g -> %g\n", TPs[_c], d, score);
+            }
+          }
+          // add loss
+          //printf("[gi_sampling] sid %d BEFORE class %d -> %ld %ld %ld %g %g\n",
+          //       sid, c, TPs[c], FPs[c], FNs[c], score, buf[c]);
+          buf[c] += 1.0 - (score/param->nClasses);
+          //printf("[gi_sampling] sid %d AFTER class %d -> %g\n", sid, c, buf[c]);
+        }
+      }
+
+      // compute posterior probability for each class
+      double Z = 0;
+      for(int c = 0; c < param->nClasses; ++c) {
+        probs[c] = std::exp(buf[c]/temperature);
+        Z += probs[c];
+      }
+
+      // normalize probabilities
+      if(fabs(Z) > 1e-30 && !isinf(Z)) {
+        for(int c = 0; c < param->nClasses; ++c) {
+          probs[c] /= Z;
+        }
+      }
+
+      // sort probabilities and cumulate them
+      double cumulated_prob = 0;
+      for(int c = 0; c < param->nClasses; ++c) {
+        cumulated_probs[c] = cumulated_prob;
+        cumulated_prob += probs[c];
+        //printf("cumulated_prob %g %g\n",probs[c].second, cumulated_prob);
+      }
+
+      bool labelSet = false;
+      int p = param->nClasses - 1;
+      do {
+        double rand_n = GI_SAMPLING_GET_RAND_UNIFORM;
+
+        //printf("rand 0:(%g,%g) 1:(%g,%g) %g %g\n",buf[0],p0,buf[1],p1,prob,rand_n);
+        int label = 0;
+        int counter = param->nClasses - 1;
+        while(counter >= 0) {
+          //printf("it %d %g %g %d %g\n", it->first, it->second, rand_n, counter, cumulated_probs[counter]);
+          if(rand_n > cumulated_probs[counter]) {
+            label = counter;
+            totalScore += buf[counter];
+            break;
+          }
+          --counter;
+        }
+
+        if(!replaceVoidMSRC || (label != voidLabel && label != moutainLabel && label != horseLabel)) {
+          inferredLabels[sid] = label;
+          labelSet = true;
+        }
+      } while(!labelSet);
+      
+      if(useLossFunction) {
+        // update stats for VOC score
+        int g = nodeLabelsGroundTruth[sid];
+
+        // update results of previous prediction
+        if(p == g) {
+          --TPs[p];
+        } else {
+          // -1 false positive for class p
+          --FPs[p];
+          // -1 false negative for class g
+          --FNs[g];
+        }
+
+        if(inferredLabels[sid] == g) {
+          ++TPs[inferredLabels[sid]];
+        } else {
+          // +1 false positive for class inferredLabels[sid]
+          ++FPs[inferredLabels[sid]];
+          // +1 false negative for class g
+          ++FNs[g];
+        }
+      }
+
+    }
+
+    printf("[gi_sampling] Iteration %d/%d. Total score = %g\n", iter, maxIter,
+           totalScore);
+    }
+
+#if USE_GSL_DEBUG
+    gsl_rng_free(rng);
+#endif
+  
+  delete[] n;
+  delete[] probs;
+  delete[] cumulated_probs;
+
+  return computeEnergy(inferredLabels);
+}

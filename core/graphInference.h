@@ -104,4 +104,123 @@ class GraphInference
   /**
    * Assume features were precomputed with the function precomputeFeatures
    */
-  inline double computeUnary
+  inline double computeUnaryPotential(Slice_P* slice, sidType sid,
+                                      labelType label) {
+    double p = 0;
+    osvm_node *n = slice->getFeature(sid);
+
+#if USE_SPARSE_VECTORS
+    assert(0);
+    // To be implemented...
+#endif
+
+    int fidx = 0;
+    int widx = SVM_FEAT_INDEX(param, label, fidx);
+    while(n[fidx].index != -1) {
+      p += n[fidx].value*smw[widx];
+      if(isinf(p) || isnan(p)) {
+        printf("[graphInference] computeUnary image (%ld, %s) sid %d label %d -> %d %d %d %g %g\n", slice->getId(), slice->getName().c_str(), sid, (int) label, fidx, widx, n[fidx].index, n[fidx].value,smw[widx]);
+        oSVM::print(n);
+        exit(-1);
+      }
+      fidx++;
+      widx += SVM_FEAT_NUM_CLASSES(param);
+    }
+
+#ifdef W_OFFSET
+    p += smw[label];
+#endif
+
+    return p;
+  }
+
+  inline double computeUnaryPotential_copy(Slice_P* slice, sidType sid,
+                                           labelType label, osvm_node *n) {
+    double p = 0;
+    feature->getFeatureVector(n, slice, sid);
+
+    int fidx = 0;
+    while(n[fidx].index != -1) {
+      p += n[fidx].value*smw[SVM_FEAT_INDEX(param,label,fidx)];
+      fidx++;
+    }
+#ifdef W_OFFSET
+    p += smw[label];
+#endif
+    return p;
+  }
+
+ protected:
+
+  map<sidType, nodeCoeffType>* nodeCoeffs;
+  map<sidType, edgeCoeffType>* edgeCoeffs;
+
+  // ugly hack to remove void labels
+  static map<ulong, labelType> classIdxToLabel;
+
+};
+
+double GraphInference::computePairwisePotential(Slice_P* slice, supernode* s,
+                                                supernode* sn,
+                                                labelType s_label,
+                                                labelType sn_label)
+{
+  int idx;
+  double energy = 0;
+  int p = 0;
+  if(s->id < sn->id) {
+    p = (sn_label*param->nClasses) + s_label;
+  } else {
+    p = (s_label*param->nClasses) + sn_label;
+  }
+
+  int gradientIdx = slice->getGradientIdx(s->id, sn->id);
+  int orientationIdx = slice->getOrientationIdx(s->id, sn->id);
+
+  p += (orientationIdx*param->nClasses*param->nClasses);
+
+  // w[0..nClasses-1] contains the unary weights
+  for(int g = 0; g <= gradientIdx; g++) {
+    idx = (g*param->nClasses*param->nClasses*param->nOrientations) + p;
+    energy += smw[idx+param->nUnaryWeights]; // nUnaryWeights is the offset due to unary terms
+  }
+  return energy;
+}
+
+
+double GraphInference::computePairwisePotential_distance(Slice_P* slice, supernode* s,
+                                                         supernode* sn,
+                                                         labelType s_label,
+                                                         labelType sn_label)
+{
+
+#if !USE_LONG_RANGE_EDGES
+  assert(0);
+#endif
+
+  int idx;
+  double energy = 0;
+  int p = 0;
+  if(s->id < sn->id) {
+    p = (sn_label*param->nClasses) + s_label;
+  } else {
+    p = (s_label*param->nClasses) + sn_label;
+  }
+
+  int gradientIdx = slice->getGradientIdx(s->id, sn->id);
+  int orientationIdx = slice->getOrientationIdx(s->id, sn->id); 
+  int distanceIdx = slice->getDistanceIdx(s->id, sn->id);
+
+  p += (orientationIdx*param->nClasses*param->nClasses);
+
+  p += distanceIdx*param->nGradientLevels*param->nClasses*param->nClasses*param->nOrientations;
+
+  // w[0..nClasses-1] contains the unary weights
+  for(int g = 0; g <= gradientIdx; g++) {
+    idx = (g*param->nClasses*param->nClasses*param->nOrientations) + p;
+    energy += smw[idx+param->nUnaryWeights]; // nUnaryWeights is the offset due to unary terms
+  }
+  return energy;
+}
+
+#endif //GRAPH_INFERENCE_H

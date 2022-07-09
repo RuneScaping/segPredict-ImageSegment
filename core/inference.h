@@ -124,4 +124,61 @@ void computeScore(Slice* g,
                   map<ulong, labelType>& classIdxToLabel,
                   bool convertToLabel,       
                   int nClasses,
-        
+                  ulong* TPs,
+                  ulong* FPs,
+                  ulong* FNs,
+                  ulong* count,
+                  const char* outputDir,
+                  map<sidType, nodeCoeffType>* _nodeCoeffs,
+                  map<sidType, edgeCoeffType>* _edgeCoeffs);
+
+labelType* computeLabels(Slice_P* g, Feature* feature, const EnergyParam& param,
+                         int algoType, double* energy,
+                         labelType* groundTruthLabels, double* lossPerLabel,
+                         map<sidType, nodeCoeffType>* _nodeCoeffs,
+                         map<sidType, edgeCoeffType>* _edgeCoeffs);
+
+labelType* computeLabels(Slice_P* g, Feature* feature, const EnergyParam& param,
+                         int algoType, double* energy,
+                         labelType* groundTruthLabels, double* lossPerLabel);
+
+labelType* computeLabels(Slice_P* g, Feature* feature, const EnergyParam& param,
+                         int algoType, double* energy);
+
+labelType* computeLabels_sampling(Slice_P* g, Feature* feature, const EnergyParam& param,
+                                  int algoType, double* energy,
+                                  labelType* groundTruthLabels, double* lossPerLabel,
+                                  map<sidType, nodeCoeffType>* _nodeCoeffs,
+                                  map<sidType, edgeCoeffType>* _edgeCoeffs);
+
+labelType* computeCombinedLabels(Slice_P* g, Feature* feature,
+                                 labelType* groundTruthLabels, double* lossPerLabel,
+                                 int nRFs, vector<double>* alphas, int example_id,
+                                 map<sidType, nodeCoeffType>* _nodeCoeffs,
+                                 map<sidType, edgeCoeffType>* _edgeCoeffs,
+                                 const char* combined_probability_output_file);
+
+void computeVOCLoss(labelType* nodeLabels, labelType* ybar,
+                    int nNodes, int nClasses,
+                    double& loss, int& nDiff,
+                    ulong* TPs, ulong* FPs, ulong* FNs);
+
+IplImage* getSegmentedImage(Slice* g,
+                            Feature* feature,
+                            int algoType,
+                            const EnergyParam& param,
+                            map<labelType, ulong>* labelToClassIdx,
+                            map<sidType, nodeCoeffType>* _nodeCoeffs,
+                            map<sidType, edgeCoeffType>* _edgeCoeffs);
+
+IplImage* getSegmentedImage(Slice* g,
+                            Feature* feature,
+                            int algoType,
+                            const EnergyParam& param,
+                            map<labelType, ulong>* labelToClassIdx);
+
+void outputScore(const char* output_file, map<ulong, labelType>& classIdxToLabel,
+                 ulong* TPs, ulong* FPs, ulong* FNs, ulong* count,
+                 const char* weight_file);
+
+#endif //INFERENCE_H

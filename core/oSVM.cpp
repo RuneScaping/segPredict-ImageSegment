@@ -146,4 +146,16 @@ void oSVM::rescale(osvm_node *x, map<int, double>& feature_min, map<int, double>
     {
       if((feature_max[index] - feature_min[index])>0.0001)
         {
-    
+          if(x[n].value == feature_min[index])
+            x[n].value = lower_value;
+          else if(x[n].value == feature_max[index])
+            x[n].value = upper_value;
+          else
+            x[n].value = lower_value + (upper_value-lower_value) * 
+              (x[n].value-feature_min[index])/
+              (feature_max[index]-feature_min[index]);
+        }
+      n++;
+      index = x[n].index;
+    }
+}

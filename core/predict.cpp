@@ -240,4 +240,171 @@ int main(int argc,char* argv[])
   }
 
   string config_tmp;
-  Config* config = new C
+  Config* config = new Config(args.config_file);
+  Config::setInstance(config);
+
+  set_default_parameters(config);
+
+  mkdir(args.output_dir, 0777);
+
+  string imageDir;
+  string maskDir;
+  if(args.image_dir != 0) {
+    imageDir = args.image_dir;
+  } else {
+    if(args.dataset_type == 0) {
+      Config::Instance()->getParameter("trainingDir", imageDir);
+      Config::Instance()->getParameter("maskTrainingDir", maskDir);
+    } else {
+      Config::Instance()->getParameter("testDir", imageDir);
+      Config::Instance()->getParameter("maskTestDir", maskDir);
+    }
+  }
+
+  vector<eFeatureType> feature_types;
+  int paramFeatureTypes = 0;
+  if(config->getParameter("featureTypes", config_tmp)) {
+    paramFeatureTypes = atoi(config_tmp.c_str());
+    getFeatureTypes(paramFeatureTypes, feature_types);
+  }
+  
+  EnergyParam param(args.weight_file);
+  
+  if(config->getParameter("giType", config_tmp)) {
+    args.algo_type = atoi(config_tmp.c_str());
+    printf("[SVM_struct] giType = %d\n", args.algo_type);
+    if(args.algo_type == T_GI_MULTIOBJ && param.nClasses == 2) {
+      args.algo_type = T_GI_MAXFLOW;
+    }
+    if(args.algo_type == T_GI_MULTIOBJ && param.nClasses > 3) {
+      args.algo_type = T_GI_LIBDAI;
+    }    
+  }
+
+  // TODO: Find a better way to change the labels!
+  if(param.nClasses == 3) {
+    printf("[svm_struct] Set class labels\n");
+    BACKGROUND = 0;
+    BOUNDARY = 1;
+    FOREGROUND = 2;
+  }
+
+  Slice_P* slice = 0;
+  Feature* feature = 0;
+  int featureSize = 0;
+  loadDataAndFeatures(imageDir, maskDir, config, slice, feature, &featureSize);
+
+  // rescale features
+  bool rescale_features = true;
+  if(Config::Instance()->getParameter("rescale_features", config_tmp)) {
+    rescale_features = config_tmp.c_str()[0] == '1';
+  }
+  if(rescale_features) {
+    const char* scale_filename = "scale.txt";
+    printf("[Main] Rescaling features\n");
+    slice->rescalePrecomputedFeatures(scale_filename);
+  }
+
+  if( (args.weight_file == 0) || !fileExists(args.weight_file)) {
+    printf("[Main] No parameter file provided. Loading vector of 1's\n");
+    // load vector of 1's for unary term
+    param.nClasses = 2;
+    param.sizePsi = featureSize;
+    param.nUnaryWeights = featureSize;
+    param.nScalingCoefficients = featureSize;
+    param.nScales = 1;
+    param.weights = new double[featureSize];
+    for(int f = 0; f < featureSize; ++f) {
+      param.weights[f] = 1;
+    }
+  }
+
+  string colormapFilename;
+  getColormapName(colormapFilename);
+  printf("[Main] Colormap=%s\n", colormapFilename.c_str());
+  map<labelType, ulong> labelToClassIdx;
+  getLabelToClassMap(colormapFilename.c_str(), labelToClassIdx);
+
+  labelType* groundTruthLabels = 0;
+  double* lossPerLabel = 0;
+  const int nExamples = 1;
+  const string score_filename = "";
+  for(int sid = 0; sid < nExamples; sid++) {
+
+    SPATTERN p;
+    p.id = 0;
+    p.slice = slice;
+    p.feature = feature;
+
+    segmentImage(p,
+                 args.output_dir,
+                 args.algo_type,
+                 args.weight_file,
+                 &labelToClassIdx,
+                 score_filename,
+                 groundTruthLabels, lossPerLabel,
+                 compress_image,
+                 args.overlay_dir,
+                 METRIC_SUPERNODE_BASED_01);
+
+    if(args.export_all) {
+
+      if(args.algo_type != T_GI_MAX) {
+        printf("[Main] Running inference with unary potentials only\n");
+        // run inference with unary potentials only (algo_type = T_GI_MAX)
+        stringstream sout_output;
+        sout_output << args.output_dir;
+        sout_output << "/unary/";
+        mkdir(sout_output.str().c_str(), 0777);
+
+        stringstream sout_overlay;
+        sout_overlay << args.output_dir;
+        sout_overlay << "/unary/";
+        mkdir(sout_overlay.str().c_str(), 0777);
+
+        segmentImage(p,
+                     args.output_dir,
+                     T_GI_MAX,
+                     args.weight_file,
+                     &labelToClassIdx,
+                     score_filename,
+                     groundTruthLabels, lossPerLabel,
+                     compress_image,
+                     args.overlay_dir,
+                     METRIC_SUPERNODE_BASED_01);
+      }
+
+      // export marginals
+      printf("[Main] Exporting marginals\n");
+      GI_libDAI* gi_Inference = new GI_libDAI(slice,
+                                              &param,
+                                              param.weights,
+                                              groundTruthLabels,
+                                              lossPerLabel,
+                                              feature,
+                                              0, 0);
+
+      int nNodes = slice->getNbSupernodes();
+      float* marginals = new float[nNodes];
+      GI_libDAI* libDAI = gi_Inference;
+
+      for(int l = 0; l < param.nClasses; ++l) {
+        libDAI->getMarginals(marginals, l);
+        
+        stringstream sout;
+        sout << args.output_dir;
+        sout << "/marginals_" << l << "/";
+        mkdir(sout.str().c_str(), 0777);
+        sout << getNameFromPathWithoutExtension(slice->getName());
+        sout << ".png";
+        printf("Exporting %s\n", sout.str().c_str());
+        slice->exportProbabilities(sout.str().c_str(), param.nClasses, marginals);
+      }
+      
+    }
+  }
+
+  printf("[Main] Cleaning\n");
+  printf("[Main] Done\n");
+  return 0;
+}

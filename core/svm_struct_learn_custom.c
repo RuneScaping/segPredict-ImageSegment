@@ -715,4 +715,301 @@ double do_gradient_step(STRUCT_LEARN_PARM *sparm,
   }
 
   if(gparm->gradient_type == GRADIENT_DIRECT_ADD ||
-     gparm->gradient_type == GRADIENT_DIRECT_SUBTRAC
+     gparm->gradient_type == GRADIENT_DIRECT_SUBTRACT) {
+
+    // allocate memory
+    y_direct = new LABEL[nExamples];
+
+    // temporarily remove loss
+    double* _lossPerLabel = sparm->lossPerLabel;
+    sparm->lossPerLabel = 0;
+
+    for(int il = 0; il < nExamples; il++) {
+
+#ifdef USE_OPENMP
+      int threadId = omp_get_thread_num();
+      printf("[svm_struct_custom] Thread %d/%d\n", threadId,omp_get_num_threads());
+#else
+      int threadId = 0;
+#endif
+
+      // check if labels are stored in the cache
+      int cacheId = nExamples + ex[il].x.id;
+      bool labelFound = LabelCache::Instance()->getLabel(cacheId, *y_direct);
+      if(!labelFound) {
+        // allocate memory
+        y_direct->nNodes = ex[il].y.nNodes;
+        y_direct->nodeLabels = new labelType[y_direct->nNodes];
+        for(int n = 0; n < ex[il].y.nNodes; n++) {
+          y_direct->nodeLabels[n] = ex[il].y.nodeLabels[n];
+        }
+        y_direct->cachedNodeLabels = false;
+        labelFound = true;
+      }
+
+      runInference(ex[il].x, ex[il].y, sm, sparm, y_direct[il], threadId, labelFound, cacheId);
+      //exportLabels(sparm, &ex[il], y_bar, "direct/");
+
+    }
+    sparm->lossPerLabel = _lossPerLabel;
+  }
+
+#if CUSTOM_VERBOSITY > 2
+  ofstream ofs_cs_dscore("constraint_set_dscore.txt", ios::app);
+#endif
+  int n_satisfied = 0;
+  int n_not_satisfied = 0;
+
+  const double dfy_weight = 1.0;
+  double total_dscore = 0;
+  double total_dloss = 0;
+
+  if(gparm->constraint_set_type == CS_USE_MVC) {
+
+    ConstraintSet* cs = ConstraintSet::Instance();
+
+    for(int il = 0; il < nExamples; il++) { /*** example loop ***/
+
+      double _loss = 0;
+      compute_gradient(sparm, sm, &ex[il], &y_bar[il], &y_direct[il], gparm,
+                       fy_to, fy_away, dfy, &_loss, dfy_weight);
+
+      // add the current constraint first
+      if(gparm->constraint_set_type == CS_MARGIN || gparm->constraint_set_type == CS_MARGIN_DISTANCE) {
+        double margin = total_dscore + total_dloss;
+        double sorting_value = (fabs(margin) < 1e-38)?0 : 1.0/margin;
+        cs->add(ex[il].x.id, fy_away, _loss, _sizePsi, sorting_value);
+      } else {
+        cs->add(ex[il].x.id, fy_away, _loss, _sizePsi);
+      }
+
+      const constraint* c = cs->getMostViolatedConstraint(ex[il].x.id, sm->w);
+      double dscore_cs = compute_gradient(sm, gparm, fy_to,
+                                          c->first->w, dfy, c->first->loss, dfy_weight);
+      bool positive_margin = (dscore_cs + c->first->loss) > 0;
+
+      if( (gparm->loss_type != HINGE_LOSS && gparm->loss_type != SQUARE_HINGE_LOSS) || positive_margin) {
+        update_w(sparm, sm, gparm, momentum, dfy);
+      }
+
+#if CUSTOM_VERBOSITY > 2
+      ofs_cs_dscore << dscore_cs << "," << c->first->loss << endl;
+#endif
+    }
+
+  } else {
+    // use all the constraints in the working set instead of the most violated one
+
+    for(int il = 0; il < nExamples; il++) { /*** example loop ***/
+
+      // compute gradient for last generated constraint
+      double _loss;
+      double _dscore = compute_gradient(sparm, sm, &ex[il], &y_bar[il], &y_direct[il], gparm,
+                                        fy_to, fy_away, dfy, &_loss, dfy_weight);
+
+      if(gparm->use_history) {
+
+        // add last generated constraint to the working set
+        ConstraintSet* cs = ConstraintSet::Instance();
+        if(gparm->constraint_set_type == CS_MARGIN || gparm->constraint_set_type == CS_MARGIN_DISTANCE) {
+          double margin = _dscore + _loss;
+          double sorting_value = (fabs(margin) < 1e-38)?0 : 1.0/margin;
+          cs->add(ex[il].x.id, fy_away, _loss, _sizePsi, sorting_value);
+        } else {
+          cs->add(ex[il].x.id, fy_away, _loss, _sizePsi);
+        }
+
+        const vector< constraint >* constraints = cs->getConstraints(ex[il].x.id);
+
+        if(constraints) {
+          for(vector<constraint>::const_iterator it = constraints->begin();
+              it != constraints->end(); ++it) {
+            double dscore_cs = compute_gradient(sm, gparm, fy_to,
+                                                it->first->w, dfy, it->first->loss, dfy_weight);
+            total_dloss += it->first->loss;
+            bool positive_margin = (dscore_cs + it->first->loss) > 0;
+
+            if( (gparm->loss_type != HINGE_LOSS && gparm->loss_type != SQUARE_HINGE_LOSS) || positive_margin) {
+              update_w(sparm, sm, gparm, momentum, dfy);
+              total_dscore += dscore_cs;
+            }
+
+            if(positive_margin) {
+              ++n_not_satisfied;
+            } else {
+              ++n_satisfied;
+            }
+#if CUSTOM_VERBOSITY > 2
+            ofs_cs_dscore << dscore_cs << "," << it->first->loss << " ";
+#endif
+          }
+        }
+
+#if CUSTOM_VERBOSITY > 2
+        ofs_cs_dscore << " , " << _dscore << endl;
+#endif
+
+        if(gparm->constraint_set_type == CS_MARGIN || gparm->constraint_set_type == CS_MARGIN_DISTANCE) {
+          // compute margin
+          double margin = total_dscore + total_dloss;
+          double sorting_value = (fabs(margin) < 1e-38)?0 : 1.0/margin;
+          cs->add(ex[il].x.id, fy_away, _loss, _sizePsi, sorting_value);
+        } else {
+          cs->add(ex[il].x.id, fy_away, _loss, _sizePsi);
+        }
+      } else {
+        bool positive_margin = (_dscore + _loss) > 0;
+        if( (gparm->loss_type != HINGE_LOSS && gparm->loss_type != SQUARE_HINGE_LOSS) || positive_margin) {
+          update_w(sparm, sm, gparm, momentum, dfy);
+          total_dscore += _dscore;
+        }
+      }
+    }
+  }
+
+#if CUSTOM_VERBOSITY > 2
+  ofs_cs_dscore.close();
+#endif
+
+#if CUSTOM_VERBOSITY > 1
+  ofstream ofs_cs_card("constraint_set_card.txt", ios::app);
+  ofs_cs_card << n_satisfied << " " << n_not_satisfied << " " << n_satisfied+n_not_satisfied << endl;
+  ofs_cs_card.close();
+#endif
+
+#if CUSTOM_VERBOSITY > 1
+  double sq_norm_dfy = 0;
+  for(int i = 1; i < _sizePsi; ++i) {
+    sq_norm_dfy += dfy[i]*dfy[i];
+  }
+  ofstream ofs_norm_dfy("norm_dfy.txt", ios::app);
+  ofs_norm_dfy << sqrt(sq_norm_dfy) << endl;
+  ofs_norm_dfy.close();
+
+  ofstream ofs_dscore("dscore.txt", ios::app);
+  ofs_dscore << total_dscore << endl;
+  ofs_dscore.close();
+
+  if(sparm->giType == T_GI_SAMPLING) {
+    ofstream ofs_temp("temperature.txt", ios::app);
+    ofs_temp << sparm->sampling_temperature_0 << endl;
+    ofs_temp.close();
+  }
+
+#endif // CUSTOM_VERBOSITY
+
+  dscore = total_dscore;
+
+  double m = compute_m(sparm, sm, ex, nExamples, gparm, y_bar, y_direct, fy_to, fy_away, dfy);
+
+  if(y_direct) {
+    delete[] y_direct;
+  }
+
+  return m;
+}
+
+double compute_m(STRUCT_LEARN_PARM *sparm,
+                 STRUCTMODEL *sm, EXAMPLE *ex, long nExamples,
+                 GRADIENT_PARM* gparm, LABEL* y_bar, LABEL* y_direct,
+                 SWORD* fy_to, SWORD* fy_away, double *dfy)
+{
+  const double dfy_weight = 1.0;
+  double total_loss = 0; // cumulative loss for all examples
+  double total_dscore = 0;
+
+  if(gparm->use_history) {
+
+    // use history of constraints
+    ConstraintSet* cs = ConstraintSet::Instance();
+
+    for(int il = 0; il < nExamples; il++) { /*** example loop ***/
+      const vector< constraint >* constraints = cs->getConstraints(ex[il].x.id);
+      if(constraints) {
+        for(vector<constraint>::const_iterator it = constraints->begin();
+            it != constraints->end(); ++it) {
+          double dscore_cs = compute_gradient(sm, gparm, fy_to,
+                                              it->first->w, dfy, it->first->loss, dfy_weight);
+
+          // do not add if negative to avoid adding and subtracting values.
+          // this score is just logged, not used in any computation.
+          if(dscore_cs > 0) {
+            total_dscore += dscore_cs;
+            total_loss += it->first->loss;
+          }
+        }
+      }
+    }
+  } else {
+    for(int il = 0; il < nExamples; il++) { /*** example loop ***/
+      double _loss  = 0;
+      total_dscore += compute_gradient(sparm, sm, &ex[il], &y_bar[il],
+                                       &y_direct[il], gparm, fy_to, fy_away,
+                                       dfy, &_loss, dfy_weight);
+      total_loss += _loss;
+    }
+  }
+
+#if CUSTOM_VERBOSITY > 1
+  // loss computed after updating weight vector
+  ofstream ofs("loss.txt", ios::app);
+  ofs << total_loss << endl;
+  ofs.close();
+
+  // dscore computed after updating weight vector
+  ofstream ofs_dscore("a_dscore.txt", ios::app);
+  ofs_dscore << total_dscore << endl;
+  ofs_dscore.close();
+#endif
+
+  double m = total_dscore + total_loss;
+  return m;
+}
+
+/**
+ * compute an estimate of the score
+ * return max among a subset of sampled superpixels and only compute score for class 0
+ */
+double compute_score_estimate(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm, GRADIENT_PARM& gparm, EXAMPLE* example)
+{
+  const int c = 0; // class 0
+  labelType* groundTruthLabels = example->y.nodeLabels;
+  EnergyParam param;
+  sparmToEnergyParam(*sparm, &param);
+  Slice_P* slice = example->x.slice;
+  GraphInference gi(slice, (const EnergyParam*)&param, sm->w+1, example->x.feature, 0, 0);
+
+  double max_potential = 0;
+
+  string config_tmp;
+  double sampling_rate = 0.3;
+  if(Config::Instance()->getParameter("sampling_rate", config_tmp)) {
+    sampling_rate = atof(config_tmp.c_str()); 
+    printf("[svm_struct] sampling_rate = %g\n", sampling_rate);
+  }
+  bool draw_samples = sampling_rate != 1.0;
+  ulong nSupernodes = slice->getNbSupernodes();
+  int sid = 0;
+  for(int i = 0; i < nSupernodes*sampling_rate; ++i) {
+
+    if(draw_samples) {
+      // Select a pixel at random
+      sid = rand() * ((double)nSupernodes/(double)RAND_MAX);
+    } else {
+      sid = i;
+    }
+
+    supernode* s = slice->getSupernode(sid);
+    vector < supernode* >* lNeighbors = &(s->neighbors);
+
+    double potential = gi.computeUnaryPotential(slice, sid, c);
+    for(vector < supernode* >::iterator itN = lNeighbors->begin();
+        itN != lNeighbors->end(); itN++) {
+      const int c2 = rand()*sparm->nClasses / (double)RAND_MAX;
+      double pairwisePotential = gi.computePairwisePotential(slice, s, (*itN),
+                                                             c, c2);
+      potential += pairwisePotential;
+    }
+
+    if(!gparm.ignore_loss) {
+      if(c != groundTruthLa

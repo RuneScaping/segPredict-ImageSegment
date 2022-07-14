@@ -385,4 +385,334 @@ void compute_psi_to(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm,
 double compute_gradient_accumulate(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm,
                                    EXAMPLE* ex, LABEL* y_bar, LABEL* y_direct,
                                    GRADIENT_PARM* gparm, SWORD* fy_to, SWORD* fy_away,
-                                   double *dfy, doub
+                                   double *dfy, double* loss, const double dfy_weight)
+{
+  int _sizePsi = sm->sizePsi + 1;
+  double _loss;
+  compute_psi(sparm, sm, ex, y_bar, y_direct, gparm, fy_to, fy_away, &_loss);
+  if(loss) {
+    *loss = _loss;
+  }
+
+  compute_gradient_accumulate(sm, gparm, fy_to, fy_away, dfy, _loss, dfy_weight);
+
+#if CUSTOM_VERBOSITY > 3
+  write_vector("dfy.txt", dfy, _sizePsi);
+#endif
+
+  double dscore = 0;
+  // do not add +1 here as dfy also has an additional dummy entry at index 0.
+  double* smw = sm->w;
+  for(int i = 0; i < _sizePsi; ++i) {
+    dscore += smw[i]*dfy[i];
+  }
+  return dscore;
+}
+
+double compute_gradient(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm,
+                        EXAMPLE* ex, LABEL* y_bar, LABEL* y_direct,
+                        GRADIENT_PARM* gparm, SWORD* fy_to, SWORD* fy_away,
+                        double *dfy, double* loss, const double dfy_weight)
+{
+  // initialize dfy to 0
+  int _sizePsi = sm->sizePsi + 1;
+  for(int i = 0; i < _sizePsi; ++i) {
+    dfy[i] = 0;
+  }
+
+  return compute_gradient_accumulate(sparm, sm, ex, y_bar, y_direct, gparm, fy_to, fy_away, dfy, loss, dfy_weight);
+}
+
+double compute_gradient(STRUCTMODEL *sm, GRADIENT_PARM* gparm,
+                        SWORD* fy_to, SWORD* fy_away, double *dfy,
+                        const double loss, const double dfy_weight)
+{
+  // initialize dfy to 0
+  int _sizePsi = sm->sizePsi + 1;
+  for(int i = 0; i < _sizePsi; ++i) {
+    dfy[i] = 0;
+  }
+
+  compute_gradient_accumulate(sm, gparm, fy_to, fy_away, dfy, loss, dfy_weight);
+
+  double dscore = 0;
+  // do not add +1 here as dfy also has an additional dummy entry at index 0.
+  double* smw = sm->w;
+  for(int i = 0; i < _sizePsi; ++i) {
+    dscore += smw[i]*dfy[i];
+  }
+  return dscore;
+}
+
+void exportLabels(STRUCT_LEARN_PARM *sparm, EXAMPLE* ex,
+                  LABEL* y, const char* dir_name)
+{
+  string paramSlice3d;
+  Config::Instance()->getParameter("slice3d", paramSlice3d);
+  bool useSlice3d = paramSlice3d.c_str()[0] == '1';
+  string paramVOC;
+  Config::Instance()->getParameter("voc", paramVOC);
+  bool useVOC = paramVOC.c_str()[0] == '1';
+
+  stringstream ss_dir;
+  ss_dir << dir_name;
+  mkdir(ss_dir.str().c_str(), 0777);
+  if(!useSlice3d) {
+    //TODO : Remove !useVOC
+    if(useVOC) {
+      ss_dir << "x" << sparm->iterationId;
+    }
+    else {
+      ss_dir << "x" << sparm->iterationId << "/";
+    }
+  }
+  mkdir(ss_dir.str().c_str(), 0777);
+
+  stringstream soutColoredImage;
+  soutColoredImage << ss_dir.str();
+  if(useSlice3d) {
+    soutColoredImage << getNameFromPathWithoutExtension(ex->x.slice->getName());
+    soutColoredImage << "_";
+    soutColoredImage << sparm->iterationId;
+  } else {
+    soutColoredImage << ex->x.slice->getName();
+  }
+
+  ex->x.slice->exportSupernodeLabels(soutColoredImage.str().c_str(),
+                                     sparm->nClasses,
+                                     y->nodeLabels,
+                                     y->nNodes,
+                                     &(sparm->labelToClassIdx));
+
+  if(useSlice3d) {
+    zipAndDeleteCube(soutColoredImage.str().c_str());
+  }
+}
+
+double do_gradient_step(STRUCT_LEARN_PARM *sparm,
+                        STRUCTMODEL *sm, EXAMPLE *ex, long nExamples,
+                        GRADIENT_PARM* gparm,
+                        double* momentum, double& dscore, LABEL* y_bar)
+{
+  int _sizePsi = sm->sizePsi + 1;
+  SWORD* fy_to = new SWORD[_sizePsi];
+  SWORD* fy_away = new SWORD[_sizePsi];
+  double* dfy = new double[_sizePsi];
+  memset((void*)dfy, 0, sizeof(double)*(_sizePsi));
+
+  double m = do_gradient_step(sparm, sm, ex, nExamples, gparm,
+                              momentum, fy_to, fy_away, dfy, dscore, y_bar);
+  delete[] fy_to;
+  delete[] fy_away;
+  delete[] dfy;
+  return m;
+}
+
+double compute_gradient_with_history(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm,
+                                     EXAMPLE* ex,
+                                     GRADIENT_PARM* gparm, SWORD* fy_to,
+                                     double *dfy, double* loss)
+{
+  ConstraintSet* cs = ConstraintSet::Instance();
+  const vector< constraint >* constraints = cs->getConstraints(ex->x.id);
+  assert(constraints != 0);
+  int n_cs = constraints->size();
+
+  double* dfy_weights = new double[n_cs];
+  if(gparm->use_random_weights) {
+    double total_weights = 0;
+    for(int c = 0; c < n_cs; ++c) {
+      dfy_weights[c] = rand() * ((double)n_cs/(double)RAND_MAX);
+      total_weights += dfy_weights[c];
+    }
+    for(int c = 0; c < n_cs; ++c) {
+      dfy_weights[c] /= total_weights;
+    }
+  } else {
+    double total_weights = 0;
+    for(int c = 0; c < n_cs; ++c) {
+      dfy_weights[c] = 1.0/(double)(n_cs);
+      total_weights += dfy_weights[c];
+    }
+    for(int c = 0; c < n_cs; ++c) {
+      dfy_weights[c] /= total_weights;
+    }
+  }
+
+  int _sizePsi = sm->sizePsi + 1;
+  // initialize dfy to 0
+  for(int i = 0; i < _sizePsi; ++i) {
+    dfy[i] = 0;
+  }
+
+  if(loss) {
+    *loss = 0;
+  }
+
+  // add gradient for history of constraints
+  if(gparm->loss_type != HINGE_LOSS && gparm->loss_type != SQUARE_HINGE_LOSS) {
+    // use all the constraints in the set
+    int c = 0;
+    for(vector<constraint>::const_iterator it = constraints->begin();
+        it != constraints->end(); ++it) {
+      compute_gradient_accumulate(sm, gparm, fy_to,
+                                  it->first->w, dfy, it->first->loss, dfy_weights[c]);
+      if(loss) {
+        *loss += it->first->loss;
+      }      
+      ++c;
+    }
+  } else {
+    // only use violated constraints
+
+    double score_gt = computeScore(sm, fy_to);
+    int c = 0;
+    for(vector<constraint>::const_iterator it = constraints->begin();
+        it != constraints->end(); ++it) {
+      // check if constraint is violated
+      double score_cs = computeScore(sm, it->first->w);
+      bool positive_margin = (score_cs - score_gt + it->first->loss) > 0;
+      //printf("Margin constraint %d: score_cs = %g, score_gt = %g, loss = %g, margin = %g\n",
+      //       c, score_cs, score_gt, it->first->loss, score_cs - score_gt + it->first->loss);
+
+      if(positive_margin) {
+        compute_gradient_accumulate(sm, gparm, fy_to,
+                                    it->first->w, dfy, it->first->loss, dfy_weights[c]);
+        if(loss) {
+          *loss += it->first->loss;
+        }
+      }     
+      ++c;
+    }
+  }
+
+  double total_dscore = 0;
+  // do not add +1 here as dfy also has an additional dummy entry at index 0.
+  double* smw = sm->w;
+  for(int i = 0; i < _sizePsi; ++i) {
+    total_dscore += smw[i]*dfy[i];
+  }
+
+  delete[] dfy_weights;
+
+  return total_dscore;
+}
+
+double compute_gradient_with_history(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm,
+                                     EXAMPLE* ex, LABEL* y_bar, LABEL* y_direct,
+                                     GRADIENT_PARM* gparm, SWORD* fy_to, SWORD* fy_away,
+                                     double *dfy, double* loss)
+{
+  double dfy_weight = 1.0;
+  int _sizePsi = sm->sizePsi + 1;
+  // initialize dfy to 0
+  for(int i = 0; i < _sizePsi; ++i) {
+    dfy[i] = 0;
+  }
+
+  double _loss;
+  double _dscore = compute_gradient(sparm, sm, ex, y_bar, y_direct, gparm, fy_to,
+                                    fy_away, dfy, &_loss, dfy_weight);
+  if(loss) {
+    *loss += _loss;
+  }
+
+  // add gradient for history of constraints
+  ConstraintSet* cs = ConstraintSet::Instance();
+  const vector< constraint >* constraints = cs->getConstraints(ex->x.id);
+  if(constraints) {
+    dfy_weight = 1.0/(double)(constraints->size()+1.0);
+    for(vector<constraint>::const_iterator it = constraints->begin();
+        it != constraints->end(); ++it) {
+      compute_gradient_accumulate(sm, gparm, fy_to,
+                                  it->first->w, dfy, it->first->loss, dfy_weight);
+      if(loss) {
+        *loss += it->first->loss;
+      }
+    }
+  }
+
+  double total_dscore = 0;
+  // do not add +1 here as dfy also has an additional dummy entry at index 0.
+  double* smw = sm->w;
+  for(int i = 0; i < _sizePsi; ++i) {
+    total_dscore += smw[i]*dfy[i];
+  }
+  total_dscore += _dscore;
+  return total_dscore;
+}
+
+void update_w(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm, GRADIENT_PARM* gparm,
+              double* momentum, double *dfy)
+{
+  int _sizePsi = sm->sizePsi + 1;
+
+  // do not add +1 here as dfy also has an additional dummy entry at index 0.
+  double* smw = sm->w;
+  if(momentum) {
+    // update momentum
+    for(int i = 1; i < _sizePsi; ++i) {
+      momentum[i] = (gparm->learning_rate*(dfy[i] + (gparm->regularization_weight*smw[i])) + gparm->momentum_weight*momentum[i]);
+    }
+    for(int i = 1; i < _sizePsi; ++i) {
+      smw[i] -= momentum[i];
+    }
+  } else {
+    for(int i = 1; i < _sizePsi; ++i) {
+      smw[i] -= gparm->learning_rate*(dfy[i]+(gparm->regularization_weight*smw[i]));
+    }
+  }
+}
+
+double do_gradient_step(STRUCT_LEARN_PARM *sparm,
+                        STRUCTMODEL *sm, EXAMPLE *ex, long nExamples,
+                        GRADIENT_PARM* gparm,
+                        double* momentum,
+                        SWORD* fy_to, SWORD* fy_away, double *dfy,
+                        double& dscore,
+                        LABEL* y_bar)
+{
+  int _sizePsi = sm->sizePsi + 1;
+  LABEL* y_direct = 0;
+
+  double* _lossPerLabel = sparm->lossPerLabel;
+  if(gparm->ignore_loss) {
+    sparm->lossPerLabel = 0;
+  }
+
+  // setting this to 1 will make the example loop below single thread so that
+  // several threads can be run for different temperature while running the
+  // samplign code.
+#define USE_SAMPLING 0
+
+#if USE_SAMPLING
+#ifdef USE_OPENMP
+#pragma omp parallel for
+#endif
+#endif
+
+  /*** precomputation step ***/
+  for(int i = 0; i < nExamples; i++) {
+
+#if USE_SAMPLING
+#ifdef USE_OPENMP
+    int threadId = omp_get_thread_num();
+    printf("[svm_struct_custom] Thread %d/%d\n", threadId,omp_get_num_threads());
+#endif
+#endif
+
+    if(sparm->loss_type == SLACK_RESCALING) {
+      y_bar[i] = find_most_violated_constraint_slackrescaling(ex[i].x, ex[i].y,
+                                                             sm, sparm);
+    } else {
+      y_bar[i] = find_most_violated_constraint_marginrescaling(ex[i].x, ex[i].y,
+                                                              sm, sparm);
+    }
+  }
+
+  if(gparm->ignore_loss) {
+    sparm->lossPerLabel = _lossPerLabel;
+  }
+
+  if(gparm->gradient_type == GRADIENT_DIRECT_ADD ||
+     gparm->gradient_type == GRADIENT_DIRECT_SUBTRAC

@@ -1012,4 +1012,340 @@ double compute_score_estimate(STRUCT_LEARN_PARM *sparm, STRUCTMODEL *sm, GRADIEN
     }
 
     if(!gparm.ignore_loss) {
-      if(c != groundTruthLa
+      if(c != groundTruthLabels[sid]) {
+        // add loss of the ground truth label
+        potential += sparm->lossPerLabel[groundTruthLabels[sid]];
+      }
+    }
+
+    if(potential > max_potential) {
+      max_potential = potential;
+    }
+  }
+
+  return max_potential;
+}
+
+void set_sampling_temperature(STRUCT_LEARN_PARM *sparm,
+                              STRUCTMODEL *sm,
+                              GRADIENT_PARM& gparm,
+                              EXAMPLE* ex,
+                              long nExamples,
+                              double* dscores,
+                              double* ddfy)
+{
+
+  int schedulingType = 2;
+  string config_tmp;
+  if(Config::Instance()->getParameter("schedulingType", config_tmp)) {
+    schedulingType = atoi(config_tmp.c_str()); 
+  }
+  printf("[svm_struct_custom] schedulingType=%d\n", schedulingType);
+
+  int nItems = sparm->stepForOutputFiles;
+
+  switch(schedulingType) {
+  case 0:
+    {
+    // try to lower the temperature as much as we can
+
+    double score = compute_score_estimate(sparm, sm, gparm, &ex[0]);
+
+    // compute average dscore
+    double avg_dscore = 0;
+    for(int i = 0; i < nItems; ++i) {
+      avg_dscore += dscores[i];
+    }
+
+#if CUSTOM_VERBOSITY > 2
+    {
+      ofstream ofs_temp("avg_dscore.txt", ios::app);
+      ofs_temp << sparm->iterationId << " " << avg_dscore << endl;
+      ofs_temp.close();
+    }
+#endif
+
+    bool exp_is_inf = false;
+    while(!exp_is_inf) {
+      exp_is_inf = isinf(exp(score/(sparm->sampling_temperature_0/SAMPLING_MUL_COEFF)));
+      if(!exp_is_inf) {
+        // decrease randomness
+        sparm->sampling_temperature_0 /= SAMPLING_MUL_COEFF;
+      }
+    }
+    }
+    break;
+  case 1:
+    {
+    // decrease temperature if dscore < 0
+    // increase temperature if not enough changes
+
+    double score = compute_score_estimate(sparm, sm, gparm, &ex[0]);
+        
+    // compute average dscore
+    double avg_dscore = 0;
+    for(int i = 0; i < nItems; ++i) {
+      avg_dscore += dscores[i];
+    }
+
+#if CUSTOM_VERBOSITY > 2
+    {
+      ofstream ofs_temp("avg_dscore.txt", ios::app);
+      ofs_temp << sparm->iterationId << " " << avg_dscore << endl;
+      ofs_temp.close();
+    }
+#endif
+
+    if(avg_dscore < 0) {
+      bool exp_is_inf = isinf(exp(score/(sparm->sampling_temperature_0/SAMPLING_MUL_COEFF)));
+      if(!exp_is_inf && sparm->sampling_temperature_0 > score*1e-10) {
+        // decrease randomness
+        sparm->sampling_temperature_0 /= SAMPLING_MUL_COEFF;
+
+        // reset labels in the cache to ground-truth
+        for(int i = 0; i < nExamples; i++) {
+          int cacheId = ex[i].x.id;
+          LabelCache::Instance()->setLabel(cacheId, ex[i].y);
+        }
+
+#if CUSTOM_VERBOSITY > 2
+        ofstream ofs_temp("temperature_change.txt", ios::app);
+        ofs_temp << sparm->iterationId << " " << score << " ";
+        ofs_temp << score/sparm->sampling_temperature_0 << " " << exp(score/(sparm->sampling_temperature_0));
+        ofs_temp << " " << sparm->sampling_temperature_0 << endl;
+        ofs_temp.close();
+#endif
+      } else {
+
+        // decrease sampling rate
+        sparm->sampling_rate = max(0.1, sparm->sampling_rate-0.1);
+
+#if CUSTOM_VERBOSITY > 2
+        ofstream ofs_temp("sampling_rate.txt", ios::app);
+        ofs_temp << sparm->sampling_rate << endl;
+        ofs_temp.close();
+#endif
+
+      }
+    }
+
+    }
+    break;
+  case 2:
+    {
+      // decrease temperature
+      if((sparm->iterationId % 20) == 0) {
+      //if((sparm->iterationId % sparm->stepForOutputFiles) == 0) {
+        double score = compute_score_estimate(sparm, sm, gparm, &ex[0]);
+        bool exp_is_inf = isinf(exp(score/(sparm->sampling_temperature_0/SAMPLING_MUL_COEFF)));
+        printf("[svm_learn] Set temp %g %d\n", score, (int)exp_is_inf);
+        if(!exp_is_inf) {
+          // decrease randomness
+          sparm->sampling_temperature_0 /= SAMPLING_MUL_COEFF;
+        }
+      }
+    }
+    break;
+  default:
+    // do not change the temperature
+    break;
+  }
+}
+
+// use -w 9 to call this function
+void svm_learn_struct_joint_custom(SAMPLE sample, STRUCT_LEARN_PARM *sparm,
+				   LEARN_PARM *lparm, KERNEL_PARM *kparm, 
+				   STRUCTMODEL *sm)
+     /* Input: sample (training examples)
+	       sparm (structural learning parameters)
+               lparm (svm learning parameters)
+               kparm (kernel parameters)
+	       Output: sm (learned model) */
+{
+  long        nTotalExamples = sample.n;
+  EXAMPLE     *examples = sample.examples;
+
+  CONSTSET    cset;
+  int         cached_constraint = 0;
+  int         numIt = 0;
+  double      *alpha = NULL;
+  double ceps;
+  bool finalized = false;
+  string config_tmp;
+
+  init_struct_model(sample, sm, sparm, lparm, kparm); 
+
+  Config* config = Config::Instance();
+  GRADIENT_PARM gparm;
+  init_gradient_param(gparm, config, ConstraintSet::Instance());
+  gparm.examples_all = examples;
+  gparm.n_total_examples = nTotalExamples;
+
+  // 0 = initialize parameter vector to 0
+  // 1 = initialize parameter vector using random values
+  int init_type = INIT_WEIGHT_0;
+  if(gparm.ignore_loss == 1) {
+    init_type = INIT_WEIGHT_RANDOM;
+  }
+  if(config->getParameter("sgd_init_type", config_tmp)) {
+    init_type = atoi(config_tmp.c_str());
+  }
+  printf("[SVM_struct_custom] init_type = %d\n", init_type);
+
+  sm->svm_model = 0;
+  //sm->w = new double[sm->sizePsi+1];
+  // use C style to be compatible with svm-light
+  // and to make sure there is no error in free_struct_model
+  sm->w = (double *)my_malloc(sizeof(double)*(sm->sizePsi+1));
+  init_w(sparm, sm, &gparm, examples, init_type);
+
+  if(sparm->giType == T_GI_SAMPLING) {
+    init_sampling(sparm, sm, examples, nTotalExamples);
+  }
+
+  int n_iterations_update_learning_rate = 1000;
+  if(config->getParameter("n_iterations_update_learning_rate", config_tmp)) {
+    n_iterations_update_learning_rate = atoi(config_tmp.c_str());
+  }
+  printf("[SVM_struct_custom] n_iterations_update_learning_rate = %d\n", n_iterations_update_learning_rate);
+
+  if(gparm.ignore_loss) {
+    sparm->lossPerLabel = 0;
+  }
+
+  double* momentum = 0;
+  if( (gparm.update_type == UPDATE_MOMENTUM) || (gparm.update_type == UPDATE_MOMENTUM_DECREASING)) {
+    int _sizePsi = sm->sizePsi + 1;
+    momentum = new double[_sizePsi];
+    for(int i = 0; i < _sizePsi; ++i) {
+      momentum[i] = 0;
+    }
+  }
+
+  double last_obj = 0;
+  int _sizePsi = sm->sizePsi + 1;
+  SWORD* fy_to = new SWORD[_sizePsi];
+  SWORD* fy_away = new SWORD[_sizePsi];
+  double* dfy = new double[_sizePsi];
+  memset((void*)dfy, 0, sizeof(double)*(_sizePsi));
+  LABEL* y_bar = new LABEL[nTotalExamples];
+
+  int nMaxIterations = (sparm->nMaxIterations!=-1)?sparm->nMaxIterations:1e7;
+  int nItems = sparm->stepForOutputFiles;
+  double* learning_rates = new double[nItems];
+  double* norm_ws = new double[nItems];
+  double* ms = new double[nItems];
+  double* objs = new double[nItems];
+  double* dscores = new double[nItems];
+  int idx = 0;
+  int example_id = 0;
+
+  // sampling: keep previous dfy and check how much change
+  // occurs to decide if we should raise the temperature
+  double* dfy_p = 0;
+  double* ddfy = 0;
+  if(sparm->giType == T_GI_SAMPLING) {
+    dfy_p = new double[_sizePsi];
+    memset((void*)dfy_p, 0, sizeof(double)*(_sizePsi));
+    ddfy = new double[nItems];
+  }
+
+  do {
+
+    EXAMPLE* _ex = examples;
+
+    int _nBatchExamples = nTotalExamples;
+
+    if(gparm.n_batch_examples != -1) {
+      _ex += example_id;
+
+      // make sure next batch doesn't go over size of training set
+      if(example_id + gparm.n_batch_examples > nTotalExamples) {
+        _nBatchExamples = nTotalExamples - example_id;
+        printf("[SVM_struct_custom] Batch size for iteration %d is too large. Reducing to %d\n", sparm->iterationId, _nBatchExamples);
+      } else {
+        _nBatchExamples = gparm.n_batch_examples;
+      }
+    }
+
+    double m = do_gradient_step(sparm, sm, _ex, _nBatchExamples,
+                                &gparm, momentum, fy_to, fy_away, dfy,
+                                dscores[idx], y_bar);
+
+    // projection
+    if(gparm.enforce_submodularity) {
+      double* smw = sm->w + 1;
+      enforce_submodularity(sparm, smw);
+    }
+    if(gparm.max_norm_w > 0) {
+      project_w(sm, &gparm);
+    }
+
+    double obj = 0;
+    switch(gparm.loss_type) {
+    case LINEAR_LOSS:
+      obj = m;
+      break;
+    case LOG_LOSS:
+      if(m > 100) {
+        obj = log(1 + std::exp(100.0));
+      } else {
+        obj = log(1 + std::exp(m));
+      }
+      break;
+    case HINGE_LOSS:
+      obj = max(0.0, m);
+      break;
+    case SQUARE_HINGE_LOSS:
+      obj = max(0.0, m*m);
+      break;
+    default:
+      printf("[svm_struct_custom] Unknown loss type %d\n", gparm.loss_type);
+      exit(-1);
+      break;
+    }
+
+    if(numIt == 0) {
+      ceps = fabs(obj);
+    } else {
+      ceps = fabs(last_obj - obj);
+    }
+    last_obj = obj;
+
+    finalized = finalize_iteration(ceps,cached_constraint,sample,sm,cset,alpha,sparm);
+
+    switch(gparm.update_type)
+      {
+      case UPDATE_DECREASING:
+      case UPDATE_MOMENTUM_DECREASING:
+        {
+          if(numIt > n_iterations_update_learning_rate) {
+            gparm.learning_rate = gparm.learning_rate_0/(double)pow(numIt-n_iterations_update_learning_rate,
+                                                                    gparm.learning_rate_exponent);
+          } else {
+            if(numIt > n_iterations_update_learning_rate) {
+              gparm.learning_rate = gparm.learning_rate_0/(double)pow(numIt-n_iterations_update_learning_rate,
+                                                                      gparm.learning_rate_exponent);
+            }
+          }
+        }
+        break;
+      default:
+        break;
+      }
+
+    int _sizePsi = sm->sizePsi + 1;
+    double norm_w = 0;
+    for(int i = 1; i < _sizePsi; ++i) {
+      norm_w += sm->w[i]*sm->w[i];
+    }
+
+    norm_ws[idx] = sqrt(norm_w);
+    ms[idx] = m;
+    objs[idx] = obj;
+    learning_rates[idx] = gparm.learning_rate;
+
+    if(ddfy) {
+      // compute difference between successive dfy vectors
+      ddfy[idx] = 0;
+      for(int

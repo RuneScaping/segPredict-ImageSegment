@@ -1684,4 +1684,46 @@ void init_gradient_param(GRADIENT_PARM& gparm, Config* config,
   }
   printf("[SVM_struct_custom] sgd_use_history = %d\n", (int)sgd_use_history);
 
-  eSortingType con
+  eSortingType constraint_set_type = CS_DISTANCE;
+  if(config->getParameter("constraint_set_type", config_tmp)) {
+    constraint_set_type = (eSortingType)atoi(config_tmp.c_str());
+  }
+  printf("[SVM_struct_custom] constraint_set_type = %d\n", (int)constraint_set_type);
+  constraint_set->setSortingAlgorithm(constraint_set_type);
+
+  bool sgd_ignore_loss = false;
+  if(config->getParameter("sgd_ignore_loss", config_tmp)) {
+    sgd_ignore_loss = config_tmp.c_str()[0] == '1';
+  }
+  printf("[SVM_struct_custom] sgd_ignore_loss = %d\n", (int)sgd_ignore_loss);
+
+  double max_norm_w = -1;
+  if(Config::Instance()->getParameter("max_norm_w", config_tmp)) {
+    max_norm_w = atof(config_tmp.c_str());
+  }
+  printf("[SVM_struct_custom] max_norm_w = %g\n", max_norm_w);
+
+  bool enforce_submodularity = true;
+  if(Config::Instance()->getParameter("project_w", config_tmp)) {
+    enforce_submodularity = config_tmp.c_str()[0] == '1';
+  }
+  if(Config::Instance()->getParameter("enforce_submodularity", config_tmp)) {
+    enforce_submodularity = config_tmp.c_str()[0] == '1';
+  }
+  printf("[SVM_struct_custom] enforce_submodularity = %d\n", (int)enforce_submodularity);
+
+  gparm.learning_rate = learning_rate;
+  gparm.learning_rate_0 = learning_rate; // initial learning rate
+  gparm.learning_rate_exponent = learning_rate_exponent;
+  gparm.max_norm_w = max_norm_w;
+  gparm.enforce_submodularity = enforce_submodularity;
+  gparm.update_type = sgd_update_type;
+  gparm.loss_type = sgd_loss_type;
+  gparm.momentum_weight = momentum_weight;
+  gparm.regularization_weight = regularization_weight;
+  gparm.gradient_type = sgd_gradient_type;
+  gparm.use_history = sgd_use_history;
+  gparm.constraint_set_type = constraint_set_type;
+  gparm.ignore_loss = sgd_ignore_loss;
+  gparm.n_batch_examples = sgd_n_batch_examples;
+}

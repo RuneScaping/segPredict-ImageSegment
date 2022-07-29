@@ -1044,4 +1044,377 @@ void importTIFCube_noAllocation(const char* imgFileName,
     imageReader->Update();
   } catch( itk::ExceptionObject & excep ) {
     cout << "[Utils] Exception Caught !" << std::endl;
-    cout
+    cout << excep << std::endl;
+    exit(-1);
+  }
+
+  ImageType::SizeType size = img->GetLargestPossibleRegion().GetSize();
+  ulong totalSize = size[0]*size[1]*size[2];
+  memcpy(outputData,img->GetBufferPointer(),totalSize);
+
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+}
+
+void importCube(const char* imgFileName,
+                uchar*& outputData,
+                int& width,
+                int& height,
+                int& depth)
+{
+  const int Dimension = 3;
+  //typedef unsigned char PixelType;
+  typedef float PixelType;
+  typedef itk::Image< PixelType, Dimension >   ImageType;
+  typedef itk::ImageFileReader< ImageType >  ImageReaderType;
+  typedef ImageType::RegionType RegionType; 
+
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  imageReader->SetFileName(imgFileName);
+ 
+  //Load it
+  ImageType *img = imageReader->GetOutput();
+  img->SetBufferedRegion(img->GetLargestPossibleRegion());
+  try  {
+    imageReader->Update();
+  }
+  catch( itk::ExceptionObject & excep ) {
+    cout << "[Utils] Exception Caught !" << std::endl;
+    cout << excep << std::endl;
+    exit(-1);
+  }
+
+  ImageType::SizeType size = img->GetLargestPossibleRegion().GetSize();
+  ulong totalSize = size[0]*size[1]*size[2];
+  outputData = new uchar[totalSize];
+
+  PixelType* ptrData = img->GetBufferPointer();
+  double minValue=-0.1;
+  double maxValue=0.1;
+  for(ulong i = 0; i < totalSize; i++)
+    {
+      if(ptrData[i] < minValue)
+	minValue=ptrData[i];
+      if(ptrData[i]>maxValue)
+	maxValue = ptrData[i];
+    }
+
+  //printf("[utils] Range=(%g,%g)\n", minValue, maxValue);
+
+  /*
+
+  //TODO : Create vector and store all the elements in that vector.
+
+  ulong idx_min = 0.01*nPixels;
+  ulong idx_max = 0.99* nPixels;
+  for(int i=0;i<fvSize;i++)
+    {  
+      nth_element(features[i].begin(), features[i].begin()+idx_min, features[i].end());
+      minValue = features[i][idx_min];
+
+      nth_element(features[i].begin(), features[i].begin()+idx_max, features[i].end());
+      maxValue= features[i][idx_max];
+    }
+  */
+
+  double scale = (255.0 / (double)maxValue);
+
+  for(ulong i=0; i < totalSize; i++) {
+    outputData[i] = (ptrData[i] - minValue)*scale; 
+  }
+
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+
+  /*
+  //ImageReader->GetOutput()->ReleaseDataFlagOn();
+  ImageType *itkImg = imageReader->GetOutput();
+  RegionType region = itkImg->GetRegion();
+  int totalSize = region[0]*region[1]*region[2];
+
+  outputData = new uchar[totalSize];
+  memcpy(outputData,itkImg->GetOutput());
+  */
+}
+
+void importNRRDCube_uint(const char* imgFileName,
+                         uint*& outputData,
+                         int& width,
+                         int& height,
+                         int& depth)
+{
+#if 1
+  const int Dimension = 3;
+  typedef unsigned int PixelType;
+  typedef itk::Image< PixelType, Dimension >   ImageType;
+  typedef itk::ImageFileReader< ImageType >  ImageReaderType;
+  typedef ImageType::RegionType RegionType; 
+
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  imageReader->SetFileName(imgFileName);
+ 
+  //Load it
+  ImageType *img = imageReader->GetOutput();
+  img->SetBufferedRegion(img->GetLargestPossibleRegion());
+  try 
+    {
+      imageReader->Update();
+    }
+  catch( itk::ExceptionObject & excep )
+    {
+      cout << "[Utils] Exception Caught in importNRRDCube_uint !" << std::endl;
+      cout << excep << std::endl;
+      exit(-1);
+    }
+
+  ImageType::SizeType size = img->GetLargestPossibleRegion().GetSize();
+  ulong totalSize = size[0]*size[1]*size[2];
+  outputData = new uint[totalSize];
+
+  PixelType* ptrData = img->GetBufferPointer();
+
+  /*
+  double minValue=-0.1;
+  double maxValue=0.1;
+  for(ulong i = 0; i < totalSize; i++)
+    {
+      if(ptrData[i] < minValue)
+	minValue=ptrData[i];
+      if(ptrData[i]>maxValue)
+	maxValue = ptrData[i];
+    }
+
+  double scale = (255.0 / (double)maxValue);
+
+  for(ulong i=0; i < totalSize; i++) {
+    outputData[i] = (ptrData[i] - minValue)*scale; 
+  }
+  */
+
+  for(ulong i=0; i < totalSize; i++) {
+    outputData[i] = ptrData[i];
+  }
+
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+
+#else
+
+  typedef unsigned int PixelType;
+  typedef itk::Image<PixelType, 3> ItkImageType;
+
+  itk::ImageFileReader<ItkImageType>::Pointer reader = itk::ImageFileReader<ItkImageType>::New();
+  printf("Loading %s\n", imgFileName);
+  reader->SetFileName(imgFileName);
+  reader->Update();
+  printf("HERE\n");
+
+  ItkImageType::Pointer img = reader->GetOutput();
+
+  ItkImageType::IndexType index;
+  index[0] = index[1] = index[2] = 0;
+
+  //PixelType *mData = &img->GetPixel( index );
+  outputData = &img->GetPixel( index );
+
+  ItkImageType::SizeType size = img->GetLargestPossibleRegion().GetSize();
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+
+
+#endif
+}
+
+#endif
+
+/**
+ * true positive (TP) : eqv. with hit
+ * true negative (TN) : eqv. with correct rejection
+ * false positive (FP) : eqv. with false alarm, Type I error
+ * false negative (FN) : eqv. with miss, Type II error
+ * sensitivity or true positive rate (TPR) : eqv. with hit rate, recall
+ * TPR = TP / P = TP / (TP + FN)
+ * false positive rate (FPR) : eqv. with fall-out
+ * FPR = FP / N = FP / (FP + TN)
+ * accuracy (ACC) : ACC = (TP + TN) / (P + N)
+ * 
+ * Source : http://en.wikipedia.org/wiki/Receiver_operating_characteristic
+ */
+void compareVolumes(uchar* annotationData,
+                    uchar* data,
+                    int width,
+                    int height,
+                    int depth,
+                    float& true_neg,
+                    float& true_pos,
+                    float& false_neg,
+                    float& false_pos,
+                    bool normalize,
+                    bool useColorAnnotations,
+                    ulong* TP,
+                    ulong* TN)
+{
+  /*
+  int POS_VALUE = FOREGROUND_MASKVALUE;
+  if(useColorAnnotations)
+    POS_VALUE = FOREGROUND_ADVANCED_MASKVALUE;
+  int NEG_VALUE = BACKGROUND_MASKVALUE;
+  */
+
+  const int POS_VALUE = 255;
+  const int NEG_VALUE = 0;
+
+  ulong total_pos = 0;
+  ulong total_neg = 0;
+  unsigned long int itrue_pos = 0;
+  unsigned long int itrue_neg = 0;
+  unsigned long int ifalse_pos = 0;
+  unsigned long int ifalse_neg = 0;
+
+  uchar annotation_value;
+  int idx = 0;
+  for(int z = 0;z < depth; z++)
+    {
+      for(int y = 0;y < height; y++)
+        for(int x = 0;x < width; x++)
+          {
+            annotation_value = annotationData[idx];
+
+            if(annotation_value != NEG_VALUE)
+              {
+                // positive annotation
+                total_pos++;
+                
+                if(data[idx] == POS_VALUE)
+                  itrue_pos++; // correctly predicted
+                else
+                  ifalse_neg++; // wrongly predicted
+              }
+            else
+              {
+                // negative annotation
+                total_neg++;
+                
+                if(data[idx] == POS_VALUE)
+                  ifalse_pos++; // wrongly predicted
+                else
+                  itrue_neg++; // correctly predicted
+              }
+
+            idx++;
+          }
+    }
+
+  /*
+  uchar annotation_value;
+  int idx = 0;
+  for(int z = 0;z < depth; z++)
+    {
+      for(int y = 0;y < height; y++)
+        for(int x = 0;x < width; x++)
+          {
+            annotation_value = annotationData[idx];
+
+            //if(annotation_value != NEG_VALUE)
+            if(annotation_value == POS_VALUE)
+              {
+                // positive annotation
+                total_pos++;
+                
+                //if(data[idx] == POS_VALUE)
+                if(data[idx] != NEG_VALUE)
+                  itrue_pos++; // correctly predicted
+                else
+                  ifalse_neg++; // wrongly predicted
+              }
+            else
+              {
+                // negative annotation
+                total_neg++;
+                
+                //if(data[idx] == POS_VALUE)
+                if(data[idx] != NEG_VALUE)
+                  ifalse_pos++; // wrongly predicted
+                else
+                  itrue_neg++; // correctly predicted
+              }
+
+            idx++;
+          }
+    }
+  */  
+
+  /*
+  printf("[Util] total_pos=%d total_neg=%d total=%d=%d ? TP=%lu FN=%lu FP=%lu\n",
+         total_pos, total_neg,
+         total_pos+total_neg,width*height*depth,
+         itrue_pos, ifalse_neg, ifalse_pos);
+  */
+
+  if(normalize)
+    {
+      if(total_pos != 0)
+        {
+          true_pos = itrue_pos*(100.0f/total_pos); // TPR = TP / P
+          false_neg = ifalse_neg*(100.0f/total_pos); // FNR = FN / P
+        }
+      if(total_neg != 0)
+        {
+          false_pos = ifalse_pos*(100.0f/total_neg); // FPR = FP / N
+          true_neg = itrue_neg*(100.0f/total_neg); // TNR = TN / N
+        }
+    }
+  else
+    {
+      true_pos = itrue_pos;
+      true_neg = itrue_neg;
+      false_neg = ifalse_neg;
+      false_pos = ifalse_pos;
+    }
+
+  if(TP)
+    *TP = total_pos;
+  if(TN)
+    *TN = total_neg;
+}
+
+void compareMultiLabelVolumes(Slice_P& slice_GT,
+                              const labelType* labels,
+                              const int class_label,
+                              float& true_neg,
+                              float& true_pos,
+                              float& false_neg,
+                              float& false_pos,
+                              bool normalize,
+                              bool useColorAnnotations,
+                              ulong* TP,
+                              ulong* TN)
+{
+  ulong total_pos = 0;
+  ulong total_neg = 0;
+  unsigned long int itrue_pos = 0;
+  unsigned long int itrue_neg = 0;
+  unsigned long int ifalse_pos = 0;
+  unsigned long int ifalse_neg = 0;
+
+  uchar annotation_value;
+  sidType sid;
+  const map<int, supernode* >& _supernodes = slice_GT.getSupernodes();
+  for(map<int, supernode* >::const_iterator its = _supernodes.begin();
+      its != _supernodes.end(); its++)
+    {
+      sid = its->first;
+      annotation_value = its->second->getLabel();
+      uint count = its->second->size();
+
+      if(annotation_value == class_label)
+        {
+          // positive annotation
+          total_pos += count;
+
+          if(labels[sid] == class_label)
+            i

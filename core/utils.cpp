@@ -708,4 +708,340 @@ void exportTIFCube(uchar* rawData,
 {
   // import data to an itk image
   const int dimension = 3;
-  ty
+  typedef uchar TInputPixelType;
+  typedef itk::Image< TInputPixelType, dimension > InputImageType;
+  typedef itk::Image< TInputPixelType, dimension > OutputImageType;
+  typedef itk::ImportImageFilter< TInputPixelType, dimension > ImportFilterType;
+  ImportFilterType::Pointer importFilter = ImportFilterType::New();
+		
+  ImportFilterType::SizeType size;
+  size[0] = cubeWidth;
+  size[1] = cubeHeight;
+  size[2] = cubeDepth;
+		
+  ImportFilterType::IndexType start;
+  start.Fill(0);
+		
+  ImportFilterType::RegionType region;
+  region.SetIndex(start);
+  region.SetSize(  size  );
+		
+  importFilter->SetRegion( region );	
+		
+  InputImageType::PointType origin;
+  origin.Fill(0.0);
+		
+  importFilter->SetOrigin( origin );
+				
+  ImportFilterType::SpacingType spacing;
+  spacing.Fill(1.0);
+		
+  importFilter->SetSpacing( spacing );
+  importFilter->SetImportPointer(rawData, 0, false);
+
+  stringstream sout;
+  sout << filename;
+  int n = strlen(filename);
+  if(n < 4 || strcmp(filename+n-4,".tif")!=0)
+     sout << ".tif";
+  printf("[Utils] Writing output cube %s of size (%d,%d,%d)\n",
+         sout.str().c_str(), cubeWidth, cubeHeight, cubeDepth);
+  typedef itk::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(sout.str().c_str());
+  writer->SetInput(importFilter->GetOutput());
+  writer->Update();
+}
+
+void exportColorTIFCube(uchar* rawData,
+                        const char* filename,
+                        int cubeDepth,
+                        int cubeHeight,
+                        int cubeWidth)
+{
+#if USE_ITK
+  // import data to an itk image
+  const int dimension = 3;
+  typedef uchar TInputPixelType;
+  typedef itk::RGBPixel<TInputPixelType> RGBPixelType;
+  typedef itk::Image< RGBPixelType, dimension > InputImageType;
+  typedef itk::Image< RGBPixelType, dimension > OutputImageType;
+  typedef itk::ImportImageFilter< RGBPixelType, dimension > ImportFilterType;
+  ImportFilterType::Pointer importFilter = ImportFilterType::New();
+		
+  ImportFilterType::SizeType size;
+  size[0] = cubeWidth;
+  size[1] = cubeHeight;
+  size[2] = cubeDepth;
+		
+  ImportFilterType::IndexType start;
+  start.Fill(0);
+		
+  ImportFilterType::RegionType region;
+  region.SetIndex(start);
+  region.SetSize(  size  );
+		
+  importFilter->SetRegion( region );	
+		
+  InputImageType::PointType origin;
+  origin.Fill(0.0);
+		
+  importFilter->SetOrigin( origin );
+				
+  ImportFilterType::SpacingType spacing;
+  spacing.Fill(1.0);
+		
+  importFilter->SetSpacing( spacing );
+  RGBPixelType* localBuffer = reinterpret_cast<RGBPixelType* >(rawData);
+  importFilter->SetImportPointer(localBuffer, 0, false);
+
+  stringstream sout;
+  sout << filename << ".tif";
+  //printf("[Utils] Writing output cube %s\n", sout.str().c_str());
+  typedef itk::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(sout.str().c_str());
+  writer->SetInput(importFilter->GetOutput());
+  writer->Update();
+#else
+  assert(0);
+#endif
+}
+
+void exportNRRDCube(uint* rawData,
+                    const char* filename,
+                    int cubeDepth,
+                    int cubeHeight,
+                    int cubeWidth)
+{
+  // import data to an itk image
+  const int dimension = 3;
+  typedef uint TInputPixelType;
+  typedef itk::Image< TInputPixelType, dimension > InputImageType;
+  typedef itk::Image< TInputPixelType, dimension > OutputImageType;
+  typedef itk::ImportImageFilter< TInputPixelType, dimension > ImportFilterType;
+  ImportFilterType::Pointer importFilter = ImportFilterType::New();
+		
+  ImportFilterType::SizeType size;
+  size[0] = cubeWidth;
+  size[1] = cubeHeight;
+  size[2] = cubeDepth;
+		
+  ImportFilterType::IndexType start;
+  start.Fill(0);
+		
+  ImportFilterType::RegionType region;
+  region.SetIndex(start);
+  region.SetSize(  size  );
+		
+  importFilter->SetRegion( region );	
+		
+  InputImageType::PointType origin;
+  origin.Fill(0.0);
+		
+  importFilter->SetOrigin( origin );
+				
+  ImportFilterType::SpacingType spacing;
+  spacing.Fill(1.0);
+		
+  importFilter->SetSpacing( spacing );
+  importFilter->SetImportPointer(rawData, 0, false);
+
+  stringstream sout;
+  sout << filename;
+  int n = strlen(filename);
+  if(n < 5 || strcmp(filename+n-5,".nrrd")!=0)
+     sout << ".nrrd";
+  //printf("[Utils] Writing output cube %s\n", sout.str().c_str());
+  typedef itk::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(sout.str().c_str());
+  writer->SetInput(importFilter->GetOutput());
+  writer->Update();
+}
+
+void exportNRRDCube(uchar* rawData,
+                    const char* filename,
+                    int cubeDepth,
+                    int cubeHeight,
+                    int cubeWidth)
+{
+  // import data to an itk image
+  const int dimension = 3;
+  typedef uchar TInputPixelType;
+  typedef itk::Image< TInputPixelType, dimension > InputImageType;
+  typedef itk::Image< TInputPixelType, dimension > OutputImageType;
+  typedef itk::ImportImageFilter< TInputPixelType, dimension > ImportFilterType;
+  ImportFilterType::Pointer importFilter = ImportFilterType::New();
+		
+  ImportFilterType::SizeType size;
+  size[0] = cubeWidth;
+  size[1] = cubeHeight;
+  size[2] = cubeDepth;
+		
+  ImportFilterType::IndexType start;
+  start.Fill(0);
+		
+  ImportFilterType::RegionType region;
+  region.SetIndex(start);
+  region.SetSize(  size  );
+		
+  importFilter->SetRegion( region );	
+		
+  InputImageType::PointType origin;
+  origin.Fill(0.0);
+		
+  importFilter->SetOrigin( origin );
+				
+  ImportFilterType::SpacingType spacing;
+  spacing.Fill(1.0);
+		
+  importFilter->SetSpacing( spacing );
+  importFilter->SetImportPointer(rawData, 0, false);
+
+  stringstream sout;
+  sout << filename;
+  int n = strlen(filename);
+  if(n < 5 || strcmp(filename+n-5,".nrrd")!=0)
+     sout << ".nrrd";
+  //printf("[Utils] Writing output cube %s\n", sout.str().c_str());
+  typedef itk::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(sout.str().c_str());
+  writer->SetInput(importFilter->GetOutput());
+  writer->Update();
+}
+
+#endif // USE_ITK
+
+void exportVIVACube(float* rawData,
+                    const char* filename,
+                    int cubeDepth,
+                    int cubeHeight,
+                    int cubeWidth)
+{
+  ofstream ofs(filename);
+  ofs.write((char*)rawData,cubeDepth*cubeHeight*cubeWidth*sizeof(float));
+  ofs.close();
+
+  // NFO file used by VIVA
+  char* nfoFilename = new char[strlen(filename)+5];
+  sprintf(nfoFilename,"%s.nfo", filename);
+  ofstream nfo(nfoFilename);
+  nfo << "voxelDepth 0.1" << endl;
+  nfo << "voxelHeight 0.1" << endl;
+  nfo << "voxelWidth 0.1" << endl;
+  nfo << "cubeDepth " << cubeDepth << endl;
+  nfo << "cubeHeight " << cubeHeight << endl;
+  nfo << "cubeWidth " << cubeWidth << endl;
+  nfo << "x_offset 0" << endl;
+  nfo << "y_offset 0" << endl;
+  nfo << "z_offset 0" << endl;
+  //nfo << "cubeFile " << getNameFromPath() << endl;
+  nfo << "cubeFile " << filename << endl;
+  nfo << "type float" << endl;
+  nfo.close();
+  delete[] nfoFilename;
+}
+
+void exportVIVACube(uchar* rawData,
+                    const char* filename,
+                    int cubeDepth,
+                    int cubeHeight,
+                    int cubeWidth)
+{
+  ofstream ofs(filename);
+  ofs.write((char*)rawData,cubeDepth*cubeHeight*cubeWidth*sizeof(char));
+  ofs.close();
+
+  // NFO file used by VIVA    
+  char* nfoFilename = new char[strlen(filename)+5];
+  sprintf(nfoFilename,"%s.nfo", filename);
+
+  ofstream nfo(nfoFilename);
+  nfo << "voxelDepth 0.1" << endl;
+  nfo << "voxelHeight 0.1" << endl;
+  nfo << "voxelWidth 0.1" << endl;
+  nfo << "cubeDepth " << cubeDepth << endl;
+  nfo << "cubeHeight " << cubeHeight << endl;
+  nfo << "cubeWidth " << cubeWidth << endl;
+  nfo << "x_offset 0" << endl;
+  nfo << "y_offset 0" << endl;
+  nfo << "z_offset 0" << endl;
+  //nfo << "cubeFile " << getNameFromPath() << endl;
+  nfo << "cubeFile " << filename << endl;
+  nfo << "type uchar" << endl;
+  nfo.close();
+  delete[] nfoFilename;
+}
+
+#ifdef USE_ITK
+void importTIFCube(const char* imgFileName,
+		   uchar*& outputData,
+                   int& width,
+                   int& height,
+                   int& depth)
+{
+  const int Dimension = 3;
+  typedef unsigned char PixelType;
+  typedef itk::Image< PixelType, Dimension >   ImageType;
+  typedef itk::ImageFileReader< ImageType >  ImageReaderType;
+  typedef ImageType::RegionType RegionType; 
+
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  imageReader->SetFileName(imgFileName);
+ 
+  //Load it
+  ImageType *img = imageReader->GetOutput();
+  img->SetBufferedRegion(img->GetLargestPossibleRegion());
+  try {
+    imageReader->Update();
+  } catch( itk::ExceptionObject & excep ) {
+    cout << "[Utils] Exception Caught !" << std::endl;
+    cout << excep << std::endl;
+    exit(-1);
+  }
+
+  ImageType::SizeType size = img->GetLargestPossibleRegion().GetSize();
+  ulong totalSize = size[0]*size[1]*size[2];
+  outputData = new uchar[totalSize];
+  memcpy(outputData,img->GetBufferPointer(),totalSize);
+
+  width = size[0];
+  height = size[1];
+  depth = size[2];
+
+  /*
+  //ImageReader->GetOutput()->ReleaseDataFlagOn();
+  ImageType *itkImg = imageReader->GetOutput();
+  RegionType region = itkImg->GetRegion();
+  int totalSize = region[0]*region[1]*region[2];
+
+  outputData = new uchar[totalSize];
+  memcpy(outputData,itkImg->GetOutput());
+  */
+}
+
+void importTIFCube_noAllocation(const char* imgFileName,
+                                uchar*& outputData,
+                                int& width,
+                                int& height,
+                                int& depth)
+{
+  const int Dimension = 3;
+  typedef unsigned char PixelType;
+  typedef itk::Image< PixelType, Dimension >   ImageType;
+  typedef itk::ImageFileReader< ImageType >  ImageReaderType;
+  typedef ImageType::RegionType RegionType; 
+
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  imageReader->SetFileName(imgFileName);
+ 
+  //Load it
+  ImageType *img = imageReader->GetOutput();
+  img->SetBufferedRegion(img->GetLargestPossibleRegion());
+  try {
+    imageReader->Update();
+  } catch( itk::ExceptionObject & excep ) {
+    cout << "[Utils] Exception Caught !" << std::endl;
+    cout

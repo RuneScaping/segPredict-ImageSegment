@@ -1747,4 +1747,391 @@ void classIdxToRGB(ulong classIdx, uchar& r, uchar& g, uchar& b)
   g = (ig > 255)?255:(uchar)ig;
   classIdx -= g*255;
   int ib = classIdx;
-  b = (ib > 
+  b = (ib > 255)?255:(uchar)ib;
+}
+
+ulong RGBToclassIdx(uchar r, uchar g, uchar b)
+{
+  ulong ir =  r*(ulong)pow(255.0f,2);
+  ulong ig =  g*(ulong)255;
+  ulong ib = b;
+  return ir + ig + ib;
+}
+
+void getLabelToClassMap(const char* colormapFilename, map<labelType, ulong>& labelToClassIdx)
+{
+  // Load colormap information
+  string line;
+  int label = 0;
+  ulong classIdx = 0;
+  //int r,g,b;
+  //char labelName[50];
+
+  ifstream ifsCol(colormapFilename);
+  if(ifsCol.fail())
+    {
+      printf("[util] Error while loading %s\n", colormapFilename);
+      exit(-1);
+    }
+
+  while(getline(ifsCol, line))
+    {
+      sscanf(line.c_str(),"%d %lu", &label, &classIdx);
+      uchar g,r,b;
+      classIdxToRGB(classIdx,r,g,b);
+      //printf("local label=%d, classIdx=%lu, rgb=(%d,%d,%d)\n",
+      //       label, classIdx, (int)r, (int)g, (int)b);
+      labelToClassIdx[(labelType)label] = classIdx;
+      //classIdxToLabel[classIdx]= (labelType)label;
+    }
+  ifsCol.close();
+}
+
+void getClassToLabelMap(const char* colormapFilename, map<ulong, labelType>& classIdxToLabel)
+{
+  // Load colormap information
+  string line;
+  int label = 0;
+  ulong classIdx = 0;
+  //int r,g,b;
+  //char labelName[50];
+
+  ifstream ifsCol(colormapFilename);
+  if(ifsCol.fail())
+    {
+      printf("[util] Error while loading %s\n", colormapFilename);
+      exit(-1);
+    }
+
+  while(getline(ifsCol, line))
+    {
+      sscanf(line.c_str(),"%d %lu", &label, &classIdx);
+      uchar g,r,b;
+      classIdxToRGB(classIdx,r,g,b);
+      //printf("local label=%d, classIdx=%lu, rgb=(%d,%d,%d)\n",
+      //       label, classIdx, (int)r, (int)g, (int)b);
+      //labelToClassIdx[(labelType)label] = classIdx;
+      classIdxToLabel[classIdx]= (labelType)label;
+    }
+  ifsCol.close();
+}
+
+void bresenhamLine3d(int* p1, int* p2, float*& xs, float*& ys, float*& zs, int& nb_pts)
+{
+  // Compute maximum distance and allocate memory
+  nb_pts = -1;
+  for(int i=0;i<3;i++)
+    nb_pts = MAX(nb_pts,abs(p2[i]-p1[i])+1);
+
+  xs = new float[nb_pts];
+  ys = new float[nb_pts];
+  zs = new float[nb_pts];
+
+  int dx = p2[0] - p1[0];
+  int dy = p2[1] - p1[1];
+  int dz = p2[2] - p1[2];
+
+  int ax = abs(dx)*2;
+  int ay = abs(dy)*2;
+  int az = abs(dz)*2;
+
+  int sx = sign(dx);
+  int sy = sign(dy);
+  int sz = sign(dz);
+
+  int x = p1[0];
+  int y = p1[1];
+  int z = p1[2];
+  int x2 = p2[0];
+  int y2 = p2[1];
+  int z2 = p2[2];
+  int idx = 0;
+
+  int xd,yd,zd;
+  if(ax>=MAX(ay,az)) // x dominant
+    {
+      yd = ay - ax/2;
+      zd = az - ax/2;
+
+      while(1)
+        {
+          xs[idx] = x;
+          ys[idx] = y;
+          zs[idx] = z;
+          idx++;
+
+          if(x == x2) // end
+            break;
+
+          if(yd >= 0) // move along y
+            {
+              y = y + sy;
+              yd = yd - ax;
+            }
+
+          if(zd >= 0) // move along z
+            {
+              z = z + sz;
+              zd = zd - ax;
+            }
+           
+          x  = x  + sx; // move along x
+          yd = yd + ay;
+          zd = zd + az;
+        }
+    }
+  else if(ay>=MAX(ax,az)) // y dominant
+    {
+      xd = ax - ay/2;
+      zd = az - ay/2;
+
+      while(1)
+        {
+          xs[idx] = x;
+          ys[idx] = y;
+          zs[idx] = z;
+          idx++;
+
+          if(y == y2) // end
+            break;
+
+          if(xd >= 0) // move along x
+            {
+              x = x + sx;
+              xd = xd - ay;
+            }
+
+          if(zd >= 0)		// move along z
+            {
+              z = z + sz;
+              zd = zd - ay;
+            }
+
+          y  = y  + sy;		// move along y
+          xd = xd + ax;
+          zd = zd + az;
+        }
+    }
+  else if(az>=MAX(ax,ay))		// z dominant
+    {
+      xd = ax - az/2;
+      yd = ay - az/2;
+
+      while(1)
+        {
+          xs[idx] = x;
+          ys[idx] = y;
+          zs[idx] = z;
+          idx++;
+
+          if(z == z2) // end
+            break;
+
+          if(xd >= 0)		// move along x
+            {
+              x = x + sx;
+              xd = xd - az;
+            }
+
+          if(yd >= 0)		// move along y
+            {
+              y = y + sy;
+              yd = yd - az;
+            }
+
+          z  = z  + sz;		// move along z
+          xd = xd + ax;
+          yd = yd + ay;
+        }
+    }
+}
+
+void splitString(const string& str, vector<string>& tokens)
+{
+  istringstream iss(str);
+  copy(istream_iterator<string>(iss),
+       istream_iterator<string>(),
+       back_inserter<vector<string> >(tokens));
+}
+
+void splitStringUsing(const string& str, vector<string>& tokens, const char separator)
+{
+  istringstream iss(str);
+  string token;
+  while ( getline(iss, token, separator) ) {
+    tokens.push_back(token);
+  }
+}
+
+void exportImageFromCube(const char* output_name, labelType* nodeLabels,
+                         int width, int height, int firstImage, int nImages) {
+  IplImage* img = cvCreateImage(cvSize(width, height),IPL_DEPTH_8U,1);
+  uchar* pImg;
+  int imageSize = width*height;
+  int cubeIdx = firstImage*imageSize;
+  for(int z=0;z<nImages;z++) {
+    cvZero(img);
+    for(int y=0; y<height;y++) {
+      for(int x=0; x<width;x++) {
+        //printf("z,x,y=%d,%d,%d\n", z, x, y);
+        pImg = &((uchar*)(img->imageData + img->widthStep*y))[x];
+        *pImg = nodeLabels[cubeIdx];
+        cubeIdx++;
+      }
+    }
+  }
+
+  cvSaveImage(output_name, img);
+  cvReleaseImage(&img);
+}
+
+void exportImageFromColorCube(const char* output_name, labelType* nodeLabels,
+                              int width, int height, int depth, int firstImageToExport, int nImagesToExport) {
+  const int nChannels = 3;
+  IplImage* img = cvCreateImage(cvSize(width, height),IPL_DEPTH_8U,nChannels);
+  uchar* pImg;
+  ulong imageSize = width*height;
+  ulong nVoxels = imageSize*depth*nChannels;
+  ulong cubeIdx = firstImageToExport*imageSize*nChannels;
+  int stepImage = (depth-firstImageToExport)/nImagesToExport;
+  for(int z = 0; z < nImagesToExport; ++z) {
+    cvZero(img);
+    for(int y = 0; y < height; y++) {
+      for(int x = 0; x < width; x++) {
+        for(int c = nChannels-1; c >= 0; --c) {
+          pImg = &((uchar*)(img->imageData + img->widthStep*y))[x*nChannels + c];
+          *pImg = nodeLabels[cubeIdx];
+          cubeIdx++;
+        }
+      }
+    }
+
+    stringstream sout;
+    if(containsImageExtension(output_name)) {
+      string s_output_name(output_name);
+      sout << s_output_name.substr(0, s_output_name.length()-5);
+    } else {
+      sout << output_name;
+    }
+    sout << "_" << z;
+    sout << ".png";
+    cvSaveImage(sout.str().c_str(), img);
+
+    // skip voxels to go to the next image to export
+    cubeIdx += stepImage*imageSize*nChannels;
+    if(cubeIdx > nVoxels - imageSize*nChannels) {
+      cubeIdx = nVoxels - imageSize*nChannels;
+    }
+
+  }
+
+  cvReleaseImage(&img);
+}
+
+void getFeatureTypes(const int featureId, vector<eFeatureType>& feature_types)
+{
+  int idxFeature = 0;
+  int i = 0;
+  while(1) {
+    idxFeature = (int)pow(2.0,i);
+    if(idxFeature == F_END_FEATURETYPE)
+      break;
+      
+    if(featureId & idxFeature) {
+      //printf("[utils] Adding feature %d\n", idxFeature);
+      feature_types.push_back((eFeatureType)idxFeature);
+    }
+    i++;
+  }
+}
+
+ulong getFeatureTypeId(const vector<eFeatureType>& feature_types) {
+  ulong id = 0;
+  for(vector<eFeatureType>::const_iterator it = feature_types.begin();
+      it != feature_types.end(); ++it) {
+    id += (ulong)*it;
+  }
+  return id;
+}
+
+void set_default_parameters(Config* config)
+{
+  string config_tmp;
+  if(config->getParameter("superpixel_step_size", config_tmp)) {
+    SUPERPIXEL_DEFAULT_STEP_SIZE = atoi(config_tmp.c_str());
+    printf("[utils] SUPERPIXEL_DEFAULT_STEP_SIZE %d\n", SUPERPIXEL_DEFAULT_STEP_SIZE);
+  }
+  if(config->getParameter("superpixel_cubeness", config_tmp)) {
+    SUPERPIXEL_DEFAULT_M = atoi(config_tmp.c_str());
+    printf("[utils] SUPERPIXEL_DEFAULT_M %d\n", SUPERPIXEL_DEFAULT_M);
+  }
+  if(config->getParameter("supervoxel_step_size", config_tmp)) {
+    DEFAULT_VOXEL_STEP = atoi(config_tmp.c_str());
+  }
+  if(config->getParameter("supervoxel_cubeness", config_tmp)) {
+    SUPERVOXEL_DEFAULT_CUBENESS = atoi(config_tmp.c_str());
+  }
+  if(config->getParameter("min_percent_to_assign_label", config_tmp)) {
+    MIN_PERCENT_TO_ASSIGN_LABEL = atof(config_tmp.c_str());
+    printf("[utils] MIN_PERCENT_TO_ASSIGN_LABEL %f\n", MIN_PERCENT_TO_ASSIGN_LABEL);
+  }
+  if(config->getParameter("maxGradientIntensity", config_tmp)) {
+    MAX_INTENSITY_GRADIENT = atoi(config_tmp.c_str());
+    printf("[utils] MAX_INTENSITY_GRADIENT=%d\n", MAX_INTENSITY_GRADIENT);
+  }
+  if(config->getParameter("feature_nDistances", config_tmp)) {
+    DEFAULT_FEATURE_DISTANCE = atoi(config_tmp.c_str());
+    printf("[utils] DEFAULT_FEATURE_DISTANCE=%d\n", DEFAULT_FEATURE_DISTANCE);
+  }
+}
+
+void getColormapName(string& paramColormap)
+{
+  paramColormap = "colormap.txt";
+  // first, check if colormap file exists in current directory
+  if(!fileExists(paramColormap)) {
+    if(!Config::Instance()->getParameter("colormapFilename", paramColormap)) {
+      string paramConfigDataDir;
+      Config::Instance()->getParameter("configData_directory", paramConfigDataDir);
+      paramColormap = paramConfigDataDir + "colormap.txt";
+    } else {
+      if(!fileExists(paramColormap)) {
+        //if(!isDirectory(paramColormap)) {
+        char * pPath = getenv ("LOCALHOME");
+        if(pPath == 0)
+          pPath = getenv ("HOME");
+        paramColormap = pPath + paramColormap;
+      }
+    }
+  }
+}
+
+double getMedian(vector<double>& list_values)
+{
+  double median = 0;
+  size_t size = list_values.size();
+  sort(list_values.begin(), list_values.end());
+
+  if (size % 2 == 0) {
+    median = (list_values[size / 2 - 1] + list_values[size / 2]) / 2;
+  } else {
+    median = list_values[size / 2];
+  }
+
+  if(isnan(median)) {
+    printf("[utils] Error Median is nan %ld %ld %g\n", size, size/2, median);
+  }
+
+  return median;
+}
+
+void loadData(string imageDir, string maskDir, Config* config,
+              Slice_P*& slice)
+{
+  string paramSlice3d;
+  config->getParameter("slice3d", paramSlice3d);
+  bool useSlice3d = paramSlice3d.c_str()[0] == '1';
+  bool includeBoundaryLabels = false;
+  if(useSlice3d) {
+    Slice3d* slice3d = new Slice3d(imageDir.c_str());
+    slice3d->loadSupervo

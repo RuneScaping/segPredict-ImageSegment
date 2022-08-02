@@ -2134,4 +2134,323 @@ void loadData(string imageDir, string maskDir, Config* config,
   bool includeBoundaryLabels = false;
   if(useSlice3d) {
     Slice3d* slice3d = new Slice3d(imageDir.c_str());
-    slice3d->loadSupervo
+    slice3d->loadSupervoxels(imageDir.c_str());
+    
+    bool includeUnknownType = false;
+    slice3d->setIncludeOtherLabel(false);
+    slice3d->generateSupernodeLabelFromMaskDirectory(maskDir.c_str(),
+                                                     includeBoundaryLabels,
+                                                     includeUnknownType);
+      slice = slice3d;
+  } else {
+    Slice* slice2d = new Slice(imageDir.c_str());
+    
+    bool useColorImages = false;
+    slice2d->generateSupernodeLabels(maskDir.c_str(), includeBoundaryLabels,
+                                     useColorImages);
+    slice = slice2d;
+  }
+}
+
+void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
+                         Slice_P*& slice, Feature*& feature, int* featureSize, int fileIdx)
+{
+  slice = 0;
+  feature = 0;
+  string config_tmp;
+  Config::Instance()->getParameter("slice3d", config_tmp);
+  bool useSlice3d = config_tmp.c_str()[0] == '1';
+
+  int nGradientLevels = 5;
+  if(config->getParameter("nGradientLevels", config_tmp)) {
+    nGradientLevels = atoi(config_tmp.c_str());
+  }
+
+  int nOrientations = 1;
+  if(config->getParameter("nOrientations", config_tmp)) {
+    nOrientations = atoi(config_tmp.c_str());
+  }
+
+#if USE_LONG_RANGE_EDGES
+  int nDistances = 1;
+  if(config->getParameter("nDistances", config_tmp)) {
+    nDistances = atoi(config_tmp.c_str());
+  }
+#endif
+
+  vector<eFeatureType> feature_types;
+  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
+  if(config->getParameter("featureTypes", config_tmp)) {
+    paramFeatureTypes = atoi(config_tmp.c_str());
+    getFeatureTypes(paramFeatureTypes, feature_types);
+  }
+
+  if(useSlice3d) {
+    printf("[utils] Loading 3d cube using images in %s\n", imageDir.c_str());
+    Slice3d* slice3d = new Slice3d(imageDir.c_str());
+    slice = slice3d;
+    bool rescale_raw_data = false;
+    if(Config::Instance()->getParameter("rescale_raw_data", config_tmp)) {
+      rescale_raw_data = config_tmp[0] == '1';
+    }
+    if(rescale_raw_data) {
+      slice3d->rescaleRawData();
+
+#if USE_ITK
+      exportTIFCube(slice3d->raw_data,
+                    "rescaled_data.tif",
+                    slice3d->depth,
+                    slice3d->height,
+                    slice3d->width);
+#endif
+
+    }
+
+    slice3d->loadSupervoxels(imageDir.c_str());
+
+    // load ground truth
+    bool includeBoundaryLabels = true;
+    if(config->getParameter("includeBoundaryLabels", config_tmp)) {
+      includeBoundaryLabels = config_tmp.c_str()[0] == '1';
+    }
+    bool includeUnknownType = false;
+    slice3d->setIncludeOtherLabel(false);
+    slice3d->generateSupernodeLabelFromMaskDirectory(maskDir.c_str(),
+                                                     includeBoundaryLabels,
+                                                     includeUnknownType);
+
+    stringstream sout_feature_filename;
+    sout_feature_filename << getDirectoryFromPath(imageDir) << "/features_";
+    sout_feature_filename << slice->getSupernodeStep() << "_" << slice->getCubeness();
+    sout_feature_filename << "_" << paramFeatureTypes;
+    sout_feature_filename << "_" << DEFAULT_FEATURE_DISTANCE;
+    printf("[utils] Checking %s\n", sout_feature_filename.str().c_str());
+    bool featuresLoaded = false;
+    if(fileExists(sout_feature_filename.str())) {
+      printf("[utils] Loading features from %s\n", sout_feature_filename.str().c_str());
+      *featureSize = -1;
+      if(slice->loadFeatures(sout_feature_filename.str().c_str(), featureSize)) {
+        featuresLoaded = true;
+        feature = new F_Precomputed(slice->getPrecomputedFeatures(), *featureSize/DEFAULT_FEATURE_DISTANCE);
+        printf("[utils] Features Loaded succesfully\n");
+      } else {
+        printf("[utils] Features not loaded succesfully\n");
+      }
+    }
+
+    if(!featuresLoaded) {
+      feature = Feature::getFeature(slice3d, feature_types);
+      slice3d->precomputeFeatures(feature);
+      feature->save(*slice3d, sout_feature_filename.str().c_str());
+    }
+
+    // precompute gradient indices to avoid race conditions
+    slice3d->precomputeGradientIndices(nGradientLevels);
+    slice3d->precomputeOrientationIndices(nOrientations);
+#if USE_LONG_RANGE_EDGES
+    slice3d->precomputeDistanceIndices(nDistances);
+#endif
+
+    slice = slice3d;
+  } else {
+
+    string imageName = imageDir;
+    if(isDirectory(imageDir)) {
+      vector<string> files;
+      getFilesInDir(imageDir.c_str(), files, "png", false);
+      imageName += files[fileIdx];
+    }
+
+    string maskName = maskDir;
+    if(isDirectory(maskDir)) {
+      vector<string> files;
+      getFilesInDir(maskDir.c_str(), files, "bmp", false);
+      maskName += files[fileIdx];
+    }
+
+    Slice* slice2d = new Slice(imageName.c_str());
+    slice = slice2d;
+
+    printf("[utils] maskName = %s\n", maskName.c_str());
+    bool includeBoundaryLabels = false;
+    slice2d->generateSupernodeLabelFromMaskImage(maskName.c_str(),
+                                                 includeBoundaryLabels);
+
+    feature = Feature::getFeature(slice, feature_types);
+
+    if(featureSize) {
+      *featureSize = feature->getSizeFeatureVector();
+    }
+
+    // precompute gradient indices to avoid race conditions
+    slice->precomputeGradientIndices(nGradientLevels);
+    slice->precomputeOrientationIndices(nOrientations);
+    slice->precomputeFeatures(feature);
+#if USE_LONG_RANGE_EDGES
+    slice->precomputeDistanceIndices(nDistances);
+#endif
+
+  }
+}
+
+
+int drawLabels(Slice* slice, const char* prediction_filename,
+               const char* outputFilename, bool use_prob,
+               eColorMapType colormapType)
+{
+  IplImage* image = cvCloneImage(slice->img);
+
+  vector<node>* centers = slice->getCenters();
+  CvScalar colors[4];
+  colors[0] = CV_RGB(255,0,0); // red = label -1 = background
+  colors[1] = CV_RGB(255,255,255); // not used
+  colors[2] = CV_RGB(0,255,0); // green = label 1 = mitochondria
+  colors[3] = CV_RGB(0,0,255); // blue = label 2 = boundary
+
+ ifstream predict(prediction_filename);
+  if(predict.fail()) {
+    printf("[SliceData] Error while loading prediction file %s\n",prediction_filename);
+    return -1;
+  }
+  string line;
+  //getline(predict, line); // first line contains labels
+
+  CvPoint p;
+  int idx = 0;
+  float pb1,pb2,pb3;
+  for(vector<node>::iterator it = centers->begin();
+      it != centers->end(); it++) {
+    p.x = it->x;
+    p.y = it->y;
+
+    getline(predict, line);
+    vector<string> tokens;
+    splitString(line, tokens);
+    //printf("line %s %ld\n", line.c_str(), tokens.size());
+
+    if(!use_prob) {
+      int label = atoi(tokens[0].c_str());
+      cvCircle(image, p, 2, colors[label], 2);
+    } else {
+      if(colormapType == COLORMAP_PROBS) {
+        pb1 = atof(tokens[1].c_str());
+        pb2 = atof(tokens[2].c_str());
+        pb3 = atof(tokens[3].c_str());
+        colors[0] = CV_RGB(255.0*pb1,
+                           255.0*pb2,
+                           255.0*pb3);
+      } else {
+        pb1 = atof(tokens[1].c_str());
+        idx = ((int)(pb1*COLORMAP_SIZE))*3;
+        if(idx>=COLORMAP_SIZE*3)
+          idx=COLORMAP_SIZE*3-1;
+        colors[0] = CV_RGB(colormap_jet[idx],colormap_jet[idx+1],colormap_jet[idx+2]);
+      }
+
+      //cvCircle(image, p, 2, colors[0], 2);
+      cvCircle(image, p, 1, colors[0], 2);
+    }
+  }
+  cvSaveImage(outputFilename,image);
+  cvReleaseImage(&image);
+  return 0;
+}
+
+
+void loadFromDir(const char* dir, uchar*& raw_data,
+                 int& width, int& height, int* nImgs)
+{
+  const int bytes_per_pixel = 1;
+  IplImage* img;
+  IplImage* gray_img;
+
+  // load files
+  vector<string> files;
+  getFilesInDir(dir, files,"png", true);
+  if(files.size() == 0) {
+    getFilesInDir(dir, files,"tif", true);
+  }
+
+  width = -1;
+  int nValidImgs = 0;
+  for(vector<string>::iterator itFile = files.begin();
+      itFile != files.end(); itFile++)
+    {
+      if((itFile->c_str()[0] != '.') && ( (getExtension(*itFile) == "png") || (getExtension(*itFile) == "tif")) )
+        {
+          if(width == -1)
+            {
+              IplImage* img_slice = cvLoadImage(itFile->c_str(),0);
+              if(!img_slice)
+                continue;
+
+              width = img_slice->width;
+              height = img_slice->height;
+
+              cvReleaseImage(&img_slice);
+            }
+
+          nValidImgs++;
+        }
+    }
+
+  if(*nImgs != -1)
+    {
+      if(*nImgs > nValidImgs)
+        {
+          printf("[PixelData] Warning : nImgs=%d > nValidImgs=%d\n", *nImgs, nValidImgs);
+          *nImgs = nValidImgs;
+        }
+    }
+  else
+    *nImgs = nValidImgs;
+
+  // ask for enough memory for the texels and make sure we got it before proceeding
+  uint n = width*height*sizeof(char);
+  raw_data = new uchar[n*(*nImgs)];
+
+  printf("[PixelData] Loading %d images from directory %s, width=%d, height=%d\n", *nImgs, dir, width, height);
+  int d = 0;
+  for(int iImage = 0; d < *nImgs; iImage++)
+    {
+      string image = files[iImage];
+
+      //printf("[PixelData] Loading image %s\n",fullpath.c_str());
+
+      // Load image in black and white
+      // Do no handle 3d cubes in color for now !
+      IplImage* img_slice = cvLoadImage(image.c_str(),0);
+
+      if(!img_slice)
+        continue;
+
+      if(img_slice->width != width || img_slice->height != height)
+        {
+          if(img_slice->nChannels != bytes_per_pixel)
+            {
+              gray_img = cvCreateImage(cvSize(img_slice->width,img_slice->height),IPL_DEPTH_8U,bytes_per_pixel);
+              //printf("%d\n",img_slice->nChannels);
+              //printf("%d\n",gray_img->nChannels);
+              cvCvtColor(img_slice,gray_img,CV_RGB2GRAY);
+              img = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvResize(gray_img,img);
+              cvReleaseImage(&gray_img);
+            }
+          else
+            {
+              img = cvCreateImage(cvSize(width,height),IPL_DEPTH_8U,bytes_per_pixel);
+              cvResize(img_slice,img);
+            }
+
+          memcpy(raw_data+(d*n),img->imageData,n);
+          cvReleaseImage(&img);
+          cvReleaseImage(&img_slice);
+        }
+      else
+        {
+          img = img_slice;
+
+          if(img_slice->nChannels != bytes_per_pixel)
+            {
+              // FIXME
+              printf("[Slice3d] img_slice->nChannels 

@@ -1417,4 +1417,334 @@ void compareMultiLabelVolumes(Slice_P& slice_GT,
           total_pos += count;
 
           if(labels[sid] == class_label)
-            i
+            itrue_pos += count; // correctly predicted
+          else
+            ifalse_neg += count; // wrongly predicted
+        }
+      else
+        {
+          // negative annotation
+          total_neg += count;
+                
+          if(labels[sid] == class_label)
+            ifalse_pos += count; // wrongly predicted
+          else
+            itrue_neg += count; // correctly predicted
+        }
+    }
+
+  /*
+  printf("[Util] total_pos=%d total_neg=%d total=%ld=%ld ? TP=%lu FN=%lu FP=%lu\n",
+         total_pos, total_neg,
+         (ulong)total_pos + total_neg, slice_GT.getSize(),
+         itrue_pos, ifalse_neg, ifalse_pos);
+  */
+
+  if(normalize)
+    {
+      if(total_pos != 0)
+        {
+          true_pos = itrue_pos*(100.0f/total_pos); // TPR = TP / P
+          false_neg = ifalse_neg*(100.0f/total_pos); // FNR = FN / P
+        }
+      if(total_neg != 0)
+        {
+          false_pos = ifalse_pos*(100.0f/total_neg); // FPR = FP / N
+          true_neg = itrue_neg*(100.0f/total_neg); // TNR = TN / N
+        }
+    }
+  else
+    {
+      true_pos = itrue_pos;
+      true_neg = itrue_neg;
+      false_neg = ifalse_neg;
+      false_pos = ifalse_pos;
+    }
+
+  if(TP)
+    *TP = total_pos;
+  if(TN)
+    *TN = total_neg;
+}
+
+void compareMultiLabelVolumes_nodeBased(Slice_P& slice_GT,
+                                        const labelType* groundtruth,
+                                        const labelType* labels,
+                                        const int class_label,
+                                        float& true_neg,
+                                        float& true_pos,
+                                        float& false_neg,
+                                        float& false_pos,
+                                        bool normalize,
+                                        bool useColorAnnotations,
+                                        ulong* TP,
+                                        ulong* TN)
+{
+  ulong total_pos = 0;
+  ulong total_neg = 0;
+  unsigned long int itrue_pos = 0;
+  unsigned long int itrue_neg = 0;
+  unsigned long int ifalse_pos = 0;
+  unsigned long int ifalse_neg = 0;
+  const int count = 1;
+  ulong sliceSize = slice_GT.getWidth()*slice_GT.getHeight();
+  ulong width = slice_GT.getWidth();
+
+  sidType sid;
+  supernode *s;
+  node n;
+  const map<int, supernode* >& _supernodes = slice_GT.getSupernodes();
+  for(map<int, supernode* >::const_iterator its = _supernodes.begin();
+      its != _supernodes.end(); its++) {
+    sid = its->first;
+    s = its->second;
+
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+
+      ulong idx = (n.z*sliceSize) + (n.y*width) + n.x;
+
+      if(groundtruth[idx] == class_label) {
+        // positive annotation
+        total_pos += count;
+
+        if(labels[sid] == class_label)
+          itrue_pos += count; // correctly predicted
+        else
+          ifalse_neg += count; // wrongly predicted
+      } else {
+        // negative annotation
+        total_neg += count;
+
+        if(labels[sid] == class_label)
+          ifalse_pos += count; // wrongly predicted
+        else
+          itrue_neg += count; // correctly predicted
+      }
+
+    }
+
+    }
+
+  /*
+  printf("[Util] total_pos=%d total_neg=%d total=%ld=%ld ? TP=%lu FN=%lu FP=%lu\n",
+         total_pos, total_neg,
+         (ulong)total_pos + total_neg, slice_GT.getSize(),
+         itrue_pos, ifalse_neg, ifalse_pos);
+  */
+
+  if(normalize) {
+    if(total_pos != 0) {
+      true_pos = itrue_pos*(100.0f/total_pos); // TPR = TP / P
+      false_neg = ifalse_neg*(100.0f/total_pos); // FNR = FN / P
+    }
+    if(total_neg != 0) {
+      false_pos = ifalse_pos*(100.0f/total_neg); // FPR = FP / N
+      true_neg = itrue_neg*(100.0f/total_neg); // TNR = TN / N
+    }
+  } else {
+    true_pos = itrue_pos;
+    true_neg = itrue_neg;
+    false_neg = ifalse_neg;
+    false_pos = ifalse_pos;
+  }
+
+  if(TP)
+    *TP = total_pos;
+  if(TN)
+    *TN = total_neg;
+}
+
+void compareMultiLabelVolumes_givenMask_nodeBased(Slice_P& slice_GT,
+                                                  const labelType* mask,
+                                                  const labelType* labels,
+                                                  const int class_label,
+                                                  float& true_neg,
+                                                  float& true_pos,
+                                                  float& false_neg,
+                                                  float& false_pos,
+                                                  bool normalize,
+                                                  bool useColorAnnotations,
+                                                  ulong* TP,
+                                                  ulong* TN)
+{
+  ulong total_pos = 0;
+  ulong total_neg = 0;
+  unsigned long int itrue_pos = 0;
+  unsigned long int itrue_neg = 0;
+  unsigned long int ifalse_pos = 0;
+  unsigned long int ifalse_neg = 0;
+  const int count = 1;
+  ulong sliceSize = slice_GT.getWidth()*slice_GT.getHeight();
+  ulong width = slice_GT.getWidth();
+
+  sidType sid;
+  supernode *s;
+  node n;
+  uchar gt_label;
+  const map<int, supernode* >& _supernodes = slice_GT.getSupernodes();
+  for(map<int, supernode* >::const_iterator its = _supernodes.begin();
+      its != _supernodes.end(); its++) {
+    sid = its->first;
+    s = its->second;
+    gt_label = s->getLabel();
+
+    nodeIterator ni = s->getIterator();
+    ni.goToBegin();
+    while(!ni.isAtEnd()) {
+      ni.get(n);
+      ni.next();
+
+      ulong idx = (n.z*sliceSize) + (n.y*width) + n.x;
+
+      if(mask[idx] != 0) {
+        if(gt_label == class_label) {
+          // positive annotation
+          total_pos += count;
+
+          if(labels[sid] == class_label)
+            itrue_pos += count; // correctly predicted
+          else
+            ifalse_neg += count; // wrongly predicted
+        } else {
+          // negative annotation
+          total_neg += count;
+                
+          if(labels[sid] == class_label)
+            ifalse_pos += count; // wrongly predicted
+          else
+            itrue_neg += count; // correctly predicted
+        }
+      }
+
+    }
+
+    }
+
+  /*
+  printf("[Util] total_pos=%d total_neg=%d total=%ld=%ld ? TP=%lu FN=%lu FP=%lu\n",
+         total_pos, total_neg,
+         (ulong)total_pos + total_neg, slice_GT.getSize(),
+         itrue_pos, ifalse_neg, ifalse_pos);
+  */
+
+  if(normalize) {
+    if(total_pos != 0) {
+      true_pos = itrue_pos*(100.0f/total_pos); // TPR = TP / P
+      false_neg = ifalse_neg*(100.0f/total_pos); // FNR = FN / P
+    }
+    if(total_neg != 0) {
+      false_pos = ifalse_pos*(100.0f/total_neg); // FPR = FP / N
+      true_neg = itrue_neg*(100.0f/total_neg); // TNR = TN / N
+    }
+  } else {
+    true_pos = itrue_pos;
+    true_neg = itrue_neg;
+    false_neg = ifalse_neg;
+    false_pos = ifalse_pos;
+  }
+
+  if(TP)
+    *TP = total_pos;
+  if(TN)
+    *TN = total_neg;
+}
+
+void cubeFloat2Uchar(float* inputData, uchar*& outputData,
+                     int nx, int ny, int nz)
+{
+  float minValue = FLT_MAX;
+  float maxValue = -1;
+  int cubeIdx = 0;
+  for(int z=0; z < nz; z++)
+    for(int y=0; y < ny; y++)
+      for(int x=0; x < nx; x++) {
+        if(maxValue < inputData[cubeIdx])
+          maxValue = inputData[cubeIdx];
+        if(minValue > inputData[cubeIdx])
+          minValue = inputData[cubeIdx];
+        
+        cubeIdx++;
+      }
+
+  printf("[util] cubeFloat2Uchar : min %f, max %f\n", minValue, maxValue);
+
+  // allocate memory
+  outputData = new uchar[nx*ny*nz];
+
+  // copy to output cube
+  float scale = 255.0f/(maxValue-minValue);
+  cubeIdx = 0;
+  for(int z=0; z < nz; z++)
+    for(int y=0; y < ny; y++)
+      for(int x=0; x < nx; x++) {
+        outputData[cubeIdx] = (inputData[cubeIdx]-minValue)*scale;
+        cubeIdx++;
+      }
+}
+
+void printProcessInfo(struct rusage *p)
+{
+#if 0
+  printf(" /* user time used */                   %8d  %8d\n",  p->ru_utime.tv_sec,p->ru_utime.tv_usec   );
+  printf(" /* system time used */                 %8d  %8d\n",  p->ru_stime.tv_sec,p->ru_stime.tv_usec   );
+  printf(" /* integral shared memory size */      %8d\n",  p->ru_ixrss           );
+  printf(" /* integral unshared data  */          %8d\n",  p->ru_idrss           );
+  printf(" /* integral unshared stack  */         %8d\n",  p->ru_isrss           );
+  printf(" /* page reclaims */                    %8d\n",  p->ru_minflt          );
+  printf(" /* page faults */                      %8d\n",  p->ru_majflt          );
+  printf(" /* swaps */                            %8d\n",  p->ru_nswap           );
+  printf(" /* block input operations */           %8d\n",  p->ru_inblock         );
+  printf(" /* block output operations */          %8d\n",  p->ru_oublock         );
+  //printf(" /* # of characters read/written */     %8d\n",  p->ru_ioch            );
+  printf(" /* messages sent */                    %8d\n",  p->ru_msgsnd          );
+  printf(" /* messages received */                %8d\n",  p->ru_msgrcv          );
+  printf(" /* signals received */                 %8d\n",  p->ru_nsignals        );
+  printf(" /* voluntary context switches */       %8d\n",  p->ru_nvcsw           );
+  printf(" /* involuntary  */                     %8d\n",  p->ru_nivcsw          );
+#endif
+}
+
+void crossProduct(float* a,  float* b, float* c)
+{
+  c[0] = a[1]*b[2]-a[2]*b[1];
+  c[1] = a[2]*b[0]-a[0]*b[2];
+  c[2] = a[0]*b[1]-a[1]*b[0];
+}
+
+float l2Norm(float* a, int n)
+{
+  float out=0.f;
+  for( int i=0; i<n; i++ ) out += a[i]*a[i];
+  return sqrt(out);
+}
+
+void matMulVec_3(float* M, float* v, float* res)
+{
+  int k;
+  for(int i=0; i < 3; i++)
+    {
+      res[i] = 0;
+      k = i*3;
+      for(int j=0; j < 3; j++)
+        {
+          res[i] += M[k+j]*v[j];
+        }
+    }
+}
+
+// FIXME : change basis, should use 256 instead of 255...
+//classIdx = b*1 + g*255 + r*255*255
+void classIdxToRGB(ulong classIdx, uchar& r, uchar& g, uchar& b)
+{
+  int ir = classIdx / (int)pow(255.0f,2);
+  r = (ir > 255)?255:(uchar)ir;
+  classIdx -= r*pow(255.0f,2);
+  int ig = classIdx / 255;
+  g = (ig > 255)?255:(uchar)ig;
+  classIdx -= g*255;
+  int ib = classIdx;
+  b = (ib > 

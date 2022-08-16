@@ -242,4 +242,186 @@ class BBP {
          */
         Prob unnormAdjoint( const Prob &w, Real Z_w, const Prob &adj_w );
 
-   
+        /// Calculates averaged L1 norm of unnormalized message adjoints
+        Real getUnMsgMag();
+        /// Calculates averaged L1 norms of current and new normalized message adjoints
+        void getMsgMags( Real &s, Real &new_s );
+        /// Returns indices and magnitude of the largest normalized factor->variable message adjoint
+        void getArgmaxMsgM( size_t &i, size_t &_I, Real &mag );
+        /// Returns magnitude of the largest (in L1-norm) normalized factor->variable message adjoint
+        Real getMaxMsgM();
+
+        /// Calculates sum of L1 norms of all normalized factor->variable message adjoints
+        Real getTotalMsgM();
+        /// Calculates sum of L1 norms of all updated normalized factor->variable message adjoints
+        Real getTotalNewMsgM();
+        /// Calculates sum of L1 norms of all normalized variable->factor message adjoints
+        Real getTotalMsgN();
+
+        /// Returns a vector of Probs (filled with zeroes) with state spaces corresponding to the factors in the factor graph \a fg
+        std::vector<Prob> getZeroAdjF( const FactorGraph &fg );
+        /// Returns a vector of Probs (filled with zeroes) with state spaces corresponding to the variables in the factor graph \a fg
+        std::vector<Prob> getZeroAdjV( const FactorGraph &fg );
+
+    public:
+    /// \name Constructors/destructors
+    //@{
+        /// Construct BBP object from a InfAlg \a ia and a PropertySet \a opts
+        /** \param ia should be a BP object or something compatible
+         *  \param opts Parameters @see Properties
+         */
+        BBP( const InfAlg *ia, const PropertySet &opts ) : _bp_dual(ia), _fg(&(ia->fg())), _ia(ia) {
+            props.set(opts);
+        }
+    //@}
+
+    /// \name Initialization
+    //@{
+        /// Initializes from given belief adjoints \a adj_b_V, \a adj_b_F and initial factor adjoints \a adj_psi_V, \a adj_psi_F
+        void init( const std::vector<Prob> &adj_b_V, const std::vector<Prob> &adj_b_F, const std::vector<Prob> &adj_psi_V, const std::vector<Prob> &adj_psi_F ) {
+            _adj_b_V = adj_b_V;
+            _adj_b_F = adj_b_F;
+            _init_adj_psi_V = adj_psi_V;
+            _init_adj_psi_F = adj_psi_F;
+            Regenerate();
+        }
+
+        /// Initializes from given belief adjoints \a adj_b_V and \a adj_b_F (setting initial factor adjoints to zero)
+        void init( const std::vector<Prob> &adj_b_V, const std::vector<Prob> &adj_b_F ) {
+            init( adj_b_V, adj_b_F, getZeroAdjV(*_fg), getZeroAdjF(*_fg) );
+        }
+
+        /// Initializes variable belief adjoints \a adj_b_V (and sets factor belief adjoints and initial factor adjoints to zero)
+        void init_V( const std::vector<Prob> &adj_b_V ) {
+            init( adj_b_V, getZeroAdjF(*_fg) );
+        }
+
+        /// Initializes factor belief adjoints \a adj_b_F (and sets variable belief adjoints and initial factor adjoints to zero)
+        void init_F( const std::vector<Prob> &adj_b_F ) {
+            init( getZeroAdjV(*_fg), adj_b_F );
+        }
+
+        /// Initializes with adjoints calculated from cost function \a cfn, and state \a stateP
+        /** Uses the internal pointer to an inference algorithm in combination with the cost function and state for initialization.
+         *  \param cfn Cost function used for initialization;
+         *  \param stateP is a Gibbs state and can be NULL; it will be initialised using a Gibbs run.
+         */
+        void initCostFnAdj( const BBPCostFunction &cfn, const std::vector<size_t> *stateP );
+    //@}
+
+    /// \name BBP Algorithm
+    //@{
+        /// Perform iterative updates until change is less than given tolerance
+        void run();
+    //@}
+
+    /// \name Query results
+    //@{
+        /// Returns reference to variable factor adjoint
+        Prob& adj_psi_V(size_t i) { return _adj_psi_V[i]; }
+        /// Returns constant reference to variable factor adjoint
+        const Prob& adj_psi_V(size_t i) const { return _adj_psi_V[i]; }
+        /// Returns reference to factor adjoint
+        Prob& adj_psi_F(size_t I) { return _adj_psi_F[I]; }
+        /// Returns constant reference to factor adjoint
+        const Prob& adj_psi_F(size_t I) const { return _adj_psi_F[I]; }
+        /// Returns reference to variable belief adjoint
+        Prob& adj_b_V(size_t i) { return _adj_b_V[i]; }
+        /// Returns constant reference to variable belief adjoint
+        const Prob& adj_b_V(size_t i) const { return _adj_b_V[i]; }
+        /// Returns reference to factor belief adjoint
+        Prob& adj_b_F(size_t I) { return _adj_b_F[I]; }
+        /// Returns constant reference to factor belief adjoint
+        const Prob& adj_b_F(size_t I) const { return _adj_b_F[I]; }
+        /// Return number of iterations done so far
+        size_t Iterations() { return _iters; }
+    //@}
+
+    public:
+        /// Parameters for BBP
+        /* PROPERTIES(props,BBP) {
+           /// Enumeration of possible update schedules
+           /// The following update schedules are defined:
+           /// - SEQ_FIX fixed sequential updates
+           /// - SEQ_MAX maximum residual updates (inspired by [\ref EMK06])
+           /// - SEQ_BP_REV schedule used by BP, but reversed
+           /// - SEQ_BP_FWD schedule used by BP
+           /// - PAR parallel updates
+           DAI_ENUM(UpdateType,SEQ_FIX,SEQ_MAX,SEQ_BP_REV,SEQ_BP_FWD,PAR);
+
+           /// Verbosity (amount of output sent to stderr)
+           size_t verbose;
+
+           /// Maximum number of iterations
+           size_t maxiter;
+
+           /// Tolerance for convergence test
+           /// \note Not used for updates = SEQ_BP_REV, SEQ_BP_FWD
+           Real tol;
+
+           /// Damping constant (0 for none); damping = 1 - lambda where lambda is the damping constant used in [\ref EaG09]
+           Real damping;
+
+           /// Update schedule
+           UpdateType updates;
+
+           // DISABLED BECAUSE IT IS BUGGY:
+           // bool clean_updates;
+        }
+        */
+/* {{{ GENERATED CODE: DO NOT EDIT. Created by
+    ./scripts/regenerate-properties include/dai/bbp.h src/bbp.cpp
+*/
+        struct Properties {
+            /// Enumeration of possible update schedules
+            /** The following update schedules are defined:
+             *  - SEQ_FIX fixed sequential updates
+             *  - SEQ_MAX maximum residual updates (inspired by [\ref EMK06])
+             *  - SEQ_BP_REV schedule used by BP, but reversed
+             *  - SEQ_BP_FWD schedule used by BP
+             *  - PAR parallel updates
+             */
+            DAI_ENUM(UpdateType,SEQ_FIX,SEQ_MAX,SEQ_BP_REV,SEQ_BP_FWD,PAR);
+            /// Verbosity (amount of output sent to stderr)
+            size_t verbose;
+            /// Maximum number of iterations
+            size_t maxiter;
+            /// Tolerance for convergence test
+            /** \note Not used for updates = SEQ_BP_REV, SEQ_BP_FWD
+             */
+            Real tol;
+            /// Damping constant (0 for none); damping = 1 - lambda where lambda is the damping constant used in [\ref EaG09]
+            Real damping;
+            /// Update schedule
+            UpdateType updates;
+
+            /// Set members from PropertySet
+            /** \throw UNKNOWN_PROPERTY if a Property key is not recognized
+             *  \throw NOT_ALL_PROPERTIES_SPECIFIED if an expected Property is missing
+             */
+            void set(const PropertySet &opts);
+            /// Get members into PropertySet
+            PropertySet get() const;
+            /// Convert to a string which can be parsed as a PropertySet
+            std::string toString() const;
+        } props;
+/* }}} END OF GENERATED CODE */
+};
+
+
+/// Function to verify the validity of adjoints computed by BBP using numerical differentiation.
+/** Factors containing a variable are multiplied by small adjustments to verify accuracy of calculated variable factor adjoints.
+ *  \param bp BP object;
+ *  \param state Global state of all variables;
+ *  \param bbp_props BBP parameters;
+ *  \param cfn Cost function to be used;
+ *  \param h Size of perturbation.
+ *  \relates BBP
+ */
+Real numericBBPTest( const InfAlg &bp, const std::vector<size_t> *state, const PropertySet &bbp_props, const BBPCostFunction &cfn, Real h );
+
+
+} // end of namespace dai
+
+
+#endif

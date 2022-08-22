@@ -292,4 +292,231 @@ template <typename T> class TFactor {
 
     /// \name Operations with other factors
     //@{
-        /// Applies bina
+        /// Applies binary operation \a op on two factors, \c *this and \a g
+        /** \tparam binOp Type of function object that accepts two arguments of type \a T and outputs a type \a T
+         *  \param g Right operand
+         *  \param op Operation of type \a binOp
+         */
+        template<typename binOp> TFactor<T>& binaryOp( const TFactor<T> &g, binOp op ) {
+            if( _vs == g._vs ) // optimize special case
+                _p.pwBinaryOp( g._p, op );
+            else {
+                TFactor<T> f(*this); // make a copy
+                _vs |= g._vs;
+                size_t N = _vs.nrStates();
+
+                IndexFor i_f( f._vs, _vs );
+                IndexFor i_g( g._vs, _vs );
+
+                _p.p().clear();
+                _p.p().reserve( N );
+                for( size_t i = 0; i < N; i++, ++i_f, ++i_g )
+                    _p.p().push_back( op( f._p[i_f], g._p[i_g] ) );
+            }
+            return *this;
+        }
+
+        /// Adds \a g to \c *this
+        /** The sum of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[f+g : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto f(x_L) + g(x_M).\f]
+         */
+        TFactor<T>& operator+= (const TFactor<T>& g) { return binaryOp( g, std::plus<T>() ); }
+
+        /// Subtracts \a g from \c *this
+        /** The difference of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[f-g : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto f(x_L) - g(x_M).\f]
+         */
+        TFactor<T>& operator-= (const TFactor<T>& g) { return binaryOp( g, std::minus<T>() ); }
+
+        /// Multiplies \c *this with \a g
+        /** The product of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[fg : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto f(x_L) g(x_M).\f]
+         */
+        TFactor<T>& operator*= (const TFactor<T>& g) { return binaryOp( g, std::multiplies<T>() ); }
+
+        /// Divides \c *this by \a g (where division by zero yields zero)
+        /** The quotient of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[\frac{f}{g} : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto \frac{f(x_L)}{g(x_M)}.\f]
+         */
+        TFactor<T>& operator/= (const TFactor<T>& g) { return binaryOp( g, fo_divides0<T>() ); }
+    //@}
+
+    /// \name Transformations with other factors
+    //@{
+        /// Returns result of applying binary operation \a op on two factors, \c *this and \a g
+        /** \tparam binOp Type of function object that accepts two arguments of type \a T and outputs a type \a T
+         *  \param g Right operand
+         *  \param op Operation of type \a binOp
+         */
+        template<typename binOp> TFactor<T> binaryTr( const TFactor<T> &g, binOp op ) const {
+            // Note that to prevent a copy to be made, it is crucial 
+            // that the result is declared outside the if-else construct.
+            TFactor<T> result;
+            if( _vs == g._vs ) { // optimize special case
+                result._vs = _vs;
+                result._p = _p.pwBinaryTr( g._p, op );
+            } else {
+                result._vs = _vs | g._vs;
+                size_t N = result._vs.nrStates();
+
+                IndexFor i_f( _vs, result.vars() );
+                IndexFor i_g( g._vs, result.vars() );
+
+                result._p.p().clear();
+                result._p.p().reserve( N );
+                for( size_t i = 0; i < N; i++, ++i_f, ++i_g )
+                    result._p.p().push_back( op( _p[i_f], g._p[i_g] ) );
+            }
+            return result;
+        }
+
+        /// Returns sum of \c *this and \a g
+        /** The sum of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[f+g : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto f(x_L) + g(x_M).\f]
+         */
+        TFactor<T> operator+ (const TFactor<T>& g) const {
+            return binaryTr(g,std::plus<T>());
+        }
+
+        /// Returns \c *this minus \a g
+        /** The difference of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[f-g : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto f(x_L) - g(x_M).\f]
+         */
+        TFactor<T> operator- (const TFactor<T>& g) const {
+            return binaryTr(g,std::minus<T>());
+        }
+
+        /// Returns product of \c *this with \a g
+        /** The product of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[fg : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto f(x_L) g(x_M).\f]
+         */
+        TFactor<T> operator* (const TFactor<T>& g) const {
+            return binaryTr(g,std::multiplies<T>());
+        }
+
+        /// Returns quotient of \c *this by \a f (where division by zero yields zero)
+        /** The quotient of two factors is defined as follows: if
+         *  \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$g : \prod_{m\in M} X_m \to [0,\infty)\f$, then
+         *  \f[\frac{f}{g} : \prod_{l\in L\cup M} X_l \to [0,\infty) : x \mapsto \frac{f(x_L)}{g(x_M)}.\f]
+         */
+        TFactor<T> operator/ (const TFactor<T>& g) const {
+            return binaryTr(g,fo_divides0<T>());
+        }
+    //@}
+
+    /// \name Miscellaneous operations
+    //@{
+        /// Returns a slice of \c *this, where the subset \a vars is in state \a varsState
+        /** \pre \a vars sould be a subset of vars()
+         *  \pre \a varsState < vars.states()
+         *
+         *  The result is a factor that depends on the variables of *this except those in \a vars,
+         *  obtained by setting the variables in \a vars to the joint state specified by the linear index
+         *  \a varsState. Formally, if \c *this corresponds with the factor \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$,
+         *  \f$M \subset L\f$ corresponds with \a vars and \a varsState corresponds with a mapping \f$s\f$ that
+         *  maps a variable \f$x_m\f$ with \f$m\in M\f$ to its state \f$s(x_m) \in X_m\f$, then the slice
+         *  returned corresponds with the factor \f$g : \prod_{l \in L \setminus M} X_l \to [0,\infty)\f$
+         *  defined by \f$g(\{x_l\}_{l\in L \setminus M}) = f(\{x_l\}_{l\in L \setminus M}, \{s(x_m)\}_{m\in M})\f$.
+         */
+        TFactor<T> slice( const VarSet& vars, size_t varsState ) const; 
+
+        /// Embeds this factor in a larger VarSet
+        /** \pre vars() should be a subset of \a vars 
+         *
+         *  If *this corresponds with \f$f : \prod_{l\in L} X_l \to [0,\infty)\f$ and \f$L \subset M\f$, then
+         *  the embedded factor corresponds with \f$g : \prod_{m\in M} X_m \to [0,\infty) : x \mapsto f(x_L)\f$.
+         */
+        TFactor<T> embed(const VarSet & vars) const {
+            DAI_ASSERT( vars >> _vs );
+            if( _vs == vars )
+                return *this;
+            else
+                return (*this) * TFactor<T>(vars / _vs, (T)1);
+        }
+
+        /// Returns marginal on \a vars, obtained by summing out all variables except those in \a vars, and normalizing the result if \a normed == \c true
+        TFactor<T> marginal(const VarSet &vars, bool normed=true) const;
+
+        /// Returns max-marginal on \a vars, obtained by maximizing all variables except those in \a vars, and normalizing the result if \a normed == \c true
+        TFactor<T> maxMarginal(const VarSet &vars, bool normed=true) const;
+    //@}
+};
+
+
+template<typename T> TFactor<T> TFactor<T>::slice( const VarSet& vars, size_t varsState ) const {
+    DAI_ASSERT( vars << _vs );
+    VarSet varsrem = _vs / vars;
+    TFactor<T> result( varsrem, T(0) );
+
+    // OPTIMIZE ME
+    IndexFor i_vars (vars, _vs);
+    IndexFor i_varsrem (varsrem, _vs);
+    for( size_t i = 0; i < states(); i++, ++i_vars, ++i_varsrem )
+        if( (size_t)i_vars == varsState )
+            result._p[i_varsrem] = _p[i];
+
+    return result;
+}
+
+
+template<typename T> TFactor<T> TFactor<T>::marginal(const VarSet &vars, bool normed) const {
+    VarSet res_vars = vars & _vs;
+
+    TFactor<T> res( res_vars, 0.0 );
+
+    IndexFor i_res( res_vars, _vs );
+    for( size_t i = 0; i < _p.size(); i++, ++i_res )
+        res._p[i_res] += _p[i];
+
+    if( normed )
+        res.normalize( TProb<T>::NORMPROB );
+
+    return res;
+}
+
+
+template<typename T> TFactor<T> TFactor<T>::maxMarginal(const VarSet &vars, bool normed) const {
+    VarSet res_vars = vars & _vs;
+
+    TFactor<T> res( res_vars, 0.0 );
+
+    IndexFor i_res( res_vars, _vs );
+    for( size_t i = 0; i < _p.size(); i++, ++i_res )
+        if( _p[i] > res._p[i_res] )
+            res._p[i_res] = _p[i];
+
+    if( normed )
+        res.normalize( TProb<T>::NORMPROB );
+
+    return res;
+}
+
+
+template<typename T> T TFactor<T>::strength( const Var &i, const Var &j ) const {
+    DAI_DEBASSERT( _vs.contains( i ) );
+    DAI_DEBASSERT( _vs.contains( j ) );
+    DAI_DEBASSERT( i != j );
+    VarSet ij(i, j);
+
+    T max = 0.0;
+    for( size_t alpha1 = 0; alpha1 < i.states(); alpha1++ )
+        for( size_t alpha2 = 0; alpha2 < i.states(); alpha2++ )
+            if( alpha2 != alpha1 )
+                for( size_t beta1 = 0; beta1 < j.states(); beta1++ )
+                    for( size_t beta2 = 0; beta2 < j.states(); beta2++ )
+                        if( beta2 != beta1 ) {
+                            size_t as = 1, bs = 1;
+                            if( i < j )
+                                bs = i.states();
+                            else
+                                as = j.states();
+                            T f1 = slice( ij, alpha1 * as + beta1 * bs ).p().divide( slice( ij, alpha2 * as + beta1 * bs ).p() ).max();
+                            T f2 = slice( ij, alpha2 * as + beta2 * bs ).p().divide( slice( ij, alpha1 * as + beta2 * bs ).p() ).max();
+             

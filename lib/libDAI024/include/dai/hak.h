@@ -148,4 +148,13 @@ class HAK : public DAIAlgRG {
          *  \param root start (and end) point of the loop
          *  \param length number of variables that may be added to \a newcl
          *  \param vars neighboring variables of \a newcl
-         *  \return allcl all clusters of variables with loops of 
+         *  \return allcl all clusters of variables with loops of length at most \a length passing through root
+         */
+        void findLoopClusters( const FactorGraph &fg, std::set<VarSet> &allcl, VarSet newcl, const Var & root, size_t length, VarSet vars );
+};
+
+
+} // end of namespace dai
+
+
+#endif

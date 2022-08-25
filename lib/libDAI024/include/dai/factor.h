@@ -519,4 +519,118 @@ template<typename T> T TFactor<T>::strength( const Var &i, const Var &j ) const 
                                 as = j.states();
                             T f1 = slice( ij, alpha1 * as + beta1 * bs ).p().divide( slice( ij, alpha2 * as + beta1 * bs ).p() ).max();
                             T f2 = slice( ij, alpha2 * as + beta2 * bs ).p().divide( slice( ij, alpha1 * as + beta2 * bs ).p() ).max();
-             
+                            T f = f1 * f2;
+                            if( f > max )
+                                max = f;
+                        }
+
+    return std::tanh( 0.25 * std::log( max ) );
+}
+
+
+/// Writes a factor to an output stream
+/** \relates TFactor
+ */
+template<typename T> std::ostream& operator<< (std::ostream& os, const TFactor<T>& f) {
+    os << "(" << f.vars() << ", (";
+    for( size_t i = 0; i < f.states(); i++ )
+        os << (i == 0 ? "" : ", ") << f[i];
+    os << "))";
+    return os;
+}
+
+
+/// Returns distance between two factors \a f and \a g, according to the distance measure \a dt
+/** \relates TFactor
+ *  \pre f.vars() == g.vars()
+ */
+template<typename T> T dist( const TFactor<T> &f, const TFactor<T> &g, typename TProb<T>::DistType dt ) {
+    if( f.vars().empty() || g.vars().empty() )
+        return -1;
+    else {
+        DAI_DEBASSERT( f.vars() == g.vars() );
+        return dist( f.p(), g.p(), dt );
+    }
+}
+
+
+/// Returns the pointwise maximum of two factors
+/** \relates TFactor
+ *  \pre f.vars() == g.vars()
+ */
+template<typename T> TFactor<T> max( const TFactor<T> &f, const TFactor<T> &g ) {
+    DAI_ASSERT( f._vs == g._vs );
+    return TFactor<T>( f._vs, max( f.p(), g.p() ) );
+}
+
+
+/// Returns the pointwise minimum of two factors
+/** \relates TFactor
+ *  \pre f.vars() == g.vars()
+ */
+template<typename T> TFactor<T> min( const TFactor<T> &f, const TFactor<T> &g ) {
+    DAI_ASSERT( f._vs == g._vs );
+    return TFactor<T>( f._vs, min( f.p(), g.p() ) );
+}
+
+
+/// Calculates the mutual information between the two variables that \a f depends on, under the distribution given by \a f
+/** \relates TFactor
+ *  \pre f.vars().size() == 2
+ */
+template<typename T> T MutualInfo(const TFactor<T> &f) {
+    DAI_ASSERT( f.vars().size() == 2 );
+    VarSet::const_iterator it = f.vars().begin();
+    Var i = *it; it++; Var j = *it;
+    TFactor<T> projection = f.marginal(i) * f.marginal(j);
+    return dist( f.normalized(), projection, TProb<T>::DISTKL );
+}
+
+
+/// Represents a factor with values of type dai::Real.
+typedef TFactor<Real> Factor;
+
+
+/// Returns a binary single-variable factor \f$ \exp(hx) \f$ where \f$ x = \pm 1 \f$
+/** \param x Variable (should be binary)
+ *  \param h Field strength
+ */
+Factor createFactorIsing( const Var &x, Real h );
+
+
+/// Returns a binary pairwise factor \f$ \exp(J x_1 x_2) \f$ where \f$ x_1, x_2 = \pm 1 \f$
+/** \param x1 First variable (should be binary)
+ *  \param x2 Second variable (should be binary)
+ *  \param J Coupling strength
+ */
+Factor createFactorIsing( const Var &x1, const Var &x2, Real J );
+
+
+/// Returns a random factor on the variables \a vs with strength \a beta
+/** Each entry are set by drawing a normally distributed random with mean
+ *  0 and standard-deviation \a beta, and taking its exponent.
+ *  \param vs Variables
+ *  \param beta Factor strength (inverse temperature)
+ */
+Factor createFactorExpGauss( const VarSet &vs, Real beta );
+
+
+/// Returns a pairwise Potts factor \f$ \exp( J \delta_{x_1, x_2} ) \f$
+/** \param x1 First variable
+ *  \param x2 Second variable (should have the same number of states as \a x1)
+ *  \param J  Factor strength
+ */
+Factor createFactorPotts( const Var &x1, const Var &x2, Real J );
+
+
+/// Returns a Kronecker delta point mass
+/** \param v Variable
+ *  \param state The state of \a v that should get value 1
+ */
+Factor createFactorDelta( const Var &v, size_t state );
+
+
+} // end of namespace dai
+
+
+#endif

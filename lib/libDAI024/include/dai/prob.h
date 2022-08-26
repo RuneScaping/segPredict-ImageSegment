@@ -411,4 +411,280 @@ template <typename T> class TProb {
         
         /// Returns pointwise inverse
         /** If \a zero == \c true, uses <tt>1/0==0</tt>; otherwise, <tt>1/0==Inf</tt>.
-         
+         */
+        TProb<T> inverse(bool zero=true) const {
+            if( zero )
+                return pwUnaryTr( fo_inv0<T>() );
+            else
+                return pwUnaryTr( fo_inv<T>() );
+        }
+
+        /// Returns normalized copy of \c *this, using the specified norm
+        /** \throw NOT_NORMALIZABLE if the norm is zero
+         */
+        TProb<T> normalized( NormType norm = NORMPROB ) const {
+            T Z = 0;
+            if( norm == NORMPROB )
+                Z = sum();
+            else if( norm == NORMLINF )
+                Z = maxAbs();
+            if( Z == (T)0 ) {
+                DAI_THROW(NOT_NORMALIZABLE);
+                return *this;
+            } else
+                return pwUnaryTr( std::bind2nd( std::divides<T>(), Z ) );
+        }
+    //@}
+
+    /// \name Unary operations
+    //@{
+        /// Applies unary operation \a op pointwise
+        template<typename unaryOp> TProb<T>& pwUnaryOp( unaryOp op ) {
+            std::transform( _p.begin(), _p.end(), _p.begin(), op );
+            return *this;
+        }
+
+        /// Draws all entries i.i.d. from a uniform distribution on [0,1)
+        TProb<T>& randomize() {
+            std::generate( _p.begin(), _p.end(), rnd_uniform );
+            return *this;
+        }
+
+        /// Sets all entries to \f$1/n\f$ where \a n is the length of the vector
+        TProb<T>& setUniform () {
+            fill( (T)1 / size() );
+            return *this;
+        }
+
+        /// Applies absolute value pointwise
+        const TProb<T>& takeAbs() { return pwUnaryOp( fo_abs<T>() ); }
+
+        /// Applies exponent pointwise
+        const TProb<T>& takeExp() { return pwUnaryOp( fo_exp<T>() ); }
+
+        /// Applies logarithm pointwise
+        /** If \a zero == \c true, uses <tt>log(0)==0</tt>; otherwise, <tt>log(0)==-Inf</tt>.
+         */
+        const TProb<T>& takeLog(bool zero=false) {
+            if( zero ) {
+                return pwUnaryOp( fo_log0<T>() );
+            } else
+                return pwUnaryOp( fo_log<T>() );
+        }
+
+        /// Normalizes vector using the specified norm
+        /** \throw NOT_NORMALIZABLE if the norm is zero
+         */
+        T normalize( NormType norm=NORMPROB ) {
+            T Z = 0;
+            if( norm == NORMPROB )
+                Z = sum();
+            else if( norm == NORMLINF )
+                Z = maxAbs();
+            if( Z == (T)0 )
+                DAI_THROW(NOT_NORMALIZABLE);
+            else
+                *this /= Z;
+            return Z;
+        }
+    //@}
+
+    /// \name Operations with scalars
+    //@{
+        /// Sets all entries to \a x
+        TProb<T> & fill(T x) {
+            std::fill( _p.begin(), _p.end(), x );
+            return *this;
+        }
+
+        /// Adds scalar \a x to each entry
+        TProb<T>& operator+= (T x) {
+            if( x != 0 )
+                return pwUnaryOp( std::bind2nd( std::plus<T>(), x ) );
+            else
+                return *this;
+        }
+
+        /// Subtracts scalar \a x from each entry
+        TProb<T>& operator-= (T x) {
+            if( x != 0 )
+                return pwUnaryOp( std::bind2nd( std::minus<T>(), x ) );
+            else
+                return *this;
+        }
+
+        /// Multiplies each entry with scalar \a x
+        TProb<T>& operator*= (T x) {
+            if( x != 1 )
+                return pwUnaryOp( std::bind2nd( std::multiplies<T>(), x ) );
+            else
+                return *this;
+        }
+
+        /// Divides each entry by scalar \a x
+        TProb<T>& operator/= (T x) {
+            DAI_DEBASSERT( x != 0 );
+            if( x != 1 )
+                return pwUnaryOp( std::bind2nd( std::divides<T>(), x ) );
+            else
+                return *this;
+        }
+
+        /// Raises entries to the power \a x
+        TProb<T>& operator^= (T x) {
+            if( x != (T)1 )
+                return pwUnaryOp( std::bind2nd( fo_pow<T>(), x) );
+            else
+                return *this;
+        }
+    //@}
+
+    /// \name Transformations with scalars
+    //@{
+        /// Returns sum of \c *this and scalar \a x
+        TProb<T> operator+ (T x) const { return pwUnaryTr( std::bind2nd( std::plus<T>(), x ) ); }
+
+        /// Returns difference of \c *this and scalar \a x
+        TProb<T> operator- (T x) const { return pwUnaryTr( std::bind2nd( std::minus<T>(), x ) ); }
+
+        /// Returns product of \c *this with scalar \a x
+        TProb<T> operator* (T x) const { return pwUnaryTr( std::bind2nd( std::multiplies<T>(), x ) ); }
+
+        /// Returns quotient of \c *this and scalar \a x, where division by 0 yields 0
+        TProb<T> operator/ (T x) const { return pwUnaryTr( std::bind2nd( fo_divides0<T>(), x ) ); }
+
+        /// Returns \c *this raised to the power \a x
+        TProb<T> operator^ (T x) const { return pwUnaryTr( std::bind2nd( fo_pow<T>(), x ) ); }
+    //@}
+
+    /// \name Operations with other equally-sized vectors
+    //@{
+        /// Applies binary operation pointwise on two vectors
+        /** \tparam binaryOp Type of function object that accepts two arguments of type \a T and outputs a type \a T
+         *  \param q Right operand
+         *  \param op Operation of type \a binaryOp
+         */
+        template<typename binaryOp> TProb<T>& pwBinaryOp( const TProb<T> &q, binaryOp op ) {
+            DAI_DEBASSERT( size() == q.size() );
+            std::transform( _p.begin(), _p.end(), q._p.begin(), _p.begin(), op );
+            return *this;
+        }
+
+        /// Pointwise addition with \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T>& operator+= (const TProb<T> & q) { return pwBinaryOp( q, std::plus<T>() ); }
+
+        /// Pointwise subtraction of \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T>& operator-= (const TProb<T> & q) { return pwBinaryOp( q, std::minus<T>() ); }
+
+        /// Pointwise multiplication with \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T>& operator*= (const TProb<T> & q) { return pwBinaryOp( q, std::multiplies<T>() ); }
+
+        /// Pointwise division by \a q, where division by 0 yields 0
+        /** \pre <tt>this->size() == q.size()</tt>
+         *  \see divide(const TProb<T> &)
+         */
+        TProb<T>& operator/= (const TProb<T> & q) { return pwBinaryOp( q, fo_divides0<T>() ); }
+
+        /// Pointwise division by \a q, where division by 0 yields +Inf
+        /** \pre <tt>this->size() == q.size()</tt>
+         *  \see operator/=(const TProb<T> &)
+         */
+        TProb<T>& divide (const TProb<T> & q) { return pwBinaryOp( q, std::divides<T>() ); }
+
+        /// Pointwise power
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T>& operator^= (const TProb<T> & q) { return pwBinaryOp( q, fo_pow<T>() ); }
+    //@}
+
+    /// \name Transformations with other equally-sized vectors
+    //@{
+        /// Returns the result of applying binary operation \a op pointwise on \c *this and \a q
+        /** \tparam binaryOp Type of function object that accepts two arguments of type \a T and outputs a type \a T
+         *  \param q Right operand
+         *  \param op Operation of type \a binaryOp
+         */
+        template<typename binaryOp> TProb<T> pwBinaryTr( const TProb<T> &q, binaryOp op ) const {
+            DAI_DEBASSERT( size() == q.size() );
+            TProb<T> r;
+            r._p.reserve( size() );
+            std::transform( _p.begin(), _p.end(), q._p.begin(), back_inserter( r._p ), op );
+            return r;
+        }
+
+        /// Returns sum of \c *this and \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T> operator+ ( const TProb<T>& q ) const { return pwBinaryTr( q, std::plus<T>() ); }
+
+        /// Return \c *this minus \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T> operator- ( const TProb<T>& q ) const { return pwBinaryTr( q, std::minus<T>() ); }
+
+        /// Return product of \c *this with \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T> operator* ( const TProb<T> &q ) const { return pwBinaryTr( q, std::multiplies<T>() ); }
+
+        /// Returns quotient of \c *this with \a q, where division by 0 yields 0
+        /** \pre <tt>this->size() == q.size()</tt>
+         *  \see divided_by(const TProb<T> &)
+         */
+        TProb<T> operator/ ( const TProb<T> &q ) const { return pwBinaryTr( q, fo_divides0<T>() ); }
+
+        /// Pointwise division by \a q, where division by 0 yields +Inf
+        /** \pre <tt>this->size() == q.size()</tt>
+         *  \see operator/(const TProb<T> &)
+         */
+        TProb<T> divided_by( const TProb<T> &q ) const { return pwBinaryTr( q, std::divides<T>() ); }
+
+        /// Returns \c *this to the power \a q
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        TProb<T> operator^ ( const TProb<T> &q ) const { return pwBinaryTr( q, fo_pow<T>() ); }
+    //@}
+
+        /// Performs a generalized inner product, similar to std::inner_product
+        /** \pre <tt>this->size() == q.size()</tt>
+         */
+        template<typename binOp1, typename binOp2> T innerProduct( const TProb<T> &q, T init, binOp1 binaryOp1, binOp2 binaryOp2 ) const {
+            DAI_DEBASSERT( size() == q.size() );
+            return std::inner_product( begin(), end(), q.begin(), init, binaryOp1, binaryOp2 );
+        }
+};
+
+
+/// Returns distance between \a p and \a q, measured using distance measure \a dt
+/** \relates TProb
+ *  \pre <tt>this->size() == q.size()</tt>
+ */
+template<typename T> T dist( const TProb<T> &p, const TProb<T> &q, typename TProb<T>::DistType dt ) {
+    switch( dt ) {
+        case TProb<T>::DISTL1:
+            return p.innerProduct( q, (T)0, std::plus<T>(), fo_absdiff<T>() );
+        case TProb<T>::DISTLINF:
+            return p.innerProduct( q, (T)0, fo_max<T>(), fo_absdiff<T>() );
+        case TProb<T>::DISTTV:
+            return p.innerProduct( q, (T)0, std::plus<T>(), fo_absdiff<T>() ) / 2;
+        case TProb<T>::DISTKL:
+            return p.innerProduct( q, (T)0, std::plus<T>(), fo_KL<T>() );
+        case TProb<T>::DISTHEL:
+            return p.innerProduct( q, (T)0, std::plus<T>(), fo_Hellinger<T>() ) / 2;
+        default:
+            DAI_THROW(UNKNOWN_ENUM_VALUE);
+            return INFINITY;
+    }
+}
+
+
+/// Writes a TProb<T> to an output stream
+/** \relates TProb
+ */
+template<ty

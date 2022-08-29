@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+#
+# This file is part of libDAI - http://www.libdai.org/
+#
+# libDAI is licensed under the terms of the GNU General Public License version
+# 2, or (at your option) any later version. libDAI is distributed without any
+# warranty. See the file COPYING for more details.
+#
+# Copyright (C) 2009  Frederik Eaton [frederik at ofb dot net]
+
+
+use warnings;
+use strict;
+
+use Cwd 'abs_path';
+
+@ARGV == 2 or die "Need 2 arguments";
+
+my ($header_file,$source_file) = @ARGV;
+@ARGV=();
+
+# Regular expressions for nested brackets (uses perl 5.10 features)
+my ($nested_angle_brackets) = qr/(<(?:[^<>]++|(?1))*>)/;
+my ($nested_curly_brackets) = qr/({(?:[^{}]++|(?1))*})/;
+my ($nested_parentheses) = qr/(\((?:[^()]++|(?1))*\))/;
+
+# Patterns to match generated code blocks
+my ($gen_code_start_pat, $gen_code_end_pat, $props_start_pat) =
+  (qr(/\*.*GENERATED CODE: DO NOT EDIT.*),
+   qr(/\*.*END OF GENERATED CODE.*\*/),
+   qr(/\*.*PROPERTIES));
+# Actual delimiters to use for generated code blocks
+my ($gen_code_start, $gen_code_end) =
+  ("/* {{{ GENERATED CODE: DO NOT EDIT. Created by\n".
+   "    $0 $header_file $source_file\n*/\n",
+   "/* }}} END OF GENERATED CODE */\n");
+
+# Strings to hold text of files
+my $header_buffer="";
+my $source_buffer="";
+
+# ----------------------------------------------------------------
+# Useful routines
+
+# remove leading and trailing whitespace
+sub stripws ($) {
+  my ($s) = @_;
+  $s =~ s/^\s*//s;
+  $s =~ s/\s*$//s;
+  return $s;
+}
+
+# split comments and non-comments, returning 

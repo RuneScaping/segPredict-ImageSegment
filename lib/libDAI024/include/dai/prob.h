@@ -687,4 +687,37 @@ template<typename T> T dist( const TProb<T> &p, const TProb<T> &q, typename TPro
 /// Writes a TProb<T> to an output stream
 /** \relates TProb
  */
-template<ty
+template<typename T> std::ostream& operator<< (std::ostream& os, const TProb<T>& p) {
+    os << "[";
+    std::copy( p.p().begin(), p.p().end(), std::ostream_iterator<T>(os, " ") );
+    os << "]";
+    return os;
+}
+
+
+/// Returns the pointwise minimum of \a a and \a b
+/** \relates TProb
+ *  \pre <tt>this->size() == q.size()</tt>
+ */
+template<typename T> TProb<T> min( const TProb<T> &a, const TProb<T> &b ) {
+    return a.pwBinaryTr( b, fo_min<T>() );
+}
+
+
+/// Returns the pointwise maximum of \a a and \a b
+/** \relates TProb
+ *  \pre <tt>this->size() == q.size()</tt>
+ */
+template<typename T> TProb<T> max( const TProb<T> &a, const TProb<T> &b ) {
+    return a.pwBinaryTr( b, fo_max<T>() );
+}
+
+
+/// Represents a vector with entries of type dai::Real.
+typedef TProb<Real> Prob;
+
+
+} // end of namespace dai
+
+
+#endif

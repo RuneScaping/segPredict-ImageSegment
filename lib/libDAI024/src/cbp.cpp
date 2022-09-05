@@ -570,4 +570,68 @@ void CBP::Properties::set(const PropertySet &opts)
         verbose = 0;
     }
     tol = opts.getStringAs<Real>("tol");
-    updates = o
+    updates = opts.getStringAs<UpdateType>("updates");
+    maxiter = opts.getStringAs<size_t>("maxiter");
+    rec_tol = opts.getStringAs<Real>("rec_tol");
+    if( opts.hasKey("max_levels") ) {
+        max_levels = opts.getStringAs<size_t>("max_levels");
+    } else {
+        max_levels = 10;
+    }
+    min_max_adj = opts.getStringAs<Real>("min_max_adj");
+    choose = opts.getStringAs<ChooseMethodType>("choose");
+    recursion = opts.getStringAs<RecurseType>("recursion");
+    clamp = opts.getStringAs<ClampType>("clamp");
+    bbp_props = opts.getStringAs<PropertySet>("bbp_props");
+    bbp_cfn = opts.getStringAs<BBPCostFunction>("bbp_cfn");
+    if( opts.hasKey("rand_seed") ) {
+        rand_seed = opts.getStringAs<size_t>("rand_seed");
+    } else {
+        rand_seed = 0;
+    }
+    if( opts.hasKey("clamp_outfile") ) {
+        clamp_outfile = opts.getStringAs<std::string>("clamp_outfile");
+    } else {
+        clamp_outfile = "";
+    }
+}
+PropertySet CBP::Properties::get() const {
+    PropertySet opts;
+    opts.Set("verbose", verbose);
+    opts.Set("tol", tol);
+    opts.Set("updates", updates);
+    opts.Set("maxiter", maxiter);
+    opts.Set("rec_tol", rec_tol);
+    opts.Set("max_levels", max_levels);
+    opts.Set("min_max_adj", min_max_adj);
+    opts.Set("choose", choose);
+    opts.Set("recursion", recursion);
+    opts.Set("clamp", clamp);
+    opts.Set("bbp_props", bbp_props);
+    opts.Set("bbp_cfn", bbp_cfn);
+    opts.Set("rand_seed", rand_seed);
+    opts.Set("clamp_outfile", clamp_outfile);
+    return opts;
+}
+string CBP::Properties::toString() const {
+    stringstream s(stringstream::out);
+    s << "[";
+    s << "verbose=" << verbose << ",";
+    s << "tol=" << tol << ",";
+    s << "updates=" << updates << ",";
+    s << "maxiter=" << maxiter << ",";
+    s << "rec_tol=" << rec_tol << ",";
+    s << "max_levels=" << max_levels << ",";
+    s << "min_max_adj=" << min_max_adj << ",";
+    s << "choose=" << choose << ",";
+    s << "recursion=" << recursion << ",";
+    s << "clamp=" << clamp << ",";
+    s << "bbp_props=" << bbp_props << ",";
+    s << "bbp_cfn=" << bbp_cfn << ",";
+    s << "rand_seed=" << rand_seed << ",";
+    s << "clamp_outfile=" << clamp_outfile;
+    s << "]";
+    return s.str();
+}
+} // end of namespace dai
+/* }}} END OF GENERATED CODE */

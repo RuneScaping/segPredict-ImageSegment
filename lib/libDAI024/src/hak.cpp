@@ -131,4 +131,267 @@ void HAK::construct() {
 }
 
 
-HAK::HAK( const RegionGraph &rg, const PropertySe
+HAK::HAK( const RegionGraph &rg, const PropertySet &opts ) : DAIAlgRG(rg), _Qa(), _Qb(), _muab(), _muba(), _maxdiff(0.0), _iters(0U), props() {
+    setProperties( opts );
+
+    construct();
+}
+
+
+void HAK::findLoopClusters( const FactorGraph & fg, std::set<VarSet> &allcl, VarSet newcl, const Var & root, size_t length, VarSet vars ) {
+    for( VarSet::const_iterator in = vars.begin(); in != vars.end(); in++ ) {
+        VarSet ind = fg.delta( fg.findVar( *in ) );
+        if( (newcl.size()) >= 2 && ind.contains( root ) )
+            allcl.insert( newcl | *in );
+        else if( length > 1 )
+            findLoopClusters( fg, allcl, newcl | *in, root, length - 1, ind / newcl );
+    }
+}
+
+
+HAK::HAK(const FactorGraph & fg, const PropertySet &opts) : DAIAlgRG(), _Qa(), _Qb(), _muab(), _muba(), _maxdiff(0.0), _iters(0U), props() {
+    setProperties( opts );
+
+    vector<VarSet> cl;
+    if( props.clusters == Properties::ClustersType::MIN ) {
+        cl = fg.Cliques();
+        constructCVM( fg, cl );
+    } else if( props.clusters == Properties::ClustersType::DELTA ) {
+        cl.reserve( fg.nrVars() );
+        for( size_t i = 0; i < fg.nrVars(); i++ )
+            cl.push_back( fg.Delta(i) );
+        constructCVM( fg, cl );
+    } else if( props.clusters == Properties::ClustersType::LOOP ) {
+        cl = fg.Cliques();
+        set<VarSet> scl;
+        for( size_t i0 = 0; i0 < fg.nrVars(); i0++ ) {
+            VarSet i0d = fg.delta(i0);
+            if( props.loopdepth > 1 )
+                findLoopClusters( fg, scl, fg.var(i0), fg.var(i0), props.loopdepth - 1, fg.delta(i0) );
+        }
+        for( set<VarSet>::const_iterator c = scl.begin(); c != scl.end(); c++ )
+            cl.push_back(*c);
+        if( props.verbose >= 3 ) {
+            cerr << Name << " uses the following clusters: " << endl;
+            for( vector<VarSet>::const_iterator cli = cl.begin(); cli != cl.end(); cli++ )
+                cerr << *cli << endl;
+        }
+        constructCVM( fg, cl );
+    } else if( props.clusters == Properties::ClustersType::BETHE ) {
+        // build outer regions (the cliques)
+        cl = fg.Cliques();
+        size_t nrEdges = 0;
+        for( size_t c = 0; c < cl.size(); c++ )
+            nrEdges += cl[c].size();
+
+        // build inner regions (single variables)
+        vector<Region> irs;
+        irs.reserve( fg.nrVars() );
+        for( size_t i = 0; i < fg.nrVars(); i++ )
+            irs.push_back( Region( fg.var(i), 1.0 ) );
+
+        // build edges (an outer and inner region are connected if the outer region contains the inner one)
+        // and calculate counting number for inner regions
+        vector<std::pair<size_t, size_t> > edges;
+        edges.reserve( nrEdges );
+        for( size_t c = 0; c < cl.size(); c++ )
+            for( size_t i = 0; i < irs.size(); i++ )
+                if( cl[c] >> irs[i] ) {
+                    edges.push_back( make_pair( c, i ) );
+                    irs[i].c() -= 1.0;
+                }
+
+        // build region graph
+        RegionGraph::construct( fg, cl, irs, edges );
+    } else
+        DAI_THROW(UNKNOWN_ENUM_VALUE);
+
+    construct();
+
+    if( props.verbose >= 3 )
+        cerr << Name << " regiongraph: " << *this << endl;
+}
+
+
+string HAK::identify() const {
+    return string(Name) + printProperties();
+}
+
+
+void HAK::init( const VarSet &ns ) {
+    for( size_t alpha = 0; alpha < nrORs(); alpha++ )
+        if( _Qa[alpha].vars().intersects( ns ) ) {
+            if( props.init == Properties::InitType::UNIFORM )
+                _Qa[alpha].setUniform();
+            else
+                _Qa[alpha].randomize();
+            _Qa[alpha] *= OR(alpha);
+            _Qa[alpha].normalize();
+        }
+
+    for( size_t beta = 0; beta < nrIRs(); beta++ )
+        if( IR(beta).intersects( ns ) ) {
+            if( props.init == Properties::InitType::UNIFORM )
+                _Qb[beta].fill( 1.0 );
+            else
+                _Qb[beta].randomize();
+            daiforeach( const Neighbor &alpha, nbIR(beta) ) {
+                size_t _beta = alpha.dual;
+                if( props.init == Properties::InitType::UNIFORM ) {
+                    muab( alpha, _beta ).fill( 1.0 );
+                    muba( alpha, _beta ).fill( 1.0 );
+                } else {
+                    muab( alpha, _beta ).randomize();
+                    muba( alpha, _beta ).randomize();
+                }
+            }
+        }
+}
+
+
+void HAK::init() {
+    for( size_t alpha = 0; alpha < nrORs(); alpha++ ) {
+        if( props.init == Properties::InitType::UNIFORM )
+            _Qa[alpha].setUniform();
+        else
+            _Qa[alpha].randomize();
+        _Qa[alpha] *= OR(alpha);
+        _Qa[alpha].normalize();
+    }
+
+    for( size_t beta = 0; beta < nrIRs(); beta++ )
+        if( props.init == Properties::InitType::UNIFORM )
+            _Qb[beta].setUniform();
+        else
+            _Qb[beta].randomize();
+
+    for( size_t alpha = 0; alpha < nrORs(); alpha++ )
+        daiforeach( const Neighbor &beta, nbOR(alpha) ) {
+            size_t _beta = beta.iter;
+            if( props.init == Properties::InitType::UNIFORM ) {
+                muab( alpha, _beta ).setUniform();
+                muba( alpha, _beta ).setUniform();
+            } else {
+                muab( alpha, _beta ).randomize();
+                muba( alpha, _beta ).randomize();
+            }
+        }
+}
+
+
+Real HAK::doGBP() {
+    if( props.verbose >= 1 )
+        cerr << "Starting " << identify() << "...";
+    if( props.verbose >= 3)
+        cerr << endl;
+
+    double tic = toc();
+
+    // Check whether counting numbers won't lead to problems
+    for( size_t beta = 0; beta < nrIRs(); beta++ )
+        DAI_ASSERT( nbIR(beta).size() + IR(beta).c() != 0.0 );
+
+    // Keep old beliefs to check convergence
+    vector<Factor> oldBeliefsV;
+    oldBeliefsV.reserve( nrVars() );
+    for( size_t i = 0; i < nrVars(); i++ )
+        oldBeliefsV.push_back( beliefV(i) );
+    vector<Factor> oldBeliefsF;
+    oldBeliefsF.reserve( nrFactors() );
+    for( size_t I = 0; I < nrFactors(); I++ )
+        oldBeliefsF.push_back( beliefF(I) );
+
+    // do several passes over the network until maximum number of iterations has
+    // been reached or until the maximum belief difference is smaller than tolerance
+    Real maxDiff = INFINITY;
+    for( _iters = 0; _iters < props.maxiter && maxDiff > props.tol; _iters++ ) {
+        for( size_t beta = 0; beta < nrIRs(); beta++ ) {
+            daiforeach( const Neighbor &alpha, nbIR(beta) ) {
+                size_t _beta = alpha.dual;
+                muab( alpha, _beta ) = _Qa[alpha].marginal(IR(beta)) / muba(alpha,_beta);
+                /* TODO: INVESTIGATE THIS PROBLEM
+                 *
+                 * In some cases, the muab's can have very large entries because the muba's have very
+                 * small entries. This may cause NANs later on (e.g., multiplying large quantities may
+                 * result in +inf; normalization then tries to calculate inf / inf which is NAN).
+                 * A fix of this problem would consist in normalizing the messages muab.
+                 * However, it is not obvious whether this is a real solution, because it has a
+                 * negative performance impact and the NAN's seem to be a symptom of a fundamental
+                 * numerical unstability.
+                 */
+                 muab(alpha,_beta).normalize();
+            }
+
+            Factor Qb_new;
+            daiforeach( const Neighbor &alpha, nbIR(beta) ) {
+                size_t _beta = alpha.dual;
+                Qb_new *= muab(alpha,_beta) ^ (1 / (nbIR(beta).size() + IR(beta).c()));
+            }
+
+            Qb_new.normalize();
+            if( Qb_new.hasNaNs() ) {
+                // TODO: WHAT TO DO IN THIS CASE?
+                cerr << Name << "::doGBP:  Qb_new has NaNs!" << endl;
+                return 1.0;
+            }
+            /* TODO: WHAT IS THE PURPOSE OF THE FOLLOWING CODE?
+             *
+             *   _Qb[beta] = Qb_new.makeZero(1e-100);
+             */
+
+            if( props.doubleloop || props.damping == 0.0 )
+                _Qb[beta] = Qb_new; // no damping for double loop
+            else
+                _Qb[beta] = (Qb_new^(1.0 - props.damping)) * (_Qb[beta]^props.damping);
+
+            daiforeach( const Neighbor &alpha, nbIR(beta) ) {
+                size_t _beta = alpha.dual;
+                muba(alpha,_beta) = _Qb[beta] / muab(alpha,_beta);
+
+                /* TODO: INVESTIGATE WHETHER THIS HACK (INVENTED BY KEES) TO PREVENT NANS MAKES SENSE
+                 *
+                 *   muba(beta,*alpha).makePositive(1e-100);
+                 *
+                 */
+
+                Factor Qa_new = OR(alpha);
+                daiforeach( const Neighbor &gamma, nbOR(alpha) )
+                    Qa_new *= muba(alpha,gamma.iter);
+                Qa_new ^= (1.0 / OR(alpha).c());
+                Qa_new.normalize();
+                if( Qa_new.hasNaNs() ) {
+                    cerr << Name << "::doGBP:  Qa_new has NaNs!" << endl;
+                    return 1.0;
+                }
+                /* TODO: WHAT IS THE PURPOSE OF THE FOLLOWING CODE?
+                 *
+                 *   _Qb[beta] = Qb_new.makeZero(1e-100);
+                 */
+
+                if( props.doubleloop || props.damping == 0.0 )
+                    _Qa[alpha] = Qa_new; // no damping for double loop
+                else
+                    // FIXME: GEOMETRIC DAMPING IS SLOW!
+                _Qa[alpha] = (Qa_new^(1.0 - props.damping)) * (_Qa[alpha]^props.damping);
+            }
+        }
+
+        // Calculate new single variable beliefs and compare with old ones
+        maxDiff = -INFINITY;
+        for( size_t i = 0; i < nrVars(); ++i ) {
+            Factor b = beliefV(i);
+            maxDiff = std::max( maxDiff, dist( b, oldBeliefsV[i], Prob::DISTLINF ) );
+            oldBeliefsV[i] = b;
+        }
+        for( size_t I = 0; I < nrFactors(); ++I ) {
+            Factor b = beliefF(I);
+            maxDiff = std::max( maxDiff, dist( b, oldBeliefsF[I], Prob::DISTLINF ) );
+            oldBeliefsF[I] = b;
+        }
+
+        if( props.verbose >= 3 )
+            cerr << Name << "::doGBP:  maxdiff " << maxDiff << " after " << _iters+1 << " passes" << endl;
+    }
+
+    if( maxDiff > _maxdiff )
+        _maxdiff = m

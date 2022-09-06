@@ -394,4 +394,175 @@ Real HAK::doGBP() {
     }
 
     if( maxDiff > _maxdiff )
-        _maxdiff = m
+        _maxdiff = maxDiff;
+
+    if( props.verbose >= 1 ) {
+        if( maxDiff > props.tol ) {
+            if( props.verbose == 1 )
+                cerr << endl;
+            cerr << Name << "::doGBP:  WARNING: not converged within " << props.maxiter << " passes (" << toc() - tic << " seconds)...final maxdiff:" << maxDiff << endl;
+        } else {
+            if( props.verbose >= 2 )
+                cerr << Name << "::doGBP:  ";
+            cerr << "converged in " << _iters << " passes (" << toc() - tic << " seconds)." << endl;
+        }
+    }
+
+    return maxDiff;
+}
+
+
+Real HAK::doDoubleLoop() {
+    if( props.verbose >= 1 )
+        cerr << "Starting " << identify() << "...";
+    if( props.verbose >= 3)
+        cerr << endl;
+
+    double tic = toc();
+
+    // Save original outer regions
+    vector<FRegion> org_ORs = ORs;
+
+    // Save original inner counting numbers and set negative counting numbers to zero
+    vector<Real> org_IR_cs( nrIRs(), 0.0 );
+    for( size_t beta = 0; beta < nrIRs(); beta++ ) {
+        org_IR_cs[beta] = IR(beta).c();
+        if( IR(beta).c() < 0.0 )
+            IR(beta).c() = 0.0;
+    }
+
+    // Keep old beliefs to check convergence
+    vector<Factor> oldBeliefsV;
+    oldBeliefsV.reserve( nrVars() );
+    for( size_t i = 0; i < nrVars(); i++ )
+        oldBeliefsV.push_back( beliefV(i) );
+    vector<Factor> oldBeliefsF;
+    oldBeliefsF.reserve( nrFactors() );
+    for( size_t I = 0; I < nrFactors(); I++ )
+        oldBeliefsF.push_back( beliefF(I) );
+
+    size_t outer_maxiter   = props.maxiter;
+    Real   outer_tol       = props.tol;
+    size_t outer_verbose   = props.verbose;
+    Real   org_maxdiff     = _maxdiff;
+
+    // Set parameters for inner loop
+    props.maxiter = 5;
+    props.verbose = outer_verbose ? outer_verbose - 1 : 0;
+
+    size_t outer_iter = 0;
+    size_t total_iter = 0;
+    Real maxDiff = INFINITY;
+    for( outer_iter = 0; outer_iter < outer_maxiter && maxDiff > outer_tol; outer_iter++ ) {
+        // Calculate new outer regions
+        for( size_t alpha = 0; alpha < nrORs(); alpha++ ) {
+            OR(alpha) = org_ORs[alpha];
+            daiforeach( const Neighbor &beta, nbOR(alpha) )
+                OR(alpha) *= _Qb[beta] ^ ((IR(beta).c() - org_IR_cs[beta]) / nbIR(beta).size());
+        }
+
+        // Inner loop
+        if( isnan( doGBP() ) )
+            return 1.0;
+
+        // Calculate new single variable beliefs and compare with old ones
+        maxDiff = -INFINITY;
+        for( size_t i = 0; i < nrVars(); ++i ) {
+            Factor b = beliefV(i);
+            maxDiff = std::max( maxDiff, dist( b, oldBeliefsV[i], Prob::DISTLINF ) );
+            oldBeliefsV[i] = b;
+        }
+        for( size_t I = 0; I < nrFactors(); ++I ) {
+            Factor b = beliefF(I);
+            maxDiff = std::max( maxDiff, dist( b, oldBeliefsF[I], Prob::DISTLINF ) );
+            oldBeliefsF[I] = b;
+        }
+
+        total_iter += Iterations();
+
+        if( props.verbose >= 3 )
+            cerr << Name << "::doDoubleLoop:  maxdiff " << maxDiff << " after " << total_iter << " passes" << endl;
+    }
+
+    // restore _maxiter, _verbose and _maxdiff
+    props.maxiter = outer_maxiter;
+    props.verbose = outer_verbose;
+    _maxdiff = org_maxdiff;
+
+    _iters = total_iter;
+    if( maxDiff > _maxdiff )
+        _maxdiff = maxDiff;
+
+    // Restore original outer regions
+    ORs = org_ORs;
+
+    // Restore original inner counting numbers
+    for( size_t beta = 0; beta < nrIRs(); ++beta )
+        IR(beta).c() = org_IR_cs[beta];
+
+    if( props.verbose >= 1 ) {
+        if( maxDiff > props.tol ) {
+            if( props.verbose == 1 )
+                cerr << endl;
+                cerr << Name << "::doDoubleLoop:  WARNING: not converged within " << outer_maxiter << " passes (" << toc() - tic << " seconds)...final maxdiff:" << maxDiff << endl;
+            } else {
+                if( props.verbose >= 3 )
+                    cerr << Name << "::doDoubleLoop:  ";
+                cerr << "converged in " << total_iter << " passes (" << toc() - tic << " seconds)." << endl;
+            }
+        }
+
+    return maxDiff;
+}
+
+
+Real HAK::run() {
+    if( props.doubleloop )
+        return doDoubleLoop();
+    else
+        return doGBP();
+}
+
+
+Factor HAK::belief( const VarSet &ns ) const {
+    vector<Factor>::const_iterator beta;
+    for( beta = _Qb.begin(); beta != _Qb.end(); beta++ )
+        if( beta->vars() >> ns )
+            break;
+    if( beta != _Qb.end() )
+        return( beta->marginal(ns) );
+    else {
+        vector<Factor>::const_iterator alpha;
+        for( alpha = _Qa.begin(); alpha != _Qa.end(); alpha++ )
+            if( alpha->vars() >> ns )
+                break;
+        if( alpha == _Qa.end() )
+            DAI_THROW(BELIEF_NOT_AVAILABLE);
+        return( alpha->marginal(ns) );
+    }
+}
+
+
+vector<Factor> HAK::beliefs() const {
+    vector<Factor> result;
+    for( size_t beta = 0; beta < nrIRs(); beta++ )
+        result.push_back( Qb(beta) );
+    for( size_t alpha = 0; alpha < nrORs(); alpha++ )
+        result.push_back( Qa(alpha) );
+    return result;
+}
+
+
+Real HAK::logZ() const {
+    Real s = 0.0;
+    for( size_t beta = 0; beta < nrIRs(); beta++ )
+        s += IR(beta).c() * Qb(beta).entropy();
+    for( size_t alpha = 0; alpha < nrORs(); alpha++ ) {
+        s += OR(alpha).c() * Qa(alpha).entropy();
+        s += (OR(alpha).log(true) * Qa(alpha)).sum();
+    }
+    return s;
+}
+
+
+} // end of namespace dai

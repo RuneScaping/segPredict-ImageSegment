@@ -81,4 +81,70 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[] ) {
     opts = (char *)mxCalloc( buflen, sizeof(char) );
     mxGetString( OPTS_IN, opts, buflen );
     // Convert to options object props
-    stringstre
+    stringstream ss;
+    ss << opts;
+    PropertySet props;
+    ss >> props;
+
+    // Construct InfAlg object, init and run
+    InfAlg *obj = newInfAlg( method, fg, props );
+    obj->init();
+    obj->run();
+
+
+    // Save logZ
+    double logZ = obj->logZ();
+
+    // Save maxdiff
+    double maxdiff = obj->maxDiff();
+
+
+    // Hand over results to MATLAB
+    LOGZ_OUT = mxCreateDoubleMatrix(1,1,mxREAL);
+    *(mxGetPr(LOGZ_OUT)) = logZ;
+
+    Q_OUT = Factors2mx(obj->beliefs());
+
+    MD_OUT = mxCreateDoubleMatrix(1,1,mxREAL);
+    *(mxGetPr(MD_OUT)) = maxdiff;
+
+    if( nlhs >= 4 ) {
+        vector<Factor> qv;
+        qv.reserve( fg.nrVars() );
+        for( size_t i = 0; i < fg.nrVars(); i++ )
+            qv.push_back( obj->belief( fg.var(i) ) );
+        QV_OUT = Factors2mx( qv );
+    }
+
+    if( nlhs >= 5 ) {
+        vector<Factor> qf;
+        qf.reserve( fg.nrFactors() );
+        for( size_t I = 0; I < fg.nrFactors(); I++ )
+            qf.push_back( obj->belief( fg.factor(I).vars() ) );
+        QF_OUT = Factors2mx( qf );
+    }
+
+    if( nlhs >= 6 ) {
+        std::vector<std::size_t> map_state;
+        if( obj->identify() == "BP" ) {
+            BP* obj_bp = dynamic_cast<BP *>(obj);
+            DAI_ASSERT( obj_bp != 0 );
+            map_state = obj_bp->findMaximum();
+        } else if( obj->identify() == "JTREE" ) {
+            JTree* obj_jtree = dynamic_cast<JTree *>(obj);
+            DAI_ASSERT( obj_jtree != 0 );
+            map_state = obj_jtree->findMaximum();
+        } else {
+            mexErrMsgTxt("MAP state assignment works only for BP, JTree.\n");
+            delete obj;
+            return;
+        }
+        QMAP_OUT = mxCreateNumericMatrix(map_state.size(), 1, mxUINT32_CLASS, mxREAL);
+        uint32_T* qmap_p = reinterpret_cast<uint32_T *>(mxGetPr(QMAP_OUT));
+        for (size_t n = 0; n < map_state.size(); ++n)
+            qmap_p[n] = map_state[n];
+    }
+    delete obj;
+
+    return;
+}

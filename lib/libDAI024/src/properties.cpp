@@ -83,3 +83,22 @@ std::istream& operator>> (std::istream& is, PropertySet & ps) {
             else if( s[token_end] == ']' )
                 level--;
             else if( (s[token_end] == ',') && (level == 0) )
+                break;
+        }
+        if( !(level == 0) )
+            DAI_THROWE(MALFORMED_PROPERTY,"Malformed Property: " + s.substr(token_start, token_end - token_start));
+        // we found a vlue
+        std::string value = s.substr(token_start, token_end - token_start);
+
+        // store the key,value pair
+        ps.Set(key,value);
+
+        // go on with the next one
+        token_start = token_end + 1;
+    }
+
+    return is;
+}
+
+
+} // end of namespace dai

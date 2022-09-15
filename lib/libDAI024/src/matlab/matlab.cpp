@@ -136,4 +136,40 @@ Factor mx2Factor(const mxArray *psi) {
     mxArray *mx_member = mxGetField(psi, 0, "Member");
     size_t nr_mem = mxGetN(mx_member);
     double *members = mxGetPr(mx_member);
-    const mwSize *dims
+    const mwSize *dims = mxGetDimensions(mxGetField(psi,0,"P"));
+    double *factordata = mxGetPr(mxGetField(psi, 0, "P"));
+
+    // add variables
+    VarSet vars;
+    vector<long> labels(nr_mem,0);
+    for( size_t mi = 0; mi < nr_mem; mi++ ) {
+        labels[mi] = (long)members[mi];
+        vars |= Var(labels[mi], dims[mi]);
+    }
+    Factor factor(vars);
+
+    // calculate permutation matrix
+    vector<size_t> perm(nr_mem,0);
+    VarSet::iterator j = vars.begin();
+    for( size_t mi = 0; mi < nr_mem; mi++,j++ ) {
+        long gezocht = j->label();
+        vector<long>::iterator piet = find(labels.begin(),labels.end(),gezocht);
+        perm[mi] = piet - labels.begin();
+    }
+
+    // read Factor
+    vector<size_t> di(nr_mem,0);
+    size_t prod = 1;
+    for( size_t k = 0; k < nr_mem; k++ ) {
+        di[k] = dims[k];
+        prod *= dims[k];
+    }
+    Permute permindex( di, perm );
+    for( size_t li = 0; li < prod; li++ )
+        factor[permindex.convertLinearIndex(li)] = factordata[li];
+
+    return( factor );
+}
+
+
+}

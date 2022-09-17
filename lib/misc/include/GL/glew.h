@@ -564,4 +564,274 @@ typedef unsigned long long GLuint64EXT;
 #define GL_MAP2_TEXTURE_COORD_3 0x0DB5
 #define GL_MAP2_TEXTURE_COORD_4 0x0DB6
 #define GL_MAP2_VERTEX_3 0x0DB7
-#d
+#define GL_MAP2_VERTEX_4 0x0DB8
+#define GL_MAP1_GRID_DOMAIN 0x0DD0
+#define GL_MAP1_GRID_SEGMENTS 0x0DD1
+#define GL_MAP2_GRID_DOMAIN 0x0DD2
+#define GL_MAP2_GRID_SEGMENTS 0x0DD3
+#define GL_TEXTURE_1D 0x0DE0
+#define GL_TEXTURE_2D 0x0DE1
+#define GL_FEEDBACK_BUFFER_POINTER 0x0DF0
+#define GL_FEEDBACK_BUFFER_SIZE 0x0DF1
+#define GL_FEEDBACK_BUFFER_TYPE 0x0DF2
+#define GL_SELECTION_BUFFER_POINTER 0x0DF3
+#define GL_SELECTION_BUFFER_SIZE 0x0DF4
+#define GL_TEXTURE_WIDTH 0x1000
+#define GL_TEXTURE_HEIGHT 0x1001
+#define GL_TEXTURE_INTERNAL_FORMAT 0x1003
+#define GL_TEXTURE_BORDER_COLOR 0x1004
+#define GL_TEXTURE_BORDER 0x1005
+#define GL_DONT_CARE 0x1100
+#define GL_FASTEST 0x1101
+#define GL_NICEST 0x1102
+#define GL_LIGHT0 0x4000
+#define GL_LIGHT1 0x4001
+#define GL_LIGHT2 0x4002
+#define GL_LIGHT3 0x4003
+#define GL_LIGHT4 0x4004
+#define GL_LIGHT5 0x4005
+#define GL_LIGHT6 0x4006
+#define GL_LIGHT7 0x4007
+#define GL_AMBIENT 0x1200
+#define GL_DIFFUSE 0x1201
+#define GL_SPECULAR 0x1202
+#define GL_POSITION 0x1203
+#define GL_SPOT_DIRECTION 0x1204
+#define GL_SPOT_EXPONENT 0x1205
+#define GL_SPOT_CUTOFF 0x1206
+#define GL_CONSTANT_ATTENUATION 0x1207
+#define GL_LINEAR_ATTENUATION 0x1208
+#define GL_QUADRATIC_ATTENUATION 0x1209
+#define GL_COMPILE 0x1300
+#define GL_COMPILE_AND_EXECUTE 0x1301
+#define GL_CLEAR 0x1500
+#define GL_AND 0x1501
+#define GL_AND_REVERSE 0x1502
+#define GL_COPY 0x1503
+#define GL_AND_INVERTED 0x1504
+#define GL_NOOP 0x1505
+#define GL_XOR 0x1506
+#define GL_OR 0x1507
+#define GL_NOR 0x1508
+#define GL_EQUIV 0x1509
+#define GL_INVERT 0x150A
+#define GL_OR_REVERSE 0x150B
+#define GL_COPY_INVERTED 0x150C
+#define GL_OR_INVERTED 0x150D
+#define GL_NAND 0x150E
+#define GL_SET 0x150F
+#define GL_EMISSION 0x1600
+#define GL_SHININESS 0x1601
+#define GL_AMBIENT_AND_DIFFUSE 0x1602
+#define GL_COLOR_INDEXES 0x1603
+#define GL_MODELVIEW 0x1700
+#define GL_PROJECTION 0x1701
+#define GL_TEXTURE 0x1702
+#define GL_COLOR 0x1800
+#define GL_DEPTH 0x1801
+#define GL_STENCIL 0x1802
+#define GL_COLOR_INDEX 0x1900
+#define GL_STENCIL_INDEX 0x1901
+#define GL_DEPTH_COMPONENT 0x1902
+#define GL_RED 0x1903
+#define GL_GREEN 0x1904
+#define GL_BLUE 0x1905
+#define GL_ALPHA 0x1906
+#define GL_RGB 0x1907
+#define GL_RGBA 0x1908
+#define GL_LUMINANCE 0x1909
+#define GL_LUMINANCE_ALPHA 0x190A
+#define GL_BITMAP 0x1A00
+#define GL_POINT 0x1B00
+#define GL_LINE 0x1B01
+#define GL_FILL 0x1B02
+#define GL_RENDER 0x1C00
+#define GL_FEEDBACK 0x1C01
+#define GL_SELECT 0x1C02
+#define GL_FLAT 0x1D00
+#define GL_SMOOTH 0x1D01
+#define GL_KEEP 0x1E00
+#define GL_REPLACE 0x1E01
+#define GL_INCR 0x1E02
+#define GL_DECR 0x1E03
+#define GL_VENDOR 0x1F00
+#define GL_RENDERER 0x1F01
+#define GL_VERSION 0x1F02
+#define GL_EXTENSIONS 0x1F03
+#define GL_S 0x2000
+#define GL_T 0x2001
+#define GL_R 0x2002
+#define GL_Q 0x2003
+#define GL_MODULATE 0x2100
+#define GL_DECAL 0x2101
+#define GL_TEXTURE_ENV_MODE 0x2200
+#define GL_TEXTURE_ENV_COLOR 0x2201
+#define GL_TEXTURE_ENV 0x2300
+#define GL_EYE_LINEAR 0x2400
+#define GL_OBJECT_LINEAR 0x2401
+#define GL_SPHERE_MAP 0x2402
+#define GL_TEXTURE_GEN_MODE 0x2500
+#define GL_OBJECT_PLANE 0x2501
+#define GL_EYE_PLANE 0x2502
+#define GL_NEAREST 0x2600
+#define GL_LINEAR 0x2601
+#define GL_NEAREST_MIPMAP_NEAREST 0x2700
+#define GL_LINEAR_MIPMAP_NEAREST 0x2701
+#define GL_NEAREST_MIPMAP_LINEAR 0x2702
+#define GL_LINEAR_MIPMAP_LINEAR 0x2703
+#define GL_TEXTURE_MAG_FILTER 0x2800
+#define GL_TEXTURE_MIN_FILTER 0x2801
+#define GL_TEXTURE_WRAP_S 0x2802
+#define GL_TEXTURE_WRAP_T 0x2803
+#define GL_CLAMP 0x2900
+#define GL_REPEAT 0x2901
+#define GL_CLIENT_PIXEL_STORE_BIT 0x00000001
+#define GL_CLIENT_VERTEX_ARRAY_BIT 0x00000002
+#define GL_CLIENT_ALL_ATTRIB_BITS 0xffffffff
+#define GL_POLYGON_OFFSET_FACTOR 0x8038
+#define GL_POLYGON_OFFSET_UNITS 0x2A00
+#define GL_POLYGON_OFFSET_POINT 0x2A01
+#define GL_POLYGON_OFFSET_LINE 0x2A02
+#define GL_POLYGON_OFFSET_FILL 0x8037
+#define GL_ALPHA4 0x803B
+#define GL_ALPHA8 0x803C
+#define GL_ALPHA12 0x803D
+#define GL_ALPHA16 0x803E
+#define GL_LUMINANCE4 0x803F
+#define GL_LUMINANCE8 0x8040
+#define GL_LUMINANCE12 0x8041
+#define GL_LUMINANCE16 0x8042
+#define GL_LUMINANCE4_ALPHA4 0x8043
+#define GL_LUMINANCE6_ALPHA2 0x8044
+#define GL_LUMINANCE8_ALPHA8 0x8045
+#define GL_LUMINANCE12_ALPHA4 0x8046
+#define GL_LUMINANCE12_ALPHA12 0x8047
+#define GL_LUMINANCE16_ALPHA16 0x8048
+#define GL_INTENSITY 0x8049
+#define GL_INTENSITY4 0x804A
+#define GL_INTENSITY8 0x804B
+#define GL_INTENSITY12 0x804C
+#define GL_INTENSITY16 0x804D
+#define GL_R3_G3_B2 0x2A10
+#define GL_RGB4 0x804F
+#define GL_RGB5 0x8050
+#define GL_RGB8 0x8051
+#define GL_RGB10 0x8052
+#define GL_RGB12 0x8053
+#define GL_RGB16 0x8054
+#define GL_RGBA2 0x8055
+#define GL_RGBA4 0x8056
+#define GL_RGB5_A1 0x8057
+#define GL_RGBA8 0x8058
+#define GL_RGB10_A2 0x8059
+#define GL_RGBA12 0x805A
+#define GL_RGBA16 0x805B
+#define GL_TEXTURE_RED_SIZE 0x805C
+#define GL_TEXTURE_GREEN_SIZE 0x805D
+#define GL_TEXTURE_BLUE_SIZE 0x805E
+#define GL_TEXTURE_ALPHA_SIZE 0x805F
+#define GL_TEXTURE_LUMINANCE_SIZE 0x8060
+#define GL_TEXTURE_INTENSITY_SIZE 0x8061
+#define GL_PROXY_TEXTURE_1D 0x8063
+#define GL_PROXY_TEXTURE_2D 0x8064
+#define GL_TEXTURE_PRIORITY 0x8066
+#define GL_TEXTURE_RESIDENT 0x8067
+#define GL_TEXTURE_BINDING_1D 0x8068
+#define GL_TEXTURE_BINDING_2D 0x8069
+#define GL_VERTEX_ARRAY 0x8074
+#define GL_NORMAL_ARRAY 0x8075
+#define GL_COLOR_ARRAY 0x8076
+#define GL_INDEX_ARRAY 0x8077
+#define GL_TEXTURE_COORD_ARRAY 0x8078
+#define GL_EDGE_FLAG_ARRAY 0x8079
+#define GL_VERTEX_ARRAY_SIZE 0x807A
+#define GL_VERTEX_ARRAY_TYPE 0x807B
+#define GL_VERTEX_ARRAY_STRIDE 0x807C
+#define GL_NORMAL_ARRAY_TYPE 0x807E
+#define GL_NORMAL_ARRAY_STRIDE 0x807F
+#define GL_COLOR_ARRAY_SIZE 0x8081
+#define GL_COLOR_ARRAY_TYPE 0x8082
+#define GL_COLOR_ARRAY_STRIDE 0x8083
+#define GL_INDEX_ARRAY_TYPE 0x8085
+#define GL_INDEX_ARRAY_STRIDE 0x8086
+#define GL_TEXTURE_COORD_ARRAY_SIZE 0x8088
+#define GL_TEXTURE_COORD_ARRAY_TYPE 0x8089
+#define GL_TEXTURE_COORD_ARRAY_STRIDE 0x808A
+#define GL_EDGE_FLAG_ARRAY_STRIDE 0x808C
+#define GL_VERTEX_ARRAY_POINTER 0x808E
+#define GL_NORMAL_ARRAY_POINTER 0x808F
+#define GL_COLOR_ARRAY_POINTER 0x8090
+#define GL_INDEX_ARRAY_POINTER 0x8091
+#define GL_TEXTURE_COORD_ARRAY_POINTER 0x8092
+#define GL_EDGE_FLAG_ARRAY_POINTER 0x8093
+#define GL_V2F 0x2A20
+#define GL_V3F 0x2A21
+#define GL_C4UB_V2F 0x2A22
+#define GL_C4UB_V3F 0x2A23
+#define GL_C3F_V3F 0x2A24
+#define GL_N3F_V3F 0x2A25
+#define GL_C4F_N3F_V3F 0x2A26
+#define GL_T2F_V3F 0x2A27
+#define GL_T4F_V4F 0x2A28
+#define GL_T2F_C4UB_V3F 0x2A29
+#define GL_T2F_C3F_V3F 0x2A2A
+#define GL_T2F_N3F_V3F 0x2A2B
+#define GL_T2F_C4F_N3F_V3F 0x2A2C
+#define GL_T4F_C4F_N3F_V4F 0x2A2D
+#define GL_LOGIC_OP GL_INDEX_LOGIC_OP
+#define GL_TEXTURE_COMPONENTS GL_TEXTURE_INTERNAL_FORMAT
+#define GL_COLOR_INDEX1_EXT 0x80E2
+#define GL_COLOR_INDEX2_EXT 0x80E3
+#define GL_COLOR_INDEX4_EXT 0x80E4
+#define GL_COLOR_INDEX8_EXT 0x80E5
+#define GL_COLOR_INDEX12_EXT 0x80E6
+#define GL_COLOR_INDEX16_EXT 0x80E7
+
+GLAPI void GLAPIENTRY glAccum (GLenum op, GLfloat value);
+GLAPI void GLAPIENTRY glAlphaFunc (GLenum func, GLclampf ref);
+GLAPI GLboolean GLAPIENTRY glAreTexturesResident (GLsizei n, const GLuint *textures, GLboolean *residences);
+GLAPI void GLAPIENTRY glArrayElement (GLint i);
+GLAPI void GLAPIENTRY glBegin (GLenum mode);
+GLAPI void GLAPIENTRY glBindTexture (GLenum target, GLuint texture);
+GLAPI void GLAPIENTRY glBitmap (GLsizei width, GLsizei height, GLfloat xorig, GLfloat yorig, GLfloat xmove, GLfloat ymove, const GLubyte *bitmap);
+GLAPI void GLAPIENTRY glBlendFunc (GLenum sfactor, GLenum dfactor);
+GLAPI void GLAPIENTRY glCallList (GLuint list);
+GLAPI void GLAPIENTRY glCallLists (GLsizei n, GLenum type, const GLvoid *lists);
+GLAPI void GLAPIENTRY glClear (GLbitfield mask);
+GLAPI void GLAPIENTRY glClearAccum (GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+GLAPI void GLAPIENTRY glClearColor (GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
+GLAPI void GLAPIENTRY glClearDepth (GLclampd depth);
+GLAPI void GLAPIENTRY glClearIndex (GLfloat c);
+GLAPI void GLAPIENTRY glClearStencil (GLint s);
+GLAPI void GLAPIENTRY glClipPlane (GLenum plane, const GLdouble *equation);
+GLAPI void GLAPIENTRY glColor3b (GLbyte red, GLbyte green, GLbyte blue);
+GLAPI void GLAPIENTRY glColor3bv (const GLbyte *v);
+GLAPI void GLAPIENTRY glColor3d (GLdouble red, GLdouble green, GLdouble blue);
+GLAPI void GLAPIENTRY glColor3dv (const GLdouble *v);
+GLAPI void GLAPIENTRY glColor3f (GLfloat red, GLfloat green, GLfloat blue);
+GLAPI void GLAPIENTRY glColor3fv (const GLfloat *v);
+GLAPI void GLAPIENTRY glColor3i (GLint red, GLint green, GLint blue);
+GLAPI void GLAPIENTRY glColor3iv (const GLint *v);
+GLAPI void GLAPIENTRY glColor3s (GLshort red, GLshort green, GLshort blue);
+GLAPI void GLAPIENTRY glColor3sv (const GLshort *v);
+GLAPI void GLAPIENTRY glColor3ub (GLubyte red, GLubyte green, GLubyte blue);
+GLAPI void GLAPIENTRY glColor3ubv (const GLubyte *v);
+GLAPI void GLAPIENTRY glColor3ui (GLuint red, GLuint green, GLuint blue);
+GLAPI void GLAPIENTRY glColor3uiv (const GLuint *v);
+GLAPI void GLAPIENTRY glColor3us (GLushort red, GLushort green, GLushort blue);
+GLAPI void GLAPIENTRY glColor3usv (const GLushort *v);
+GLAPI void GLAPIENTRY glColor4b (GLbyte red, GLbyte green, GLbyte blue, GLbyte alpha);
+GLAPI void GLAPIENTRY glColor4bv (const GLbyte *v);
+GLAPI void GLAPIENTRY glColor4d (GLdouble red, GLdouble green, GLdouble blue, GLdouble alpha);
+GLAPI void GLAPIENTRY glColor4dv (const GLdouble *v);
+GLAPI void GLAPIENTRY glColor4f (GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+GLAPI void GLAPIENTRY glColor4fv (const GLfloat *v);
+GLAPI void GLAPIENTRY glColor4i (GLint red, GLint green, GLint blue, GLint alpha);
+GLAPI void GLAPIENTRY glColor4iv (const GLint *v);
+GLAPI void GLAPIENTRY glColor4s (GLshort red, GLshort green, GLshort blue, GLshort alpha);
+GLAPI void GLAPIENTRY glColor4sv (const GLshort *v);
+GLAPI void GLAPIENTRY glColor4ub (GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha);
+GLAPI void GLAPIENTRY glColor4ubv (const GLubyte *v);
+GLAPI void GLAPIENTRY glColor4ui (GLuint red, GLuint green, GLuint blue, GLuint alpha);
+GLAPI void GLAPIENTRY glColor4uiv (const GLuint *v);
+GLAPI void GLAPIENTRY glColor4us (GLushort red, GLushort green, GLu

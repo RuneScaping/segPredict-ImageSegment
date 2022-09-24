@@ -1495,4 +1495,225 @@ typedef void (GLAPIENTRY * PFNGLWINDOWPOS3SVPROC) (const GLshort *p);
 #define glBlendEquation GLEW_GET_FUN(__glewBlendEquation)
 #define glBlendFuncSeparate GLEW_GET_FUN(__glewBlendFuncSeparate)
 #define glFogCoordPointer GLEW_GET_FUN(__glewFogCoordPointer)
-#define glFogC
+#define glFogCoordd GLEW_GET_FUN(__glewFogCoordd)
+#define glFogCoorddv GLEW_GET_FUN(__glewFogCoorddv)
+#define glFogCoordf GLEW_GET_FUN(__glewFogCoordf)
+#define glFogCoordfv GLEW_GET_FUN(__glewFogCoordfv)
+#define glMultiDrawArrays GLEW_GET_FUN(__glewMultiDrawArrays)
+#define glMultiDrawElements GLEW_GET_FUN(__glewMultiDrawElements)
+#define glPointParameterf GLEW_GET_FUN(__glewPointParameterf)
+#define glPointParameterfv GLEW_GET_FUN(__glewPointParameterfv)
+#define glPointParameteri GLEW_GET_FUN(__glewPointParameteri)
+#define glPointParameteriv GLEW_GET_FUN(__glewPointParameteriv)
+#define glSecondaryColor3b GLEW_GET_FUN(__glewSecondaryColor3b)
+#define glSecondaryColor3bv GLEW_GET_FUN(__glewSecondaryColor3bv)
+#define glSecondaryColor3d GLEW_GET_FUN(__glewSecondaryColor3d)
+#define glSecondaryColor3dv GLEW_GET_FUN(__glewSecondaryColor3dv)
+#define glSecondaryColor3f GLEW_GET_FUN(__glewSecondaryColor3f)
+#define glSecondaryColor3fv GLEW_GET_FUN(__glewSecondaryColor3fv)
+#define glSecondaryColor3i GLEW_GET_FUN(__glewSecondaryColor3i)
+#define glSecondaryColor3iv GLEW_GET_FUN(__glewSecondaryColor3iv)
+#define glSecondaryColor3s GLEW_GET_FUN(__glewSecondaryColor3s)
+#define glSecondaryColor3sv GLEW_GET_FUN(__glewSecondaryColor3sv)
+#define glSecondaryColor3ub GLEW_GET_FUN(__glewSecondaryColor3ub)
+#define glSecondaryColor3ubv GLEW_GET_FUN(__glewSecondaryColor3ubv)
+#define glSecondaryColor3ui GLEW_GET_FUN(__glewSecondaryColor3ui)
+#define glSecondaryColor3uiv GLEW_GET_FUN(__glewSecondaryColor3uiv)
+#define glSecondaryColor3us GLEW_GET_FUN(__glewSecondaryColor3us)
+#define glSecondaryColor3usv GLEW_GET_FUN(__glewSecondaryColor3usv)
+#define glSecondaryColorPointer GLEW_GET_FUN(__glewSecondaryColorPointer)
+#define glWindowPos2d GLEW_GET_FUN(__glewWindowPos2d)
+#define glWindowPos2dv GLEW_GET_FUN(__glewWindowPos2dv)
+#define glWindowPos2f GLEW_GET_FUN(__glewWindowPos2f)
+#define glWindowPos2fv GLEW_GET_FUN(__glewWindowPos2fv)
+#define glWindowPos2i GLEW_GET_FUN(__glewWindowPos2i)
+#define glWindowPos2iv GLEW_GET_FUN(__glewWindowPos2iv)
+#define glWindowPos2s GLEW_GET_FUN(__glewWindowPos2s)
+#define glWindowPos2sv GLEW_GET_FUN(__glewWindowPos2sv)
+#define glWindowPos3d GLEW_GET_FUN(__glewWindowPos3d)
+#define glWindowPos3dv GLEW_GET_FUN(__glewWindowPos3dv)
+#define glWindowPos3f GLEW_GET_FUN(__glewWindowPos3f)
+#define glWindowPos3fv GLEW_GET_FUN(__glewWindowPos3fv)
+#define glWindowPos3i GLEW_GET_FUN(__glewWindowPos3i)
+#define glWindowPos3iv GLEW_GET_FUN(__glewWindowPos3iv)
+#define glWindowPos3s GLEW_GET_FUN(__glewWindowPos3s)
+#define glWindowPos3sv GLEW_GET_FUN(__glewWindowPos3sv)
+
+#define GLEW_VERSION_1_4 GLEW_GET_VAR(__GLEW_VERSION_1_4)
+
+#endif /* GL_VERSION_1_4 */
+
+/* ----------------------------- GL_VERSION_1_5 ---------------------------- */
+
+#ifndef GL_VERSION_1_5
+#define GL_VERSION_1_5 1
+
+#define GL_FOG_COORD_SRC GL_FOG_COORDINATE_SOURCE
+#define GL_FOG_COORD GL_FOG_COORDINATE
+#define GL_FOG_COORD_ARRAY GL_FOG_COORDINATE_ARRAY
+#define GL_SRC0_RGB GL_SOURCE0_RGB
+#define GL_FOG_COORD_ARRAY_POINTER GL_FOG_COORDINATE_ARRAY_POINTER
+#define GL_FOG_COORD_ARRAY_TYPE GL_FOG_COORDINATE_ARRAY_TYPE
+#define GL_SRC1_ALPHA GL_SOURCE1_ALPHA
+#define GL_CURRENT_FOG_COORD GL_CURRENT_FOG_COORDINATE
+#define GL_FOG_COORD_ARRAY_STRIDE GL_FOG_COORDINATE_ARRAY_STRIDE
+#define GL_SRC0_ALPHA GL_SOURCE0_ALPHA
+#define GL_SRC1_RGB GL_SOURCE1_RGB
+#define GL_FOG_COORD_ARRAY_BUFFER_BINDING GL_FOG_COORDINATE_ARRAY_BUFFER_BINDING
+#define GL_SRC2_ALPHA GL_SOURCE2_ALPHA
+#define GL_SRC2_RGB GL_SOURCE2_RGB
+#define GL_BUFFER_SIZE 0x8764
+#define GL_BUFFER_USAGE 0x8765
+#define GL_QUERY_COUNTER_BITS 0x8864
+#define GL_CURRENT_QUERY 0x8865
+#define GL_QUERY_RESULT 0x8866
+#define GL_QUERY_RESULT_AVAILABLE 0x8867
+#define GL_ARRAY_BUFFER 0x8892
+#define GL_ELEMENT_ARRAY_BUFFER 0x8893
+#define GL_ARRAY_BUFFER_BINDING 0x8894
+#define GL_ELEMENT_ARRAY_BUFFER_BINDING 0x8895
+#define GL_VERTEX_ARRAY_BUFFER_BINDING 0x8896
+#define GL_NORMAL_ARRAY_BUFFER_BINDING 0x8897
+#define GL_COLOR_ARRAY_BUFFER_BINDING 0x8898
+#define GL_INDEX_ARRAY_BUFFER_BINDING 0x8899
+#define GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING 0x889A
+#define GL_EDGE_FLAG_ARRAY_BUFFER_BINDING 0x889B
+#define GL_SECONDARY_COLOR_ARRAY_BUFFER_BINDING 0x889C
+#define GL_FOG_COORDINATE_ARRAY_BUFFER_BINDING 0x889D
+#define GL_WEIGHT_ARRAY_BUFFER_BINDING 0x889E
+#define GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING 0x889F
+#define GL_READ_ONLY 0x88B8
+#define GL_WRITE_ONLY 0x88B9
+#define GL_READ_WRITE 0x88BA
+#define GL_BUFFER_ACCESS 0x88BB
+#define GL_BUFFER_MAPPED 0x88BC
+#define GL_BUFFER_MAP_POINTER 0x88BD
+#define GL_STREAM_DRAW 0x88E0
+#define GL_STREAM_READ 0x88E1
+#define GL_STREAM_COPY 0x88E2
+#define GL_STATIC_DRAW 0x88E4
+#define GL_STATIC_READ 0x88E5
+#define GL_STATIC_COPY 0x88E6
+#define GL_DYNAMIC_DRAW 0x88E8
+#define GL_DYNAMIC_READ 0x88E9
+#define GL_DYNAMIC_COPY 0x88EA
+#define GL_SAMPLES_PASSED 0x8914
+
+typedef ptrdiff_t GLsizeiptr;
+typedef ptrdiff_t GLintptr;
+
+typedef void (GLAPIENTRY * PFNGLBEGINQUERYPROC) (GLenum target, GLuint id);
+typedef void (GLAPIENTRY * PFNGLBINDBUFFERPROC) (GLenum target, GLuint buffer);
+typedef void (GLAPIENTRY * PFNGLBUFFERDATAPROC) (GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage);
+typedef void (GLAPIENTRY * PFNGLBUFFERSUBDATAPROC) (GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data);
+typedef void (GLAPIENTRY * PFNGLDELETEBUFFERSPROC) (GLsizei n, const GLuint* buffers);
+typedef void (GLAPIENTRY * PFNGLDELETEQUERIESPROC) (GLsizei n, const GLuint* ids);
+typedef void (GLAPIENTRY * PFNGLENDQUERYPROC) (GLenum target);
+typedef void (GLAPIENTRY * PFNGLGENBUFFERSPROC) (GLsizei n, GLuint* buffers);
+typedef void (GLAPIENTRY * PFNGLGENQUERIESPROC) (GLsizei n, GLuint* ids);
+typedef void (GLAPIENTRY * PFNGLGETBUFFERPARAMETERIVPROC) (GLenum target, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETBUFFERPOINTERVPROC) (GLenum target, GLenum pname, GLvoid** params);
+typedef void (GLAPIENTRY * PFNGLGETBUFFERSUBDATAPROC) (GLenum target, GLintptr offset, GLsizeiptr size, GLvoid* data);
+typedef void (GLAPIENTRY * PFNGLGETQUERYOBJECTIVPROC) (GLuint id, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETQUERYOBJECTUIVPROC) (GLuint id, GLenum pname, GLuint* params);
+typedef void (GLAPIENTRY * PFNGLGETQUERYIVPROC) (GLenum target, GLenum pname, GLint* params);
+typedef GLboolean (GLAPIENTRY * PFNGLISBUFFERPROC) (GLuint buffer);
+typedef GLboolean (GLAPIENTRY * PFNGLISQUERYPROC) (GLuint id);
+typedef GLvoid* (GLAPIENTRY * PFNGLMAPBUFFERPROC) (GLenum target, GLenum access);
+typedef GLboolean (GLAPIENTRY * PFNGLUNMAPBUFFERPROC) (GLenum target);
+
+#define glBeginQuery GLEW_GET_FUN(__glewBeginQuery)
+#define glBindBuffer GLEW_GET_FUN(__glewBindBuffer)
+#define glBufferData GLEW_GET_FUN(__glewBufferData)
+#define glBufferSubData GLEW_GET_FUN(__glewBufferSubData)
+#define glDeleteBuffers GLEW_GET_FUN(__glewDeleteBuffers)
+#define glDeleteQueries GLEW_GET_FUN(__glewDeleteQueries)
+#define glEndQuery GLEW_GET_FUN(__glewEndQuery)
+#define glGenBuffers GLEW_GET_FUN(__glewGenBuffers)
+#define glGenQueries GLEW_GET_FUN(__glewGenQueries)
+#define glGetBufferParameteriv GLEW_GET_FUN(__glewGetBufferParameteriv)
+#define glGetBufferPointerv GLEW_GET_FUN(__glewGetBufferPointerv)
+#define glGetBufferSubData GLEW_GET_FUN(__glewGetBufferSubData)
+#define glGetQueryObjectiv GLEW_GET_FUN(__glewGetQueryObjectiv)
+#define glGetQueryObjectuiv GLEW_GET_FUN(__glewGetQueryObjectuiv)
+#define glGetQueryiv GLEW_GET_FUN(__glewGetQueryiv)
+#define glIsBuffer GLEW_GET_FUN(__glewIsBuffer)
+#define glIsQuery GLEW_GET_FUN(__glewIsQuery)
+#define glMapBuffer GLEW_GET_FUN(__glewMapBuffer)
+#define glUnmapBuffer GLEW_GET_FUN(__glewUnmapBuffer)
+
+#define GLEW_VERSION_1_5 GLEW_GET_VAR(__GLEW_VERSION_1_5)
+
+#endif /* GL_VERSION_1_5 */
+
+/* ----------------------------- GL_VERSION_2_0 ---------------------------- */
+
+#ifndef GL_VERSION_2_0
+#define GL_VERSION_2_0 1
+
+#define GL_BLEND_EQUATION_RGB GL_BLEND_EQUATION
+#define GL_VERTEX_ATTRIB_ARRAY_ENABLED 0x8622
+#define GL_VERTEX_ATTRIB_ARRAY_SIZE 0x8623
+#define GL_VERTEX_ATTRIB_ARRAY_STRIDE 0x8624
+#define GL_VERTEX_ATTRIB_ARRAY_TYPE 0x8625
+#define GL_CURRENT_VERTEX_ATTRIB 0x8626
+#define GL_VERTEX_PROGRAM_POINT_SIZE 0x8642
+#define GL_VERTEX_PROGRAM_TWO_SIDE 0x8643
+#define GL_VERTEX_ATTRIB_ARRAY_POINTER 0x8645
+#define GL_STENCIL_BACK_FUNC 0x8800
+#define GL_STENCIL_BACK_FAIL 0x8801
+#define GL_STENCIL_BACK_PASS_DEPTH_FAIL 0x8802
+#define GL_STENCIL_BACK_PASS_DEPTH_PASS 0x8803
+#define GL_MAX_DRAW_BUFFERS 0x8824
+#define GL_DRAW_BUFFER0 0x8825
+#define GL_DRAW_BUFFER1 0x8826
+#define GL_DRAW_BUFFER2 0x8827
+#define GL_DRAW_BUFFER3 0x8828
+#define GL_DRAW_BUFFER4 0x8829
+#define GL_DRAW_BUFFER5 0x882A
+#define GL_DRAW_BUFFER6 0x882B
+#define GL_DRAW_BUFFER7 0x882C
+#define GL_DRAW_BUFFER8 0x882D
+#define GL_DRAW_BUFFER9 0x882E
+#define GL_DRAW_BUFFER10 0x882F
+#define GL_DRAW_BUFFER11 0x8830
+#define GL_DRAW_BUFFER12 0x8831
+#define GL_DRAW_BUFFER13 0x8832
+#define GL_DRAW_BUFFER14 0x8833
+#define GL_DRAW_BUFFER15 0x8834
+#define GL_BLEND_EQUATION_ALPHA 0x883D
+#define GL_POINT_SPRITE 0x8861
+#define GL_COORD_REPLACE 0x8862
+#define GL_MAX_VERTEX_ATTRIBS 0x8869
+#define GL_VERTEX_ATTRIB_ARRAY_NORMALIZED 0x886A
+#define GL_MAX_TEXTURE_COORDS 0x8871
+#define GL_MAX_TEXTURE_IMAGE_UNITS 0x8872
+#define GL_FRAGMENT_SHADER 0x8B30
+#define GL_VERTEX_SHADER 0x8B31
+#define GL_MAX_FRAGMENT_UNIFORM_COMPONENTS 0x8B49
+#define GL_MAX_VERTEX_UNIFORM_COMPONENTS 0x8B4A
+#define GL_MAX_VARYING_FLOATS 0x8B4B
+#define GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS 0x8B4C
+#define GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS 0x8B4D
+#define GL_SHADER_TYPE 0x8B4F
+#define GL_FLOAT_VEC2 0x8B50
+#define GL_FLOAT_VEC3 0x8B51
+#define GL_FLOAT_VEC4 0x8B52
+#define GL_INT_VEC2 0x8B53
+#define GL_INT_VEC3 0x8B54
+#define GL_INT_VEC4 0x8B55
+#define GL_BOOL 0x8B56
+#define GL_BOOL_VEC2 0x8B57
+#define GL_BOOL_VEC3 0x8B58
+#define GL_BOOL_VEC4 0x8B59
+#define GL_FLOAT_MAT2 0x8B5A
+#define GL_FLOAT_MAT3 0x8B5B
+#define GL_FLOAT_MAT4 0x8B5C
+#define GL_SAMPLER_1D 0x8B5D
+#define GL_SAMPLER_2D 0x8B5E
+#define GL_SAMPLER_3D 0x8B5F
+#define GL_SAMPLER_CUBE 0x8B60
+#define GL_SAMPLER_1D_SHADOW 0x8B61
+#define GL_SAMPLER_2D_SHADOW 0x8B62
+#define GL_DELETE_STATUS 0x8B80
+#define GL_COM

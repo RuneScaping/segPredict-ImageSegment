@@ -2514,4 +2514,190 @@ typedef void (GLAPIENTRY * PFNGLSEPARABLEFILTER2DPROC) (GLenum target, GLenum in
 
 #endif /* GL_ARB_imaging */
 
-/* -
+/* ------------------------- GL_ARB_matrix_palette ------------------------- */
+
+#ifndef GL_ARB_matrix_palette
+#define GL_ARB_matrix_palette 1
+
+#define GL_MATRIX_PALETTE_ARB 0x8840
+#define GL_MAX_MATRIX_PALETTE_STACK_DEPTH_ARB 0x8841
+#define GL_MAX_PALETTE_MATRICES_ARB 0x8842
+#define GL_CURRENT_PALETTE_MATRIX_ARB 0x8843
+#define GL_MATRIX_INDEX_ARRAY_ARB 0x8844
+#define GL_CURRENT_MATRIX_INDEX_ARB 0x8845
+#define GL_MATRIX_INDEX_ARRAY_SIZE_ARB 0x8846
+#define GL_MATRIX_INDEX_ARRAY_TYPE_ARB 0x8847
+#define GL_MATRIX_INDEX_ARRAY_STRIDE_ARB 0x8848
+#define GL_MATRIX_INDEX_ARRAY_POINTER_ARB 0x8849
+
+typedef void (GLAPIENTRY * PFNGLCURRENTPALETTEMATRIXARBPROC) (GLint index);
+typedef void (GLAPIENTRY * PFNGLMATRIXINDEXPOINTERARBPROC) (GLint size, GLenum type, GLsizei stride, GLvoid *pointer);
+typedef void (GLAPIENTRY * PFNGLMATRIXINDEXUBVARBPROC) (GLint size, GLubyte *indices);
+typedef void (GLAPIENTRY * PFNGLMATRIXINDEXUIVARBPROC) (GLint size, GLuint *indices);
+typedef void (GLAPIENTRY * PFNGLMATRIXINDEXUSVARBPROC) (GLint size, GLushort *indices);
+
+#define glCurrentPaletteMatrixARB GLEW_GET_FUN(__glewCurrentPaletteMatrixARB)
+#define glMatrixIndexPointerARB GLEW_GET_FUN(__glewMatrixIndexPointerARB)
+#define glMatrixIndexubvARB GLEW_GET_FUN(__glewMatrixIndexubvARB)
+#define glMatrixIndexuivARB GLEW_GET_FUN(__glewMatrixIndexuivARB)
+#define glMatrixIndexusvARB GLEW_GET_FUN(__glewMatrixIndexusvARB)
+
+#define GLEW_ARB_matrix_palette GLEW_GET_VAR(__GLEW_ARB_matrix_palette)
+
+#endif /* GL_ARB_matrix_palette */
+
+/* --------------------------- GL_ARB_multisample -------------------------- */
+
+#ifndef GL_ARB_multisample
+#define GL_ARB_multisample 1
+
+#define GL_MULTISAMPLE_ARB 0x809D
+#define GL_SAMPLE_ALPHA_TO_COVERAGE_ARB 0x809E
+#define GL_SAMPLE_ALPHA_TO_ONE_ARB 0x809F
+#define GL_SAMPLE_COVERAGE_ARB 0x80A0
+#define GL_SAMPLE_BUFFERS_ARB 0x80A8
+#define GL_SAMPLES_ARB 0x80A9
+#define GL_SAMPLE_COVERAGE_VALUE_ARB 0x80AA
+#define GL_SAMPLE_COVERAGE_INVERT_ARB 0x80AB
+#define GL_MULTISAMPLE_BIT_ARB 0x20000000
+
+typedef void (GLAPIENTRY * PFNGLSAMPLECOVERAGEARBPROC) (GLclampf value, GLboolean invert);
+
+#define glSampleCoverageARB GLEW_GET_FUN(__glewSampleCoverageARB)
+
+#define GLEW_ARB_multisample GLEW_GET_VAR(__GLEW_ARB_multisample)
+
+#endif /* GL_ARB_multisample */
+
+/* -------------------------- GL_ARB_multitexture -------------------------- */
+
+#ifndef GL_ARB_multitexture
+#define GL_ARB_multitexture 1
+
+#define GL_TEXTURE0_ARB 0x84C0
+#define GL_TEXTURE1_ARB 0x84C1
+#define GL_TEXTURE2_ARB 0x84C2
+#define GL_TEXTURE3_ARB 0x84C3
+#define GL_TEXTURE4_ARB 0x84C4
+#define GL_TEXTURE5_ARB 0x84C5
+#define GL_TEXTURE6_ARB 0x84C6
+#define GL_TEXTURE7_ARB 0x84C7
+#define GL_TEXTURE8_ARB 0x84C8
+#define GL_TEXTURE9_ARB 0x84C9
+#define GL_TEXTURE10_ARB 0x84CA
+#define GL_TEXTURE11_ARB 0x84CB
+#define GL_TEXTURE12_ARB 0x84CC
+#define GL_TEXTURE13_ARB 0x84CD
+#define GL_TEXTURE14_ARB 0x84CE
+#define GL_TEXTURE15_ARB 0x84CF
+#define GL_TEXTURE16_ARB 0x84D0
+#define GL_TEXTURE17_ARB 0x84D1
+#define GL_TEXTURE18_ARB 0x84D2
+#define GL_TEXTURE19_ARB 0x84D3
+#define GL_TEXTURE20_ARB 0x84D4
+#define GL_TEXTURE21_ARB 0x84D5
+#define GL_TEXTURE22_ARB 0x84D6
+#define GL_TEXTURE23_ARB 0x84D7
+#define GL_TEXTURE24_ARB 0x84D8
+#define GL_TEXTURE25_ARB 0x84D9
+#define GL_TEXTURE26_ARB 0x84DA
+#define GL_TEXTURE27_ARB 0x84DB
+#define GL_TEXTURE28_ARB 0x84DC
+#define GL_TEXTURE29_ARB 0x84DD
+#define GL_TEXTURE30_ARB 0x84DE
+#define GL_TEXTURE31_ARB 0x84DF
+#define GL_ACTIVE_TEXTURE_ARB 0x84E0
+#define GL_CLIENT_ACTIVE_TEXTURE_ARB 0x84E1
+#define GL_MAX_TEXTURE_UNITS_ARB 0x84E2
+
+typedef void (GLAPIENTRY * PFNGLACTIVETEXTUREARBPROC) (GLenum texture);
+typedef void (GLAPIENTRY * PFNGLCLIENTACTIVETEXTUREARBPROC) (GLenum texture);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1DARBPROC) (GLenum target, GLdouble s);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1DVARBPROC) (GLenum target, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1FARBPROC) (GLenum target, GLfloat s);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1FVARBPROC) (GLenum target, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1IARBPROC) (GLenum target, GLint s);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1IVARBPROC) (GLenum target, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1SARBPROC) (GLenum target, GLshort s);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1SVARBPROC) (GLenum target, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2DARBPROC) (GLenum target, GLdouble s, GLdouble t);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2DVARBPROC) (GLenum target, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2FARBPROC) (GLenum target, GLfloat s, GLfloat t);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2FVARBPROC) (GLenum target, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2IARBPROC) (GLenum target, GLint s, GLint t);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2IVARBPROC) (GLenum target, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2SARBPROC) (GLenum target, GLshort s, GLshort t);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2SVARBPROC) (GLenum target, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3DARBPROC) (GLenum target, GLdouble s, GLdouble t, GLdouble r);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3DVARBPROC) (GLenum target, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3FARBPROC) (GLenum target, GLfloat s, GLfloat t, GLfloat r);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3FVARBPROC) (GLenum target, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3IARBPROC) (GLenum target, GLint s, GLint t, GLint r);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3IVARBPROC) (GLenum target, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3SARBPROC) (GLenum target, GLshort s, GLshort t, GLshort r);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3SVARBPROC) (GLenum target, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4DARBPROC) (GLenum target, GLdouble s, GLdouble t, GLdouble r, GLdouble q);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4DVARBPROC) (GLenum target, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4FARBPROC) (GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4FVARBPROC) (GLenum target, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4IARBPROC) (GLenum target, GLint s, GLint t, GLint r, GLint q);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4IVARBPROC) (GLenum target, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4SARBPROC) (GLenum target, GLshort s, GLshort t, GLshort r, GLshort q);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4SVARBPROC) (GLenum target, const GLshort *v);
+
+#define glActiveTextureARB GLEW_GET_FUN(__glewActiveTextureARB)
+#define glClientActiveTextureARB GLEW_GET_FUN(__glewClientActiveTextureARB)
+#define glMultiTexCoord1dARB GLEW_GET_FUN(__glewMultiTexCoord1dARB)
+#define glMultiTexCoord1dvARB GLEW_GET_FUN(__glewMultiTexCoord1dvARB)
+#define glMultiTexCoord1fARB GLEW_GET_FUN(__glewMultiTexCoord1fARB)
+#define glMultiTexCoord1fvARB GLEW_GET_FUN(__glewMultiTexCoord1fvARB)
+#define glMultiTexCoord1iARB GLEW_GET_FUN(__glewMultiTexCoord1iARB)
+#define glMultiTexCoord1ivARB GLEW_GET_FUN(__glewMultiTexCoord1ivARB)
+#define glMultiTexCoord1sARB GLEW_GET_FUN(__glewMultiTexCoord1sARB)
+#define glMultiTexCoord1svARB GLEW_GET_FUN(__glewMultiTexCoord1svARB)
+#define glMultiTexCoord2dARB GLEW_GET_FUN(__glewMultiTexCoord2dARB)
+#define glMultiTexCoord2dvARB GLEW_GET_FUN(__glewMultiTexCoord2dvARB)
+#define glMultiTexCoord2fARB GLEW_GET_FUN(__glewMultiTexCoord2fARB)
+#define glMultiTexCoord2fvARB GLEW_GET_FUN(__glewMultiTexCoord2fvARB)
+#define glMultiTexCoord2iARB GLEW_GET_FUN(__glewMultiTexCoord2iARB)
+#define glMultiTexCoord2ivARB GLEW_GET_FUN(__glewMultiTexCoord2ivARB)
+#define glMultiTexCoord2sARB GLEW_GET_FUN(__glewMultiTexCoord2sARB)
+#define glMultiTexCoord2svARB GLEW_GET_FUN(__glewMultiTexCoord2svARB)
+#define glMultiTexCoord3dARB GLEW_GET_FUN(__glewMultiTexCoord3dARB)
+#define glMultiTexCoord3dvARB GLEW_GET_FUN(__glewMultiTexCoord3dvARB)
+#define glMultiTexCoord3fARB GLEW_GET_FUN(__glewMultiTexCoord3fARB)
+#define glMultiTexCoord3fvARB GLEW_GET_FUN(__glewMultiTexCoord3fvARB)
+#define glMultiTexCoord3iARB GLEW_GET_FUN(__glewMultiTexCoord3iARB)
+#define glMultiTexCoord3ivARB GLEW_GET_FUN(__glewMultiTexCoord3ivARB)
+#define glMultiTexCoord3sARB GLEW_GET_FUN(__glewMultiTexCoord3sARB)
+#define glMultiTexCoord3svARB GLEW_GET_FUN(__glewMultiTexCoord3svARB)
+#define glMultiTexCoord4dARB GLEW_GET_FUN(__glewMultiTexCoord4dARB)
+#define glMultiTexCoord4dvARB GLEW_GET_FUN(__glewMultiTexCoord4dvARB)
+#define glMultiTexCoord4fARB GLEW_GET_FUN(__glewMultiTexCoord4fARB)
+#define glMultiTexCoord4fvARB GLEW_GET_FUN(__glewMultiTexCoord4fvARB)
+#define glMultiTexCoord4iARB GLEW_GET_FUN(__glewMultiTexCoord4iARB)
+#define glMultiTexCoord4ivARB GLEW_GET_FUN(__glewMultiTexCoord4ivARB)
+#define glMultiTexCoord4sARB GLEW_GET_FUN(__glewMultiTexCoord4sARB)
+#define glMultiTexCoord4svARB GLEW_GET_FUN(__glewMultiTexCoord4svARB)
+
+#define GLEW_ARB_multitexture GLEW_GET_VAR(__GLEW_ARB_multitexture)
+
+#endif /* GL_ARB_multitexture */
+
+/* ------------------------- GL_ARB_occlusion_query ------------------------ */
+
+#ifndef GL_ARB_occlusion_query
+#define GL_ARB_occlusion_query 1
+
+#define GL_QUERY_COUNTER_BITS_ARB 0x8864
+#define GL_CURRENT_QUERY_ARB 0x8865
+#define GL_QUERY_RESULT_ARB 0x8866
+#define GL_QUERY_RESULT_AVAILABLE_ARB 0x8867
+#define GL_SAMPLES_PASSED_ARB 0x8914
+
+typedef void (GLAPIENTRY * PFNGLBEGINQUERYARBPROC) (GLenum target, GLuint id);
+typedef void (GLAPIENTRY * PFNGLDELETEQUERIESARBPROC) (GLsizei n, const GLuint* ids);
+typedef void (GLAPIENTRY * PFNGLENDQUERYARBPROC) (GLenum target);
+typedef void (GLAPIENTRY * PFNGLGENQUERIESARBPROC) (GLsizei n, GLuint* ids);
+typedef void (GLAPIENTRY * PFNGLGETQUERYOBJECTIVARBPROC) (GLuint id, GLenum pname, GLint* params);
+typedef voi

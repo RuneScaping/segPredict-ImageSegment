@@ -2052,4 +2052,280 @@ typedef void (GLAPIENTRY * PFNGLMULTIDRAWRANGEELEMENTARRAYAPPLEPROC) (GLenum mod
 
 #endif /* GL_APPLE_element_array */
 
-/* ----------------------------- GL_APPLE_fence ---------
+/* ----------------------------- GL_APPLE_fence ---------------------------- */
+
+#ifndef GL_APPLE_fence
+#define GL_APPLE_fence 1
+
+#define GL_DRAW_PIXELS_APPLE 0x8A0A
+#define GL_FENCE_APPLE 0x8A0B
+
+typedef void (GLAPIENTRY * PFNGLDELETEFENCESAPPLEPROC) (GLsizei n, const GLuint* fences);
+typedef void (GLAPIENTRY * PFNGLFINISHFENCEAPPLEPROC) (GLuint fence);
+typedef void (GLAPIENTRY * PFNGLFINISHOBJECTAPPLEPROC) (GLenum object, GLint name);
+typedef void (GLAPIENTRY * PFNGLGENFENCESAPPLEPROC) (GLsizei n, GLuint* fences);
+typedef GLboolean (GLAPIENTRY * PFNGLISFENCEAPPLEPROC) (GLuint fence);
+typedef void (GLAPIENTRY * PFNGLSETFENCEAPPLEPROC) (GLuint fence);
+typedef GLboolean (GLAPIENTRY * PFNGLTESTFENCEAPPLEPROC) (GLuint fence);
+typedef GLboolean (GLAPIENTRY * PFNGLTESTOBJECTAPPLEPROC) (GLenum object, GLuint name);
+
+#define glDeleteFencesAPPLE GLEW_GET_FUN(__glewDeleteFencesAPPLE)
+#define glFinishFenceAPPLE GLEW_GET_FUN(__glewFinishFenceAPPLE)
+#define glFinishObjectAPPLE GLEW_GET_FUN(__glewFinishObjectAPPLE)
+#define glGenFencesAPPLE GLEW_GET_FUN(__glewGenFencesAPPLE)
+#define glIsFenceAPPLE GLEW_GET_FUN(__glewIsFenceAPPLE)
+#define glSetFenceAPPLE GLEW_GET_FUN(__glewSetFenceAPPLE)
+#define glTestFenceAPPLE GLEW_GET_FUN(__glewTestFenceAPPLE)
+#define glTestObjectAPPLE GLEW_GET_FUN(__glewTestObjectAPPLE)
+
+#define GLEW_APPLE_fence GLEW_GET_VAR(__GLEW_APPLE_fence)
+
+#endif /* GL_APPLE_fence */
+
+/* ------------------------- GL_APPLE_float_pixels ------------------------- */
+
+#ifndef GL_APPLE_float_pixels
+#define GL_APPLE_float_pixels 1
+
+#define GL_HALF_APPLE 0x140B
+#define GL_RGBA_FLOAT32_APPLE 0x8814
+#define GL_RGB_FLOAT32_APPLE 0x8815
+#define GL_ALPHA_FLOAT32_APPLE 0x8816
+#define GL_INTENSITY_FLOAT32_APPLE 0x8817
+#define GL_LUMINANCE_FLOAT32_APPLE 0x8818
+#define GL_LUMINANCE_ALPHA_FLOAT32_APPLE 0x8819
+#define GL_RGBA_FLOAT16_APPLE 0x881A
+#define GL_RGB_FLOAT16_APPLE 0x881B
+#define GL_ALPHA_FLOAT16_APPLE 0x881C
+#define GL_INTENSITY_FLOAT16_APPLE 0x881D
+#define GL_LUMINANCE_FLOAT16_APPLE 0x881E
+#define GL_LUMINANCE_ALPHA_FLOAT16_APPLE 0x881F
+#define GL_COLOR_FLOAT_APPLE 0x8A0F
+
+#define GLEW_APPLE_float_pixels GLEW_GET_VAR(__GLEW_APPLE_float_pixels)
+
+#endif /* GL_APPLE_float_pixels */
+
+/* ---------------------- GL_APPLE_flush_buffer_range ---------------------- */
+
+#ifndef GL_APPLE_flush_buffer_range
+#define GL_APPLE_flush_buffer_range 1
+
+#define GL_BUFFER_SERIALIZED_MODIFY_APPLE 0x8A12
+#define GL_BUFFER_FLUSHING_UNMAP_APPLE 0x8A13
+
+typedef void (GLAPIENTRY * PFNGLBUFFERPARAMETERIAPPLEPROC) (GLenum target, GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLFLUSHMAPPEDBUFFERRANGEAPPLEPROC) (GLenum target, GLintptr offset, GLsizeiptr size);
+
+#define glBufferParameteriAPPLE GLEW_GET_FUN(__glewBufferParameteriAPPLE)
+#define glFlushMappedBufferRangeAPPLE GLEW_GET_FUN(__glewFlushMappedBufferRangeAPPLE)
+
+#define GLEW_APPLE_flush_buffer_range GLEW_GET_VAR(__GLEW_APPLE_flush_buffer_range)
+
+#endif /* GL_APPLE_flush_buffer_range */
+
+/* ------------------------- GL_APPLE_pixel_buffer ------------------------- */
+
+#ifndef GL_APPLE_pixel_buffer
+#define GL_APPLE_pixel_buffer 1
+
+#define GL_MIN_PBUFFER_VIEWPORT_DIMS_APPLE 0x8A10
+
+#define GLEW_APPLE_pixel_buffer GLEW_GET_VAR(__GLEW_APPLE_pixel_buffer)
+
+#endif /* GL_APPLE_pixel_buffer */
+
+/* ------------------------ GL_APPLE_specular_vector ----------------------- */
+
+#ifndef GL_APPLE_specular_vector
+#define GL_APPLE_specular_vector 1
+
+#define GL_LIGHT_MODEL_SPECULAR_VECTOR_APPLE 0x85B0
+
+#define GLEW_APPLE_specular_vector GLEW_GET_VAR(__GLEW_APPLE_specular_vector)
+
+#endif /* GL_APPLE_specular_vector */
+
+/* ------------------------- GL_APPLE_texture_range ------------------------ */
+
+#ifndef GL_APPLE_texture_range
+#define GL_APPLE_texture_range 1
+
+#define GL_TEXTURE_RANGE_LENGTH_APPLE 0x85B7
+#define GL_TEXTURE_RANGE_POINTER_APPLE 0x85B8
+#define GL_TEXTURE_STORAGE_HINT_APPLE 0x85BC
+#define GL_STORAGE_PRIVATE_APPLE 0x85BD
+#define GL_STORAGE_CACHED_APPLE 0x85BE
+#define GL_STORAGE_SHARED_APPLE 0x85BF
+
+typedef void (GLAPIENTRY * PFNGLGETTEXPARAMETERPOINTERVAPPLEPROC) (GLenum target, GLenum pname, GLvoid **params);
+typedef void (GLAPIENTRY * PFNGLTEXTURERANGEAPPLEPROC) (GLenum target, GLsizei length, GLvoid *pointer);
+
+#define glGetTexParameterPointervAPPLE GLEW_GET_FUN(__glewGetTexParameterPointervAPPLE)
+#define glTextureRangeAPPLE GLEW_GET_FUN(__glewTextureRangeAPPLE)
+
+#define GLEW_APPLE_texture_range GLEW_GET_VAR(__GLEW_APPLE_texture_range)
+
+#endif /* GL_APPLE_texture_range */
+
+/* ------------------------ GL_APPLE_transform_hint ------------------------ */
+
+#ifndef GL_APPLE_transform_hint
+#define GL_APPLE_transform_hint 1
+
+#define GL_TRANSFORM_HINT_APPLE 0x85B1
+
+#define GLEW_APPLE_transform_hint GLEW_GET_VAR(__GLEW_APPLE_transform_hint)
+
+#endif /* GL_APPLE_transform_hint */
+
+/* ---------------------- GL_APPLE_vertex_array_object --------------------- */
+
+#ifndef GL_APPLE_vertex_array_object
+#define GL_APPLE_vertex_array_object 1
+
+#define GL_VERTEX_ARRAY_BINDING_APPLE 0x85B5
+
+typedef void (GLAPIENTRY * PFNGLBINDVERTEXARRAYAPPLEPROC) (GLuint array);
+typedef void (GLAPIENTRY * PFNGLDELETEVERTEXARRAYSAPPLEPROC) (GLsizei n, const GLuint* arrays);
+typedef void (GLAPIENTRY * PFNGLGENVERTEXARRAYSAPPLEPROC) (GLsizei n, const GLuint* arrays);
+typedef GLboolean (GLAPIENTRY * PFNGLISVERTEXARRAYAPPLEPROC) (GLuint array);
+
+#define glBindVertexArrayAPPLE GLEW_GET_FUN(__glewBindVertexArrayAPPLE)
+#define glDeleteVertexArraysAPPLE GLEW_GET_FUN(__glewDeleteVertexArraysAPPLE)
+#define glGenVertexArraysAPPLE GLEW_GET_FUN(__glewGenVertexArraysAPPLE)
+#define glIsVertexArrayAPPLE GLEW_GET_FUN(__glewIsVertexArrayAPPLE)
+
+#define GLEW_APPLE_vertex_array_object GLEW_GET_VAR(__GLEW_APPLE_vertex_array_object)
+
+#endif /* GL_APPLE_vertex_array_object */
+
+/* ---------------------- GL_APPLE_vertex_array_range ---------------------- */
+
+#ifndef GL_APPLE_vertex_array_range
+#define GL_APPLE_vertex_array_range 1
+
+#define GL_VERTEX_ARRAY_RANGE_APPLE 0x851D
+#define GL_VERTEX_ARRAY_RANGE_LENGTH_APPLE 0x851E
+#define GL_VERTEX_ARRAY_STORAGE_HINT_APPLE 0x851F
+#define GL_MAX_VERTEX_ARRAY_RANGE_ELEMENT_APPLE 0x8520
+#define GL_VERTEX_ARRAY_RANGE_POINTER_APPLE 0x8521
+#define GL_STORAGE_CACHED_APPLE 0x85BE
+#define GL_STORAGE_SHARED_APPLE 0x85BF
+
+typedef void (GLAPIENTRY * PFNGLFLUSHVERTEXARRAYRANGEAPPLEPROC) (GLsizei length, void* pointer);
+typedef void (GLAPIENTRY * PFNGLVERTEXARRAYPARAMETERIAPPLEPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLVERTEXARRAYRANGEAPPLEPROC) (GLsizei length, void* pointer);
+
+#define glFlushVertexArrayRangeAPPLE GLEW_GET_FUN(__glewFlushVertexArrayRangeAPPLE)
+#define glVertexArrayParameteriAPPLE GLEW_GET_FUN(__glewVertexArrayParameteriAPPLE)
+#define glVertexArrayRangeAPPLE GLEW_GET_FUN(__glewVertexArrayRangeAPPLE)
+
+#define GLEW_APPLE_vertex_array_range GLEW_GET_VAR(__GLEW_APPLE_vertex_array_range)
+
+#endif /* GL_APPLE_vertex_array_range */
+
+/* --------------------------- GL_APPLE_ycbcr_422 -------------------------- */
+
+#ifndef GL_APPLE_ycbcr_422
+#define GL_APPLE_ycbcr_422 1
+
+#define GL_YCBCR_422_APPLE 0x85B9
+#define GL_UNSIGNED_SHORT_8_8_APPLE 0x85BA
+#define GL_UNSIGNED_SHORT_8_8_REV_APPLE 0x85BB
+
+#define GLEW_APPLE_ycbcr_422 GLEW_GET_VAR(__GLEW_APPLE_ycbcr_422)
+
+#endif /* GL_APPLE_ycbcr_422 */
+
+/* ----------------------- GL_ARB_color_buffer_float ----------------------- */
+
+#ifndef GL_ARB_color_buffer_float
+#define GL_ARB_color_buffer_float 1
+
+#define GL_RGBA_FLOAT_MODE_ARB 0x8820
+#define GL_CLAMP_VERTEX_COLOR_ARB 0x891A
+#define GL_CLAMP_FRAGMENT_COLOR_ARB 0x891B
+#define GL_CLAMP_READ_COLOR_ARB 0x891C
+#define GL_FIXED_ONLY_ARB 0x891D
+
+typedef void (GLAPIENTRY * PFNGLCLAMPCOLORARBPROC) (GLenum target, GLenum clamp);
+
+#define glClampColorARB GLEW_GET_FUN(__glewClampColorARB)
+
+#define GLEW_ARB_color_buffer_float GLEW_GET_VAR(__GLEW_ARB_color_buffer_float)
+
+#endif /* GL_ARB_color_buffer_float */
+
+/* -------------------------- GL_ARB_depth_texture ------------------------- */
+
+#ifndef GL_ARB_depth_texture
+#define GL_ARB_depth_texture 1
+
+#define GL_DEPTH_COMPONENT16_ARB 0x81A5
+#define GL_DEPTH_COMPONENT24_ARB 0x81A6
+#define GL_DEPTH_COMPONENT32_ARB 0x81A7
+#define GL_TEXTURE_DEPTH_SIZE_ARB 0x884A
+#define GL_DEPTH_TEXTURE_MODE_ARB 0x884B
+
+#define GLEW_ARB_depth_texture GLEW_GET_VAR(__GLEW_ARB_depth_texture)
+
+#endif /* GL_ARB_depth_texture */
+
+/* -------------------------- GL_ARB_draw_buffers -------------------------- */
+
+#ifndef GL_ARB_draw_buffers
+#define GL_ARB_draw_buffers 1
+
+#define GL_MAX_DRAW_BUFFERS_ARB 0x8824
+#define GL_DRAW_BUFFER0_ARB 0x8825
+#define GL_DRAW_BUFFER1_ARB 0x8826
+#define GL_DRAW_BUFFER2_ARB 0x8827
+#define GL_DRAW_BUFFER3_ARB 0x8828
+#define GL_DRAW_BUFFER4_ARB 0x8829
+#define GL_DRAW_BUFFER5_ARB 0x882A
+#define GL_DRAW_BUFFER6_ARB 0x882B
+#define GL_DRAW_BUFFER7_ARB 0x882C
+#define GL_DRAW_BUFFER8_ARB 0x882D
+#define GL_DRAW_BUFFER9_ARB 0x882E
+#define GL_DRAW_BUFFER10_ARB 0x882F
+#define GL_DRAW_BUFFER11_ARB 0x8830
+#define GL_DRAW_BUFFER12_ARB 0x8831
+#define GL_DRAW_BUFFER13_ARB 0x8832
+#define GL_DRAW_BUFFER14_ARB 0x8833
+#define GL_DRAW_BUFFER15_ARB 0x8834
+
+typedef void (GLAPIENTRY * PFNGLDRAWBUFFERSARBPROC) (GLsizei n, const GLenum* bufs);
+
+#define glDrawBuffersARB GLEW_GET_FUN(__glewDrawBuffersARB)
+
+#define GLEW_ARB_draw_buffers GLEW_GET_VAR(__GLEW_ARB_draw_buffers)
+
+#endif /* GL_ARB_draw_buffers */
+
+/* ------------------------ GL_ARB_fragment_program ------------------------ */
+
+#ifndef GL_ARB_fragment_program
+#define GL_ARB_fragment_program 1
+
+#define GL_FRAGMENT_PROGRAM_ARB 0x8804
+#define GL_PROGRAM_ALU_INSTRUCTIONS_ARB 0x8805
+#define GL_PROGRAM_TEX_INSTRUCTIONS_ARB 0x8806
+#define GL_PROGRAM_TEX_INDIRECTIONS_ARB 0x8807
+#define GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB 0x8808
+#define GL_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB 0x8809
+#define GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB 0x880A
+#define GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB 0x880B
+#define GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB 0x880C
+#define GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB 0x880D
+#define GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB 0x880E
+#define GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB 0x880F
+#define GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB 0x8810
+#define GL_MAX_TEXTURE_COORDS_ARB 0x8871
+#define GL_MAX_TEXTURE_IMAGE_UNITS_ARB 0x8872
+
+#define GLEW_ARB_fragment_program GLEW_GET_VAR(__GLEW_ARB_fragment_program)
+
+#endif /* GL_ARB_fragment_program */
+
+/* --------------------- GL_ARB_fragment_program_sha

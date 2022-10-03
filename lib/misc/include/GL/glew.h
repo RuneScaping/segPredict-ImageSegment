@@ -3497,4 +3497,256 @@ typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBPOINTERARBPROC) (GLuint index, GLint
 #define glVertexAttrib4svARB GLEW_GET_FUN(__glewVertexAttrib4svARB)
 #define glVertexAttrib4ubvARB GLEW_GET_FUN(__glewVertexAttrib4ubvARB)
 #define glVertexAttrib4uivARB GLEW_GET_FUN(__glewVertexAttrib4uivARB)
-#define glVert
+#define glVertexAttrib4usvARB GLEW_GET_FUN(__glewVertexAttrib4usvARB)
+#define glVertexAttribPointerARB GLEW_GET_FUN(__glewVertexAttribPointerARB)
+
+#define GLEW_ARB_vertex_program GLEW_GET_VAR(__GLEW_ARB_vertex_program)
+
+#endif /* GL_ARB_vertex_program */
+
+/* -------------------------- GL_ARB_vertex_shader ------------------------- */
+
+#ifndef GL_ARB_vertex_shader
+#define GL_ARB_vertex_shader 1
+
+#define GL_VERTEX_SHADER_ARB 0x8B31
+#define GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB 0x8B4A
+#define GL_MAX_VARYING_FLOATS_ARB 0x8B4B
+#define GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB 0x8B4C
+#define GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB 0x8B4D
+#define GL_OBJECT_ACTIVE_ATTRIBUTES_ARB 0x8B89
+#define GL_OBJECT_ACTIVE_ATTRIBUTE_MAX_LENGTH_ARB 0x8B8A
+
+typedef void (GLAPIENTRY * PFNGLBINDATTRIBLOCATIONARBPROC) (GLhandleARB programObj, GLuint index, const GLcharARB* name);
+typedef void (GLAPIENTRY * PFNGLGETACTIVEATTRIBARBPROC) (GLhandleARB programObj, GLuint index, GLsizei maxLength, GLsizei* length, GLint *size, GLenum *type, GLcharARB *name);
+typedef GLint (GLAPIENTRY * PFNGLGETATTRIBLOCATIONARBPROC) (GLhandleARB programObj, const GLcharARB* name);
+
+#define glBindAttribLocationARB GLEW_GET_FUN(__glewBindAttribLocationARB)
+#define glGetActiveAttribARB GLEW_GET_FUN(__glewGetActiveAttribARB)
+#define glGetAttribLocationARB GLEW_GET_FUN(__glewGetAttribLocationARB)
+
+#define GLEW_ARB_vertex_shader GLEW_GET_VAR(__GLEW_ARB_vertex_shader)
+
+#endif /* GL_ARB_vertex_shader */
+
+/* --------------------------- GL_ARB_window_pos --------------------------- */
+
+#ifndef GL_ARB_window_pos
+#define GL_ARB_window_pos 1
+
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2DARBPROC) (GLdouble x, GLdouble y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2DVARBPROC) (const GLdouble* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2FARBPROC) (GLfloat x, GLfloat y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2FVARBPROC) (const GLfloat* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2IARBPROC) (GLint x, GLint y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2IVARBPROC) (const GLint* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2SARBPROC) (GLshort x, GLshort y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2SVARBPROC) (const GLshort* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3DARBPROC) (GLdouble x, GLdouble y, GLdouble z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3DVARBPROC) (const GLdouble* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3FARBPROC) (GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3FVARBPROC) (const GLfloat* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3IARBPROC) (GLint x, GLint y, GLint z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3IVARBPROC) (const GLint* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3SARBPROC) (GLshort x, GLshort y, GLshort z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3SVARBPROC) (const GLshort* p);
+
+#define glWindowPos2dARB GLEW_GET_FUN(__glewWindowPos2dARB)
+#define glWindowPos2dvARB GLEW_GET_FUN(__glewWindowPos2dvARB)
+#define glWindowPos2fARB GLEW_GET_FUN(__glewWindowPos2fARB)
+#define glWindowPos2fvARB GLEW_GET_FUN(__glewWindowPos2fvARB)
+#define glWindowPos2iARB GLEW_GET_FUN(__glewWindowPos2iARB)
+#define glWindowPos2ivARB GLEW_GET_FUN(__glewWindowPos2ivARB)
+#define glWindowPos2sARB GLEW_GET_FUN(__glewWindowPos2sARB)
+#define glWindowPos2svARB GLEW_GET_FUN(__glewWindowPos2svARB)
+#define glWindowPos3dARB GLEW_GET_FUN(__glewWindowPos3dARB)
+#define glWindowPos3dvARB GLEW_GET_FUN(__glewWindowPos3dvARB)
+#define glWindowPos3fARB GLEW_GET_FUN(__glewWindowPos3fARB)
+#define glWindowPos3fvARB GLEW_GET_FUN(__glewWindowPos3fvARB)
+#define glWindowPos3iARB GLEW_GET_FUN(__glewWindowPos3iARB)
+#define glWindowPos3ivARB GLEW_GET_FUN(__glewWindowPos3ivARB)
+#define glWindowPos3sARB GLEW_GET_FUN(__glewWindowPos3sARB)
+#define glWindowPos3svARB GLEW_GET_FUN(__glewWindowPos3svARB)
+
+#define GLEW_ARB_window_pos GLEW_GET_VAR(__GLEW_ARB_window_pos)
+
+#endif /* GL_ARB_window_pos */
+
+/* ------------------------- GL_ATIX_point_sprites ------------------------- */
+
+#ifndef GL_ATIX_point_sprites
+#define GL_ATIX_point_sprites 1
+
+#define GL_TEXTURE_POINT_MODE_ATIX 0x60B0
+#define GL_TEXTURE_POINT_ONE_COORD_ATIX 0x60B1
+#define GL_TEXTURE_POINT_SPRITE_ATIX 0x60B2
+#define GL_POINT_SPRITE_CULL_MODE_ATIX 0x60B3
+#define GL_POINT_SPRITE_CULL_CENTER_ATIX 0x60B4
+#define GL_POINT_SPRITE_CULL_CLIP_ATIX 0x60B5
+
+#define GLEW_ATIX_point_sprites GLEW_GET_VAR(__GLEW_ATIX_point_sprites)
+
+#endif /* GL_ATIX_point_sprites */
+
+/* ---------------------- GL_ATIX_texture_env_combine3 --------------------- */
+
+#ifndef GL_ATIX_texture_env_combine3
+#define GL_ATIX_texture_env_combine3 1
+
+#define GL_MODULATE_ADD_ATIX 0x8744
+#define GL_MODULATE_SIGNED_ADD_ATIX 0x8745
+#define GL_MODULATE_SUBTRACT_ATIX 0x8746
+
+#define GLEW_ATIX_texture_env_combine3 GLEW_GET_VAR(__GLEW_ATIX_texture_env_combine3)
+
+#endif /* GL_ATIX_texture_env_combine3 */
+
+/* ----------------------- GL_ATIX_texture_env_route ----------------------- */
+
+#ifndef GL_ATIX_texture_env_route
+#define GL_ATIX_texture_env_route 1
+
+#define GL_SECONDARY_COLOR_ATIX 0x8747
+#define GL_TEXTURE_OUTPUT_RGB_ATIX 0x8748
+#define GL_TEXTURE_OUTPUT_ALPHA_ATIX 0x8749
+
+#define GLEW_ATIX_texture_env_route GLEW_GET_VAR(__GLEW_ATIX_texture_env_route)
+
+#endif /* GL_ATIX_texture_env_route */
+
+/* ---------------- GL_ATIX_vertex_shader_output_point_size ---------------- */
+
+#ifndef GL_ATIX_vertex_shader_output_point_size
+#define GL_ATIX_vertex_shader_output_point_size 1
+
+#define GL_OUTPUT_POINT_SIZE_ATIX 0x610E
+
+#define GLEW_ATIX_vertex_shader_output_point_size GLEW_GET_VAR(__GLEW_ATIX_vertex_shader_output_point_size)
+
+#endif /* GL_ATIX_vertex_shader_output_point_size */
+
+/* -------------------------- GL_ATI_draw_buffers -------------------------- */
+
+#ifndef GL_ATI_draw_buffers
+#define GL_ATI_draw_buffers 1
+
+#define GL_MAX_DRAW_BUFFERS_ATI 0x8824
+#define GL_DRAW_BUFFER0_ATI 0x8825
+#define GL_DRAW_BUFFER1_ATI 0x8826
+#define GL_DRAW_BUFFER2_ATI 0x8827
+#define GL_DRAW_BUFFER3_ATI 0x8828
+#define GL_DRAW_BUFFER4_ATI 0x8829
+#define GL_DRAW_BUFFER5_ATI 0x882A
+#define GL_DRAW_BUFFER6_ATI 0x882B
+#define GL_DRAW_BUFFER7_ATI 0x882C
+#define GL_DRAW_BUFFER8_ATI 0x882D
+#define GL_DRAW_BUFFER9_ATI 0x882E
+#define GL_DRAW_BUFFER10_ATI 0x882F
+#define GL_DRAW_BUFFER11_ATI 0x8830
+#define GL_DRAW_BUFFER12_ATI 0x8831
+#define GL_DRAW_BUFFER13_ATI 0x8832
+#define GL_DRAW_BUFFER14_ATI 0x8833
+#define GL_DRAW_BUFFER15_ATI 0x8834
+
+typedef void (GLAPIENTRY * PFNGLDRAWBUFFERSATIPROC) (GLsizei n, const GLenum* bufs);
+
+#define glDrawBuffersATI GLEW_GET_FUN(__glewDrawBuffersATI)
+
+#define GLEW_ATI_draw_buffers GLEW_GET_VAR(__GLEW_ATI_draw_buffers)
+
+#endif /* GL_ATI_draw_buffers */
+
+/* -------------------------- GL_ATI_element_array ------------------------- */
+
+#ifndef GL_ATI_element_array
+#define GL_ATI_element_array 1
+
+#define GL_ELEMENT_ARRAY_ATI 0x8768
+#define GL_ELEMENT_ARRAY_TYPE_ATI 0x8769
+#define GL_ELEMENT_ARRAY_POINTER_ATI 0x876A
+
+typedef void (GLAPIENTRY * PFNGLDRAWELEMENTARRAYATIPROC) (GLenum mode, GLsizei count);
+typedef void (GLAPIENTRY * PFNGLDRAWRANGEELEMENTARRAYATIPROC) (GLenum mode, GLuint start, GLuint end, GLsizei count);
+typedef void (GLAPIENTRY * PFNGLELEMENTPOINTERATIPROC) (GLenum type, const void* pointer);
+
+#define glDrawElementArrayATI GLEW_GET_FUN(__glewDrawElementArrayATI)
+#define glDrawRangeElementArrayATI GLEW_GET_FUN(__glewDrawRangeElementArrayATI)
+#define glElementPointerATI GLEW_GET_FUN(__glewElementPointerATI)
+
+#define GLEW_ATI_element_array GLEW_GET_VAR(__GLEW_ATI_element_array)
+
+#endif /* GL_ATI_element_array */
+
+/* ------------------------- GL_ATI_envmap_bumpmap ------------------------- */
+
+#ifndef GL_ATI_envmap_bumpmap
+#define GL_ATI_envmap_bumpmap 1
+
+#define GL_BUMP_ROT_MATRIX_ATI 0x8775
+#define GL_BUMP_ROT_MATRIX_SIZE_ATI 0x8776
+#define GL_BUMP_NUM_TEX_UNITS_ATI 0x8777
+#define GL_BUMP_TEX_UNITS_ATI 0x8778
+#define GL_DUDV_ATI 0x8779
+#define GL_DU8DV8_ATI 0x877A
+#define GL_BUMP_ENVMAP_ATI 0x877B
+#define GL_BUMP_TARGET_ATI 0x877C
+
+typedef void (GLAPIENTRY * PFNGLGETTEXBUMPPARAMETERFVATIPROC) (GLenum pname, GLfloat *param);
+typedef void (GLAPIENTRY * PFNGLGETTEXBUMPPARAMETERIVATIPROC) (GLenum pname, GLint *param);
+typedef void (GLAPIENTRY * PFNGLTEXBUMPPARAMETERFVATIPROC) (GLenum pname, GLfloat *param);
+typedef void (GLAPIENTRY * PFNGLTEXBUMPPARAMETERIVATIPROC) (GLenum pname, GLint *param);
+
+#define glGetTexBumpParameterfvATI GLEW_GET_FUN(__glewGetTexBumpParameterfvATI)
+#define glGetTexBumpParameterivATI GLEW_GET_FUN(__glewGetTexBumpParameterivATI)
+#define glTexBumpParameterfvATI GLEW_GET_FUN(__glewTexBumpParameterfvATI)
+#define glTexBumpParameterivATI GLEW_GET_FUN(__glewTexBumpParameterivATI)
+
+#define GLEW_ATI_envmap_bumpmap GLEW_GET_VAR(__GLEW_ATI_envmap_bumpmap)
+
+#endif /* GL_ATI_envmap_bumpmap */
+
+/* ------------------------- GL_ATI_fragment_shader ------------------------ */
+
+#ifndef GL_ATI_fragment_shader
+#define GL_ATI_fragment_shader 1
+
+#define GL_RED_BIT_ATI 0x00000001
+#define GL_2X_BIT_ATI 0x00000001
+#define GL_4X_BIT_ATI 0x00000002
+#define GL_GREEN_BIT_ATI 0x00000002
+#define GL_COMP_BIT_ATI 0x00000002
+#define GL_BLUE_BIT_ATI 0x00000004
+#define GL_8X_BIT_ATI 0x00000004
+#define GL_NEGATE_BIT_ATI 0x00000004
+#define GL_BIAS_BIT_ATI 0x00000008
+#define GL_HALF_BIT_ATI 0x00000008
+#define GL_QUARTER_BIT_ATI 0x00000010
+#define GL_EIGHTH_BIT_ATI 0x00000020
+#define GL_SATURATE_BIT_ATI 0x00000040
+#define GL_FRAGMENT_SHADER_ATI 0x8920
+#define GL_REG_0_ATI 0x8921
+#define GL_REG_1_ATI 0x8922
+#define GL_REG_2_ATI 0x8923
+#define GL_REG_3_ATI 0x8924
+#define GL_REG_4_ATI 0x8925
+#define GL_REG_5_ATI 0x8926
+#define GL_CON_0_ATI 0x8941
+#define GL_CON_1_ATI 0x8942
+#define GL_CON_2_ATI 0x8943
+#define GL_CON_3_ATI 0x8944
+#define GL_CON_4_ATI 0x8945
+#define GL_CON_5_ATI 0x8946
+#define GL_CON_6_ATI 0x8947
+#define GL_CON_7_ATI 0x8948
+#define GL_MOV_ATI 0x8961
+#define GL_ADD_ATI 0x8963
+#define GL_MUL_ATI 0x8964
+#define GL_SUB_ATI 0x8965
+#define GL_DOT3_ATI 0x8966
+#define GL_DOT4_ATI 0x8967
+#define GL_MAD_ATI 0x8968
+#define GL_LERP_ATI 0x8969
+#define GL_CND_ATI 0x896A
+#define GL_CND0_ATI 0x896B
+#define GL_DOT2_ADD_ATI 0x896C
+#de

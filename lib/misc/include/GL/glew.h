@@ -3749,4 +3749,221 @@ typedef void (GLAPIENTRY * PFNGLTEXBUMPPARAMETERIVATIPROC) (GLenum pname, GLint 
 #define GL_CND_ATI 0x896A
 #define GL_CND0_ATI 0x896B
 #define GL_DOT2_ADD_ATI 0x896C
-#de
+#define GL_SECONDARY_INTERPOLATOR_ATI 0x896D
+#define GL_NUM_FRAGMENT_REGISTERS_ATI 0x896E
+#define GL_NUM_FRAGMENT_CONSTANTS_ATI 0x896F
+#define GL_NUM_PASSES_ATI 0x8970
+#define GL_NUM_INSTRUCTIONS_PER_PASS_ATI 0x8971
+#define GL_NUM_INSTRUCTIONS_TOTAL_ATI 0x8972
+#define GL_NUM_INPUT_INTERPOLATOR_COMPONENTS_ATI 0x8973
+#define GL_NUM_LOOPBACK_COMPONENTS_ATI 0x8974
+#define GL_COLOR_ALPHA_PAIRING_ATI 0x8975
+#define GL_SWIZZLE_STR_ATI 0x8976
+#define GL_SWIZZLE_STQ_ATI 0x8977
+#define GL_SWIZZLE_STR_DR_ATI 0x8978
+#define GL_SWIZZLE_STQ_DQ_ATI 0x8979
+#define GL_SWIZZLE_STRQ_ATI 0x897A
+#define GL_SWIZZLE_STRQ_DQ_ATI 0x897B
+
+typedef void (GLAPIENTRY * PFNGLALPHAFRAGMENTOP1ATIPROC) (GLenum op, GLuint dst, GLuint dstMod, GLuint arg1, GLuint arg1Rep, GLuint arg1Mod);
+typedef void (GLAPIENTRY * PFNGLALPHAFRAGMENTOP2ATIPROC) (GLenum op, GLuint dst, GLuint dstMod, GLuint arg1, GLuint arg1Rep, GLuint arg1Mod, GLuint arg2, GLuint arg2Rep, GLuint arg2Mod);
+typedef void (GLAPIENTRY * PFNGLALPHAFRAGMENTOP3ATIPROC) (GLenum op, GLuint dst, GLuint dstMod, GLuint arg1, GLuint arg1Rep, GLuint arg1Mod, GLuint arg2, GLuint arg2Rep, GLuint arg2Mod, GLuint arg3, GLuint arg3Rep, GLuint arg3Mod);
+typedef void (GLAPIENTRY * PFNGLBEGINFRAGMENTSHADERATIPROC) (void);
+typedef void (GLAPIENTRY * PFNGLBINDFRAGMENTSHADERATIPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLCOLORFRAGMENTOP1ATIPROC) (GLenum op, GLuint dst, GLuint dstMask, GLuint dstMod, GLuint arg1, GLuint arg1Rep, GLuint arg1Mod);
+typedef void (GLAPIENTRY * PFNGLCOLORFRAGMENTOP2ATIPROC) (GLenum op, GLuint dst, GLuint dstMask, GLuint dstMod, GLuint arg1, GLuint arg1Rep, GLuint arg1Mod, GLuint arg2, GLuint arg2Rep, GLuint arg2Mod);
+typedef void (GLAPIENTRY * PFNGLCOLORFRAGMENTOP3ATIPROC) (GLenum op, GLuint dst, GLuint dstMask, GLuint dstMod, GLuint arg1, GLuint arg1Rep, GLuint arg1Mod, GLuint arg2, GLuint arg2Rep, GLuint arg2Mod, GLuint arg3, GLuint arg3Rep, GLuint arg3Mod);
+typedef void (GLAPIENTRY * PFNGLDELETEFRAGMENTSHADERATIPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLENDFRAGMENTSHADERATIPROC) (void);
+typedef GLuint (GLAPIENTRY * PFNGLGENFRAGMENTSHADERSATIPROC) (GLuint range);
+typedef void (GLAPIENTRY * PFNGLPASSTEXCOORDATIPROC) (GLuint dst, GLuint coord, GLenum swizzle);
+typedef void (GLAPIENTRY * PFNGLSAMPLEMAPATIPROC) (GLuint dst, GLuint interp, GLenum swizzle);
+typedef void (GLAPIENTRY * PFNGLSETFRAGMENTSHADERCONSTANTATIPROC) (GLuint dst, const GLfloat* value);
+
+#define glAlphaFragmentOp1ATI GLEW_GET_FUN(__glewAlphaFragmentOp1ATI)
+#define glAlphaFragmentOp2ATI GLEW_GET_FUN(__glewAlphaFragmentOp2ATI)
+#define glAlphaFragmentOp3ATI GLEW_GET_FUN(__glewAlphaFragmentOp3ATI)
+#define glBeginFragmentShaderATI GLEW_GET_FUN(__glewBeginFragmentShaderATI)
+#define glBindFragmentShaderATI GLEW_GET_FUN(__glewBindFragmentShaderATI)
+#define glColorFragmentOp1ATI GLEW_GET_FUN(__glewColorFragmentOp1ATI)
+#define glColorFragmentOp2ATI GLEW_GET_FUN(__glewColorFragmentOp2ATI)
+#define glColorFragmentOp3ATI GLEW_GET_FUN(__glewColorFragmentOp3ATI)
+#define glDeleteFragmentShaderATI GLEW_GET_FUN(__glewDeleteFragmentShaderATI)
+#define glEndFragmentShaderATI GLEW_GET_FUN(__glewEndFragmentShaderATI)
+#define glGenFragmentShadersATI GLEW_GET_FUN(__glewGenFragmentShadersATI)
+#define glPassTexCoordATI GLEW_GET_FUN(__glewPassTexCoordATI)
+#define glSampleMapATI GLEW_GET_FUN(__glewSampleMapATI)
+#define glSetFragmentShaderConstantATI GLEW_GET_FUN(__glewSetFragmentShaderConstantATI)
+
+#define GLEW_ATI_fragment_shader GLEW_GET_VAR(__GLEW_ATI_fragment_shader)
+
+#endif /* GL_ATI_fragment_shader */
+
+/* ------------------------ GL_ATI_map_object_buffer ----------------------- */
+
+#ifndef GL_ATI_map_object_buffer
+#define GL_ATI_map_object_buffer 1
+
+typedef void* (GLAPIENTRY * PFNGLMAPOBJECTBUFFERATIPROC) (GLuint buffer);
+typedef void (GLAPIENTRY * PFNGLUNMAPOBJECTBUFFERATIPROC) (GLuint buffer);
+
+#define glMapObjectBufferATI GLEW_GET_FUN(__glewMapObjectBufferATI)
+#define glUnmapObjectBufferATI GLEW_GET_FUN(__glewUnmapObjectBufferATI)
+
+#define GLEW_ATI_map_object_buffer GLEW_GET_VAR(__GLEW_ATI_map_object_buffer)
+
+#endif /* GL_ATI_map_object_buffer */
+
+/* -------------------------- GL_ATI_pn_triangles -------------------------- */
+
+#ifndef GL_ATI_pn_triangles
+#define GL_ATI_pn_triangles 1
+
+#define GL_PN_TRIANGLES_ATI 0x87F0
+#define GL_MAX_PN_TRIANGLES_TESSELATION_LEVEL_ATI 0x87F1
+#define GL_PN_TRIANGLES_POINT_MODE_ATI 0x87F2
+#define GL_PN_TRIANGLES_NORMAL_MODE_ATI 0x87F3
+#define GL_PN_TRIANGLES_TESSELATION_LEVEL_ATI 0x87F4
+#define GL_PN_TRIANGLES_POINT_MODE_LINEAR_ATI 0x87F5
+#define GL_PN_TRIANGLES_POINT_MODE_CUBIC_ATI 0x87F6
+#define GL_PN_TRIANGLES_NORMAL_MODE_LINEAR_ATI 0x87F7
+#define GL_PN_TRIANGLES_NORMAL_MODE_QUADRATIC_ATI 0x87F8
+
+typedef void (GLAPIENTRY * PFNGLPNTRIANGLESFATIPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLPNTRIANGLESIATIPROC) (GLenum pname, GLint param);
+
+#define glPNTrianglesfATI GLEW_GET_FUN(__glPNTrianglewesfATI)
+#define glPNTrianglesiATI GLEW_GET_FUN(__glPNTrianglewesiATI)
+
+#define GLEW_ATI_pn_triangles GLEW_GET_VAR(__GLEW_ATI_pn_triangles)
+
+#endif /* GL_ATI_pn_triangles */
+
+/* ------------------------ GL_ATI_separate_stencil ------------------------ */
+
+#ifndef GL_ATI_separate_stencil
+#define GL_ATI_separate_stencil 1
+
+#define GL_STENCIL_BACK_FUNC_ATI 0x8800
+#define GL_STENCIL_BACK_FAIL_ATI 0x8801
+#define GL_STENCIL_BACK_PASS_DEPTH_FAIL_ATI 0x8802
+#define GL_STENCIL_BACK_PASS_DEPTH_PASS_ATI 0x8803
+
+typedef void (GLAPIENTRY * PFNGLSTENCILFUNCSEPARATEATIPROC) (GLenum frontfunc, GLenum backfunc, GLint ref, GLuint mask);
+typedef void (GLAPIENTRY * PFNGLSTENCILOPSEPARATEATIPROC) (GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
+
+#define glStencilFuncSeparateATI GLEW_GET_FUN(__glewStencilFuncSeparateATI)
+#define glStencilOpSeparateATI GLEW_GET_FUN(__glewStencilOpSeparateATI)
+
+#define GLEW_ATI_separate_stencil GLEW_GET_VAR(__GLEW_ATI_separate_stencil)
+
+#endif /* GL_ATI_separate_stencil */
+
+/* ----------------------- GL_ATI_shader_texture_lod ----------------------- */
+
+#ifndef GL_ATI_shader_texture_lod
+#define GL_ATI_shader_texture_lod 1
+
+#define GLEW_ATI_shader_texture_lod GLEW_GET_VAR(__GLEW_ATI_shader_texture_lod)
+
+#endif /* GL_ATI_shader_texture_lod */
+
+/* ---------------------- GL_ATI_text_fragment_shader ---------------------- */
+
+#ifndef GL_ATI_text_fragment_shader
+#define GL_ATI_text_fragment_shader 1
+
+#define GL_TEXT_FRAGMENT_SHADER_ATI 0x8200
+
+#define GLEW_ATI_text_fragment_shader GLEW_GET_VAR(__GLEW_ATI_text_fragment_shader)
+
+#endif /* GL_ATI_text_fragment_shader */
+
+/* --------------------- GL_ATI_texture_compression_3dc -------------------- */
+
+#ifndef GL_ATI_texture_compression_3dc
+#define GL_ATI_texture_compression_3dc 1
+
+#define GL_COMPRESSED_LUMINANCE_ALPHA_3DC_ATI 0x8837
+
+#define GLEW_ATI_texture_compression_3dc GLEW_GET_VAR(__GLEW_ATI_texture_compression_3dc)
+
+#endif /* GL_ATI_texture_compression_3dc */
+
+/* ---------------------- GL_ATI_texture_env_combine3 ---------------------- */
+
+#ifndef GL_ATI_texture_env_combine3
+#define GL_ATI_texture_env_combine3 1
+
+#define GL_MODULATE_ADD_ATI 0x8744
+#define GL_MODULATE_SIGNED_ADD_ATI 0x8745
+#define GL_MODULATE_SUBTRACT_ATI 0x8746
+
+#define GLEW_ATI_texture_env_combine3 GLEW_GET_VAR(__GLEW_ATI_texture_env_combine3)
+
+#endif /* GL_ATI_texture_env_combine3 */
+
+/* -------------------------- GL_ATI_texture_float ------------------------- */
+
+#ifndef GL_ATI_texture_float
+#define GL_ATI_texture_float 1
+
+#define GL_RGBA_FLOAT32_ATI 0x8814
+#define GL_RGB_FLOAT32_ATI 0x8815
+#define GL_ALPHA_FLOAT32_ATI 0x8816
+#define GL_INTENSITY_FLOAT32_ATI 0x8817
+#define GL_LUMINANCE_FLOAT32_ATI 0x8818
+#define GL_LUMINANCE_ALPHA_FLOAT32_ATI 0x8819
+#define GL_RGBA_FLOAT16_ATI 0x881A
+#define GL_RGB_FLOAT16_ATI 0x881B
+#define GL_ALPHA_FLOAT16_ATI 0x881C
+#define GL_INTENSITY_FLOAT16_ATI 0x881D
+#define GL_LUMINANCE_FLOAT16_ATI 0x881E
+#define GL_LUMINANCE_ALPHA_FLOAT16_ATI 0x881F
+
+#define GLEW_ATI_texture_float GLEW_GET_VAR(__GLEW_ATI_texture_float)
+
+#endif /* GL_ATI_texture_float */
+
+/* ----------------------- GL_ATI_texture_mirror_once ---------------------- */
+
+#ifndef GL_ATI_texture_mirror_once
+#define GL_ATI_texture_mirror_once 1
+
+#define GL_MIRROR_CLAMP_ATI 0x8742
+#define GL_MIRROR_CLAMP_TO_EDGE_ATI 0x8743
+
+#define GLEW_ATI_texture_mirror_once GLEW_GET_VAR(__GLEW_ATI_texture_mirror_once)
+
+#endif /* GL_ATI_texture_mirror_once */
+
+/* ----------------------- GL_ATI_vertex_array_object ---------------------- */
+
+#ifndef GL_ATI_vertex_array_object
+#define GL_ATI_vertex_array_object 1
+
+#define GL_STATIC_ATI 0x8760
+#define GL_DYNAMIC_ATI 0x8761
+#define GL_PRESERVE_ATI 0x8762
+#define GL_DISCARD_ATI 0x8763
+#define GL_OBJECT_BUFFER_SIZE_ATI 0x8764
+#define GL_OBJECT_BUFFER_USAGE_ATI 0x8765
+#define GL_ARRAY_OBJECT_BUFFER_ATI 0x8766
+#define GL_ARRAY_OBJECT_OFFSET_ATI 0x8767
+
+typedef void (GLAPIENTRY * PFNGLARRAYOBJECTATIPROC) (GLenum array, GLint size, GLenum type, GLsizei stride, GLuint buffer, GLuint offset);
+typedef void (GLAPIENTRY * PFNGLFREEOBJECTBUFFERATIPROC) (GLuint buffer);
+typedef void (GLAPIENTRY * PFNGLGETARRAYOBJECTFVATIPROC) (GLenum array, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETARRAYOBJECTIVATIPROC) (GLenum array, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETOBJECTBUFFERFVATIPROC) (GLuint buffer, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETOBJECTBUFFERIVATIPROC) (GLuint buffer, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETVARIANTARRAYOBJECTFVATIPROC) (GLuint id, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETVARIANTARRAYOBJECTIVATIPROC) (GLuint id, GLenum pname, GLint* params);
+typedef GLboolean (GLAPIENTRY * PFNGLISOBJECTBUFFERATIPROC) (GLuint buffer);
+typedef GLuint (GLAPIENTRY * PFNGLNEWOBJECTBUFFERATIPROC) (GLsizei size, const void* pointer, GLenum usage);
+typedef void (GLAPIENTRY * PFNGLUPDATEOBJECTBUFFERATIPROC) (GLuint buffer, GLuint offset, GLsizei size, const void* pointer, GLenum preserve);
+typedef void (GLAPIENTRY * PFNGLVARIANTARRAYOBJECTATIPROC) (GLuint id, GLenum type, GLsizei stride, GLuint buffer, GLuint offset);
+
+#define glArrayObjectATI GLEW_GET_FUN(__glewArrayObjectATI)
+#define glFreeObjectBufferATI GLEW_GET_FUN(__glewFreeObjectBufferATI)
+#define glGetArrayOb

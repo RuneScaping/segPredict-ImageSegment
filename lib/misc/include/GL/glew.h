@@ -4155,4 +4155,244 @@ typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4SVATIPROC) (GLenum stream, const GL
 #define GL_UNIFORM_BUFFER_EXT 0x8DEE
 #define GL_UNIFORM_BUFFER_BINDING_EXT 0x8DEF
 
-typedef GLint (GLAPIENTRY * PFNGLGETUNIFORMBUFFERSIZEEXTPROC) (GLuint program, 
+typedef GLint (GLAPIENTRY * PFNGLGETUNIFORMBUFFERSIZEEXTPROC) (GLuint program, GLint location);
+typedef GLintptr (GLAPIENTRY * PFNGLGETUNIFORMOFFSETEXTPROC) (GLuint program, GLint location);
+typedef void (GLAPIENTRY * PFNGLUNIFORMBUFFEREXTPROC) (GLuint program, GLint location, GLuint buffer);
+
+#define glGetUniformBufferSizeEXT GLEW_GET_FUN(__glewGetUniformBufferSizeEXT)
+#define glGetUniformOffsetEXT GLEW_GET_FUN(__glewGetUniformOffsetEXT)
+#define glUniformBufferEXT GLEW_GET_FUN(__glewUniformBufferEXT)
+
+#define GLEW_EXT_bindable_uniform GLEW_GET_VAR(__GLEW_EXT_bindable_uniform)
+
+#endif /* GL_EXT_bindable_uniform */
+
+/* --------------------------- GL_EXT_blend_color -------------------------- */
+
+#ifndef GL_EXT_blend_color
+#define GL_EXT_blend_color 1
+
+#define GL_CONSTANT_COLOR_EXT 0x8001
+#define GL_ONE_MINUS_CONSTANT_COLOR_EXT 0x8002
+#define GL_CONSTANT_ALPHA_EXT 0x8003
+#define GL_ONE_MINUS_CONSTANT_ALPHA_EXT 0x8004
+#define GL_BLEND_COLOR_EXT 0x8005
+
+typedef void (GLAPIENTRY * PFNGLBLENDCOLOREXTPROC) (GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
+
+#define glBlendColorEXT GLEW_GET_FUN(__glewBlendColorEXT)
+
+#define GLEW_EXT_blend_color GLEW_GET_VAR(__GLEW_EXT_blend_color)
+
+#endif /* GL_EXT_blend_color */
+
+/* --------------------- GL_EXT_blend_equation_separate -------------------- */
+
+#ifndef GL_EXT_blend_equation_separate
+#define GL_EXT_blend_equation_separate 1
+
+#define GL_BLEND_EQUATION_RGB_EXT 0x8009
+#define GL_BLEND_EQUATION_ALPHA_EXT 0x883D
+
+typedef void (GLAPIENTRY * PFNGLBLENDEQUATIONSEPARATEEXTPROC) (GLenum modeRGB, GLenum modeAlpha);
+
+#define glBlendEquationSeparateEXT GLEW_GET_FUN(__glewBlendEquationSeparateEXT)
+
+#define GLEW_EXT_blend_equation_separate GLEW_GET_VAR(__GLEW_EXT_blend_equation_separate)
+
+#endif /* GL_EXT_blend_equation_separate */
+
+/* ----------------------- GL_EXT_blend_func_separate ---------------------- */
+
+#ifndef GL_EXT_blend_func_separate
+#define GL_EXT_blend_func_separate 1
+
+#define GL_BLEND_DST_RGB_EXT 0x80C8
+#define GL_BLEND_SRC_RGB_EXT 0x80C9
+#define GL_BLEND_DST_ALPHA_EXT 0x80CA
+#define GL_BLEND_SRC_ALPHA_EXT 0x80CB
+
+typedef void (GLAPIENTRY * PFNGLBLENDFUNCSEPARATEEXTPROC) (GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
+
+#define glBlendFuncSeparateEXT GLEW_GET_FUN(__glewBlendFuncSeparateEXT)
+
+#define GLEW_EXT_blend_func_separate GLEW_GET_VAR(__GLEW_EXT_blend_func_separate)
+
+#endif /* GL_EXT_blend_func_separate */
+
+/* ------------------------- GL_EXT_blend_logic_op ------------------------- */
+
+#ifndef GL_EXT_blend_logic_op
+#define GL_EXT_blend_logic_op 1
+
+#define GLEW_EXT_blend_logic_op GLEW_GET_VAR(__GLEW_EXT_blend_logic_op)
+
+#endif /* GL_EXT_blend_logic_op */
+
+/* -------------------------- GL_EXT_blend_minmax -------------------------- */
+
+#ifndef GL_EXT_blend_minmax
+#define GL_EXT_blend_minmax 1
+
+#define GL_FUNC_ADD_EXT 0x8006
+#define GL_MIN_EXT 0x8007
+#define GL_MAX_EXT 0x8008
+#define GL_BLEND_EQUATION_EXT 0x8009
+
+typedef void (GLAPIENTRY * PFNGLBLENDEQUATIONEXTPROC) (GLenum mode);
+
+#define glBlendEquationEXT GLEW_GET_FUN(__glewBlendEquationEXT)
+
+#define GLEW_EXT_blend_minmax GLEW_GET_VAR(__GLEW_EXT_blend_minmax)
+
+#endif /* GL_EXT_blend_minmax */
+
+/* ------------------------- GL_EXT_blend_subtract ------------------------- */
+
+#ifndef GL_EXT_blend_subtract
+#define GL_EXT_blend_subtract 1
+
+#define GL_FUNC_SUBTRACT_EXT 0x800A
+#define GL_FUNC_REVERSE_SUBTRACT_EXT 0x800B
+
+#define GLEW_EXT_blend_subtract GLEW_GET_VAR(__GLEW_EXT_blend_subtract)
+
+#endif /* GL_EXT_blend_subtract */
+
+/* ------------------------ GL_EXT_clip_volume_hint ------------------------ */
+
+#ifndef GL_EXT_clip_volume_hint
+#define GL_EXT_clip_volume_hint 1
+
+#define GL_CLIP_VOLUME_CLIPPING_HINT_EXT 0x80F0
+
+#define GLEW_EXT_clip_volume_hint GLEW_GET_VAR(__GLEW_EXT_clip_volume_hint)
+
+#endif /* GL_EXT_clip_volume_hint */
+
+/* ------------------------------ GL_EXT_cmyka ----------------------------- */
+
+#ifndef GL_EXT_cmyka
+#define GL_EXT_cmyka 1
+
+#define GL_CMYK_EXT 0x800C
+#define GL_CMYKA_EXT 0x800D
+#define GL_PACK_CMYK_HINT_EXT 0x800E
+#define GL_UNPACK_CMYK_HINT_EXT 0x800F
+
+#define GLEW_EXT_cmyka GLEW_GET_VAR(__GLEW_EXT_cmyka)
+
+#endif /* GL_EXT_cmyka */
+
+/* ------------------------- GL_EXT_color_subtable ------------------------- */
+
+#ifndef GL_EXT_color_subtable
+#define GL_EXT_color_subtable 1
+
+typedef void (GLAPIENTRY * PFNGLCOLORSUBTABLEEXTPROC) (GLenum target, GLsizei start, GLsizei count, GLenum format, GLenum type, const void* data);
+typedef void (GLAPIENTRY * PFNGLCOPYCOLORSUBTABLEEXTPROC) (GLenum target, GLsizei start, GLint x, GLint y, GLsizei width);
+
+#define glColorSubTableEXT GLEW_GET_FUN(__glewColorSubTableEXT)
+#define glCopyColorSubTableEXT GLEW_GET_FUN(__glewCopyColorSubTableEXT)
+
+#define GLEW_EXT_color_subtable GLEW_GET_VAR(__GLEW_EXT_color_subtable)
+
+#endif /* GL_EXT_color_subtable */
+
+/* ---------------------- GL_EXT_compiled_vertex_array --------------------- */
+
+#ifndef GL_EXT_compiled_vertex_array
+#define GL_EXT_compiled_vertex_array 1
+
+typedef void (GLAPIENTRY * PFNGLLOCKARRAYSEXTPROC) (GLint first, GLsizei count);
+typedef void (GLAPIENTRY * PFNGLUNLOCKARRAYSEXTPROC) (void);
+
+#define glLockArraysEXT GLEW_GET_FUN(__glewLockArraysEXT)
+#define glUnlockArraysEXT GLEW_GET_FUN(__glewUnlockArraysEXT)
+
+#define GLEW_EXT_compiled_vertex_array GLEW_GET_VAR(__GLEW_EXT_compiled_vertex_array)
+
+#endif /* GL_EXT_compiled_vertex_array */
+
+/* --------------------------- GL_EXT_convolution -------------------------- */
+
+#ifndef GL_EXT_convolution
+#define GL_EXT_convolution 1
+
+#define GL_CONVOLUTION_1D_EXT 0x8010
+#define GL_CONVOLUTION_2D_EXT 0x8011
+#define GL_SEPARABLE_2D_EXT 0x8012
+#define GL_CONVOLUTION_BORDER_MODE_EXT 0x8013
+#define GL_CONVOLUTION_FILTER_SCALE_EXT 0x8014
+#define GL_CONVOLUTION_FILTER_BIAS_EXT 0x8015
+#define GL_REDUCE_EXT 0x8016
+#define GL_CONVOLUTION_FORMAT_EXT 0x8017
+#define GL_CONVOLUTION_WIDTH_EXT 0x8018
+#define GL_CONVOLUTION_HEIGHT_EXT 0x8019
+#define GL_MAX_CONVOLUTION_WIDTH_EXT 0x801A
+#define GL_MAX_CONVOLUTION_HEIGHT_EXT 0x801B
+#define GL_POST_CONVOLUTION_RED_SCALE_EXT 0x801C
+#define GL_POST_CONVOLUTION_GREEN_SCALE_EXT 0x801D
+#define GL_POST_CONVOLUTION_BLUE_SCALE_EXT 0x801E
+#define GL_POST_CONVOLUTION_ALPHA_SCALE_EXT 0x801F
+#define GL_POST_CONVOLUTION_RED_BIAS_EXT 0x8020
+#define GL_POST_CONVOLUTION_GREEN_BIAS_EXT 0x8021
+#define GL_POST_CONVOLUTION_BLUE_BIAS_EXT 0x8022
+#define GL_POST_CONVOLUTION_ALPHA_BIAS_EXT 0x8023
+
+typedef void (GLAPIENTRY * PFNGLCONVOLUTIONFILTER1DEXTPROC) (GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const void* image);
+typedef void (GLAPIENTRY * PFNGLCONVOLUTIONFILTER2DEXTPROC) (GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* image);
+typedef void (GLAPIENTRY * PFNGLCONVOLUTIONPARAMETERFEXTPROC) (GLenum target, GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLCONVOLUTIONPARAMETERFVEXTPROC) (GLenum target, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLCONVOLUTIONPARAMETERIEXTPROC) (GLenum target, GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLCONVOLUTIONPARAMETERIVEXTPROC) (GLenum target, GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLCOPYCONVOLUTIONFILTER1DEXTPROC) (GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width);
+typedef void (GLAPIENTRY * PFNGLCOPYCONVOLUTIONFILTER2DEXTPROC) (GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height);
+typedef void (GLAPIENTRY * PFNGLGETCONVOLUTIONFILTEREXTPROC) (GLenum target, GLenum format, GLenum type, void* image);
+typedef void (GLAPIENTRY * PFNGLGETCONVOLUTIONPARAMETERFVEXTPROC) (GLenum target, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETCONVOLUTIONPARAMETERIVEXTPROC) (GLenum target, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETSEPARABLEFILTEREXTPROC) (GLenum target, GLenum format, GLenum type, void* row, void* column, void* span);
+typedef void (GLAPIENTRY * PFNGLSEPARABLEFILTER2DEXTPROC) (GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* row, const void* column);
+
+#define glConvolutionFilter1DEXT GLEW_GET_FUN(__glewConvolutionFilter1DEXT)
+#define glConvolutionFilter2DEXT GLEW_GET_FUN(__glewConvolutionFilter2DEXT)
+#define glConvolutionParameterfEXT GLEW_GET_FUN(__glewConvolutionParameterfEXT)
+#define glConvolutionParameterfvEXT GLEW_GET_FUN(__glewConvolutionParameterfvEXT)
+#define glConvolutionParameteriEXT GLEW_GET_FUN(__glewConvolutionParameteriEXT)
+#define glConvolutionParameterivEXT GLEW_GET_FUN(__glewConvolutionParameterivEXT)
+#define glCopyConvolutionFilter1DEXT GLEW_GET_FUN(__glewCopyConvolutionFilter1DEXT)
+#define glCopyConvolutionFilter2DEXT GLEW_GET_FUN(__glewCopyConvolutionFilter2DEXT)
+#define glGetConvolutionFilterEXT GLEW_GET_FUN(__glewGetConvolutionFilterEXT)
+#define glGetConvolutionParameterfvEXT GLEW_GET_FUN(__glewGetConvolutionParameterfvEXT)
+#define glGetConvolutionParameterivEXT GLEW_GET_FUN(__glewGetConvolutionParameterivEXT)
+#define glGetSeparableFilterEXT GLEW_GET_FUN(__glewGetSeparableFilterEXT)
+#define glSeparableFilter2DEXT GLEW_GET_FUN(__glewSeparableFilter2DEXT)
+
+#define GLEW_EXT_convolution GLEW_GET_VAR(__GLEW_EXT_convolution)
+
+#endif /* GL_EXT_convolution */
+
+/* ------------------------ GL_EXT_coordinate_frame ------------------------ */
+
+#ifndef GL_EXT_coordinate_frame
+#define GL_EXT_coordinate_frame 1
+
+#define GL_TANGENT_ARRAY_EXT 0x8439
+#define GL_BINORMAL_ARRAY_EXT 0x843A
+#define GL_CURRENT_TANGENT_EXT 0x843B
+#define GL_CURRENT_BINORMAL_EXT 0x843C
+#define GL_TANGENT_ARRAY_TYPE_EXT 0x843E
+#define GL_TANGENT_ARRAY_STRIDE_EXT 0x843F
+#define GL_BINORMAL_ARRAY_TYPE_EXT 0x8440
+#define GL_BINORMAL_ARRAY_STRIDE_EXT 0x8441
+#define GL_TANGENT_ARRAY_POINTER_EXT 0x8442
+#define GL_BINORMAL_ARRAY_POINTER_EXT 0x8443
+#define GL_MAP1_TANGENT_EXT 0x8444
+#define GL_MAP2_TANGENT_EXT 0x8445
+#define GL_MAP1_BINORMAL_EXT 0x8446
+#define GL_MAP2_BINORMAL_EXT 0x8447
+
+typedef void (GLAPIENTRY * PFNGLBINORMALPOINTEREXTPROC) (GLenum type, GLsizei stride, void* pointer);
+typedef void (GLAPIENTRY * PFNGLTANGENTPOINTEREXTPROC) (GLenum type, GLsizei stride, void* pointer);
+
+#define glBinormalPointerEXT GLEW_GE

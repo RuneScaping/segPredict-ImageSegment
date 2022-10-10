@@ -4395,4 +4395,199 @@ typedef void (GLAPIENTRY * PFNGLSEPARABLEFILTER2DEXTPROC) (GLenum target, GLenum
 typedef void (GLAPIENTRY * PFNGLBINORMALPOINTEREXTPROC) (GLenum type, GLsizei stride, void* pointer);
 typedef void (GLAPIENTRY * PFNGLTANGENTPOINTEREXTPROC) (GLenum type, GLsizei stride, void* pointer);
 
-#define glBinormalPointerEXT GLEW_GE
+#define glBinormalPointerEXT GLEW_GET_FUN(__glewBinormalPointerEXT)
+#define glTangentPointerEXT GLEW_GET_FUN(__glewTangentPointerEXT)
+
+#define GLEW_EXT_coordinate_frame GLEW_GET_VAR(__GLEW_EXT_coordinate_frame)
+
+#endif /* GL_EXT_coordinate_frame */
+
+/* -------------------------- GL_EXT_copy_texture -------------------------- */
+
+#ifndef GL_EXT_copy_texture
+#define GL_EXT_copy_texture 1
+
+typedef void (GLAPIENTRY * PFNGLCOPYTEXIMAGE1DEXTPROC) (GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
+typedef void (GLAPIENTRY * PFNGLCOPYTEXIMAGE2DEXTPROC) (GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
+typedef void (GLAPIENTRY * PFNGLCOPYTEXSUBIMAGE1DEXTPROC) (GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
+typedef void (GLAPIENTRY * PFNGLCOPYTEXSUBIMAGE2DEXTPROC) (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+typedef void (GLAPIENTRY * PFNGLCOPYTEXSUBIMAGE3DEXTPROC) (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+
+#define glCopyTexImage1DEXT GLEW_GET_FUN(__glewCopyTexImage1DEXT)
+#define glCopyTexImage2DEXT GLEW_GET_FUN(__glewCopyTexImage2DEXT)
+#define glCopyTexSubImage1DEXT GLEW_GET_FUN(__glewCopyTexSubImage1DEXT)
+#define glCopyTexSubImage2DEXT GLEW_GET_FUN(__glewCopyTexSubImage2DEXT)
+#define glCopyTexSubImage3DEXT GLEW_GET_FUN(__glewCopyTexSubImage3DEXT)
+
+#define GLEW_EXT_copy_texture GLEW_GET_VAR(__GLEW_EXT_copy_texture)
+
+#endif /* GL_EXT_copy_texture */
+
+/* --------------------------- GL_EXT_cull_vertex -------------------------- */
+
+#ifndef GL_EXT_cull_vertex
+#define GL_EXT_cull_vertex 1
+
+typedef void (GLAPIENTRY * PFNGLCULLPARAMETERDVEXTPROC) (GLenum pname, GLdouble* params);
+typedef void (GLAPIENTRY * PFNGLCULLPARAMETERFVEXTPROC) (GLenum pname, GLfloat* params);
+
+#define glCullParameterdvEXT GLEW_GET_FUN(__glewCullParameterdvEXT)
+#define glCullParameterfvEXT GLEW_GET_FUN(__glewCullParameterfvEXT)
+
+#define GLEW_EXT_cull_vertex GLEW_GET_VAR(__GLEW_EXT_cull_vertex)
+
+#endif /* GL_EXT_cull_vertex */
+
+/* ------------------------ GL_EXT_depth_bounds_test ----------------------- */
+
+#ifndef GL_EXT_depth_bounds_test
+#define GL_EXT_depth_bounds_test 1
+
+#define GL_DEPTH_BOUNDS_TEST_EXT 0x8890
+#define GL_DEPTH_BOUNDS_EXT 0x8891
+
+typedef void (GLAPIENTRY * PFNGLDEPTHBOUNDSEXTPROC) (GLclampd zmin, GLclampd zmax);
+
+#define glDepthBoundsEXT GLEW_GET_FUN(__glewDepthBoundsEXT)
+
+#define GLEW_EXT_depth_bounds_test GLEW_GET_VAR(__GLEW_EXT_depth_bounds_test)
+
+#endif /* GL_EXT_depth_bounds_test */
+
+/* -------------------------- GL_EXT_draw_buffers2 ------------------------- */
+
+#ifndef GL_EXT_draw_buffers2
+#define GL_EXT_draw_buffers2 1
+
+typedef void (GLAPIENTRY * PFNGLCOLORMASKINDEXEDEXTPROC) (GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
+typedef void (GLAPIENTRY * PFNGLDISABLEINDEXEDEXTPROC) (GLenum target, GLuint index);
+typedef void (GLAPIENTRY * PFNGLENABLEINDEXEDEXTPROC) (GLenum target, GLuint index);
+typedef void (GLAPIENTRY * PFNGLGETBOOLEANINDEXEDVEXTPROC) (GLenum target, GLuint index, GLboolean *data);
+typedef void (GLAPIENTRY * PFNGLGETINTEGERINDEXEDVEXTPROC) (GLenum target, GLuint index, GLint *data);
+typedef GLboolean (GLAPIENTRY * PFNGLISENABLEDINDEXEDEXTPROC) (GLenum target, GLuint index);
+
+#define glColorMaskIndexedEXT GLEW_GET_FUN(__glewColorMaskIndexedEXT)
+#define glDisableIndexedEXT GLEW_GET_FUN(__glewDisableIndexedEXT)
+#define glEnableIndexedEXT GLEW_GET_FUN(__glewEnableIndexedEXT)
+#define glGetBooleanIndexedvEXT GLEW_GET_FUN(__glewGetBooleanIndexedvEXT)
+#define glGetIntegerIndexedvEXT GLEW_GET_FUN(__glewGetIntegerIndexedvEXT)
+#define glIsEnabledIndexedEXT GLEW_GET_FUN(__glewIsEnabledIndexedEXT)
+
+#define GLEW_EXT_draw_buffers2 GLEW_GET_VAR(__GLEW_EXT_draw_buffers2)
+
+#endif /* GL_EXT_draw_buffers2 */
+
+/* ------------------------- GL_EXT_draw_instanced ------------------------- */
+
+#ifndef GL_EXT_draw_instanced
+#define GL_EXT_draw_instanced 1
+
+typedef void (GLAPIENTRY * PFNGLDRAWARRAYSINSTANCEDEXTPROC) (GLenum mode, GLint start, GLsizei count, GLsizei primcount);
+typedef void (GLAPIENTRY * PFNGLDRAWELEMENTSINSTANCEDEXTPROC) (GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount);
+
+#define glDrawArraysInstancedEXT GLEW_GET_FUN(__glewDrawArraysInstancedEXT)
+#define glDrawElementsInstancedEXT GLEW_GET_FUN(__glewDrawElementsInstancedEXT)
+
+#define GLEW_EXT_draw_instanced GLEW_GET_VAR(__GLEW_EXT_draw_instanced)
+
+#endif /* GL_EXT_draw_instanced */
+
+/* ----------------------- GL_EXT_draw_range_elements ---------------------- */
+
+#ifndef GL_EXT_draw_range_elements
+#define GL_EXT_draw_range_elements 1
+
+#define GL_MAX_ELEMENTS_VERTICES 0x80E8
+#define GL_MAX_ELEMENTS_INDICES 0x80E9
+
+typedef void (GLAPIENTRY * PFNGLDRAWRANGEELEMENTSEXTPROC) (GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
+
+#define glDrawRangeElementsEXT GLEW_GET_FUN(__glewDrawRangeElementsEXT)
+
+#define GLEW_EXT_draw_range_elements GLEW_GET_VAR(__GLEW_EXT_draw_range_elements)
+
+#endif /* GL_EXT_draw_range_elements */
+
+/* ---------------------------- GL_EXT_fog_coord --------------------------- */
+
+#ifndef GL_EXT_fog_coord
+#define GL_EXT_fog_coord 1
+
+#define GL_FOG_COORDINATE_SOURCE_EXT 0x8450
+#define GL_FOG_COORDINATE_EXT 0x8451
+#define GL_FRAGMENT_DEPTH_EXT 0x8452
+#define GL_CURRENT_FOG_COORDINATE_EXT 0x8453
+#define GL_FOG_COORDINATE_ARRAY_TYPE_EXT 0x8454
+#define GL_FOG_COORDINATE_ARRAY_STRIDE_EXT 0x8455
+#define GL_FOG_COORDINATE_ARRAY_POINTER_EXT 0x8456
+#define GL_FOG_COORDINATE_ARRAY_EXT 0x8457
+
+typedef void (GLAPIENTRY * PFNGLFOGCOORDPOINTEREXTPROC) (GLenum type, GLsizei stride, const GLvoid *pointer);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDDEXTPROC) (GLdouble coord);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDDVEXTPROC) (const GLdouble *coord);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDFEXTPROC) (GLfloat coord);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDFVEXTPROC) (const GLfloat *coord);
+
+#define glFogCoordPointerEXT GLEW_GET_FUN(__glewFogCoordPointerEXT)
+#define glFogCoorddEXT GLEW_GET_FUN(__glewFogCoorddEXT)
+#define glFogCoorddvEXT GLEW_GET_FUN(__glewFogCoorddvEXT)
+#define glFogCoordfEXT GLEW_GET_FUN(__glewFogCoordfEXT)
+#define glFogCoordfvEXT GLEW_GET_FUN(__glewFogCoordfvEXT)
+
+#define GLEW_EXT_fog_coord GLEW_GET_VAR(__GLEW_EXT_fog_coord)
+
+#endif /* GL_EXT_fog_coord */
+
+/* ------------------------ GL_EXT_fragment_lighting ----------------------- */
+
+#ifndef GL_EXT_fragment_lighting
+#define GL_EXT_fragment_lighting 1
+
+#define GL_FRAGMENT_LIGHTING_EXT 0x8400
+#define GL_FRAGMENT_COLOR_MATERIAL_EXT 0x8401
+#define GL_FRAGMENT_COLOR_MATERIAL_FACE_EXT 0x8402
+#define GL_FRAGMENT_COLOR_MATERIAL_PARAMETER_EXT 0x8403
+#define GL_MAX_FRAGMENT_LIGHTS_EXT 0x8404
+#define GL_MAX_ACTIVE_LIGHTS_EXT 0x8405
+#define GL_CURRENT_RASTER_NORMAL_EXT 0x8406
+#define GL_LIGHT_ENV_MODE_EXT 0x8407
+#define GL_FRAGMENT_LIGHT_MODEL_LOCAL_VIEWER_EXT 0x8408
+#define GL_FRAGMENT_LIGHT_MODEL_TWO_SIDE_EXT 0x8409
+#define GL_FRAGMENT_LIGHT_MODEL_AMBIENT_EXT 0x840A
+#define GL_FRAGMENT_LIGHT_MODEL_NORMAL_INTERPOLATION_EXT 0x840B
+#define GL_FRAGMENT_LIGHT0_EXT 0x840C
+#define GL_FRAGMENT_LIGHT7_EXT 0x8413
+
+typedef void (GLAPIENTRY * PFNGLFRAGMENTCOLORMATERIALEXTPROC) (GLenum face, GLenum mode);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELFEXTPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELFVEXTPROC) (GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELIEXTPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELIVEXTPROC) (GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTFEXTPROC) (GLenum light, GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTFVEXTPROC) (GLenum light, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTIEXTPROC) (GLenum light, GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTIVEXTPROC) (GLenum light, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALFEXTPROC) (GLenum face, GLenum pname, const GLfloat param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALFVEXTPROC) (GLenum face, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALIEXTPROC) (GLenum face, GLenum pname, const GLint param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALIVEXTPROC) (GLenum face, GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTLIGHTFVEXTPROC) (GLenum light, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTLIGHTIVEXTPROC) (GLenum light, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTMATERIALFVEXTPROC) (GLenum face, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTMATERIALIVEXTPROC) (GLenum face, GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLLIGHTENVIEXTPROC) (GLenum pname, GLint param);
+
+#define glFragmentColorMaterialEXT GLEW_GET_FUN(__glewFragmentColorMaterialEXT)
+#define glFragmentLightModelfEXT GLEW_GET_FUN(__glewFragmentLightModelfEXT)
+#define glFragmentLightModelfvEXT GLEW_GET_FUN(__glewFragmentLightModelfvEXT)
+#define glFragmentLightModeliEXT GLEW_GET_FUN(__glewFragmentLightModeliEXT)
+#define glFragmentLightModelivEXT GLEW_GET_FUN(__glewFragmentLightModelivEXT)
+#define glFragmentLightfEXT GLEW_GET_FUN(__glewFragmentLightfEXT)
+#define glFragmentLightfvEXT GLEW_GET_FUN(__glewFragmentLightfvEXT)
+#define glFragmentLightiEXT GLEW_GET_FUN(__glewFragmentLightiEXT)
+#define glFragmentLightivEXT GLEW_GET_FUN(__glewFragmentLightivEXT)
+#define glFragmentMaterialfEXT GLEW_GET_FUN(__glewFragmentMaterialfEXT)
+#define glFragmentMaterialfvEXT GLEW_GET_FUN(__glewFragmentMaterialfvEXT)
+#define glFragmentMaterialiEXT GLEW_GET_FUN(__glewFragmentMaterialiEXT)
+#define glFragmentMaterialivEXT GLEW_GET_FUN(__glewFragmentMaterialivEXT)
+#define glGetFragmentLightfvEXT G

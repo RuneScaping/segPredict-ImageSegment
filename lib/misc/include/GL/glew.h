@@ -3966,4 +3966,193 @@ typedef void (GLAPIENTRY * PFNGLVARIANTARRAYOBJECTATIPROC) (GLuint id, GLenum ty
 
 #define glArrayObjectATI GLEW_GET_FUN(__glewArrayObjectATI)
 #define glFreeObjectBufferATI GLEW_GET_FUN(__glewFreeObjectBufferATI)
-#define glGetArrayOb
+#define glGetArrayObjectfvATI GLEW_GET_FUN(__glewGetArrayObjectfvATI)
+#define glGetArrayObjectivATI GLEW_GET_FUN(__glewGetArrayObjectivATI)
+#define glGetObjectBufferfvATI GLEW_GET_FUN(__glewGetObjectBufferfvATI)
+#define glGetObjectBufferivATI GLEW_GET_FUN(__glewGetObjectBufferivATI)
+#define glGetVariantArrayObjectfvATI GLEW_GET_FUN(__glewGetVariantArrayObjectfvATI)
+#define glGetVariantArrayObjectivATI GLEW_GET_FUN(__glewGetVariantArrayObjectivATI)
+#define glIsObjectBufferATI GLEW_GET_FUN(__glewIsObjectBufferATI)
+#define glNewObjectBufferATI GLEW_GET_FUN(__glewNewObjectBufferATI)
+#define glUpdateObjectBufferATI GLEW_GET_FUN(__glewUpdateObjectBufferATI)
+#define glVariantArrayObjectATI GLEW_GET_FUN(__glewVariantArrayObjectATI)
+
+#define GLEW_ATI_vertex_array_object GLEW_GET_VAR(__GLEW_ATI_vertex_array_object)
+
+#endif /* GL_ATI_vertex_array_object */
+
+/* ------------------- GL_ATI_vertex_attrib_array_object ------------------- */
+
+#ifndef GL_ATI_vertex_attrib_array_object
+#define GL_ATI_vertex_attrib_array_object 1
+
+typedef void (GLAPIENTRY * PFNGLGETVERTEXATTRIBARRAYOBJECTFVATIPROC) (GLuint index, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETVERTEXATTRIBARRAYOBJECTIVATIPROC) (GLuint index, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBARRAYOBJECTATIPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLuint buffer, GLuint offset);
+
+#define glGetVertexAttribArrayObjectfvATI GLEW_GET_FUN(__glewGetVertexAttribArrayObjectfvATI)
+#define glGetVertexAttribArrayObjectivATI GLEW_GET_FUN(__glewGetVertexAttribArrayObjectivATI)
+#define glVertexAttribArrayObjectATI GLEW_GET_FUN(__glewVertexAttribArrayObjectATI)
+
+#define GLEW_ATI_vertex_attrib_array_object GLEW_GET_VAR(__GLEW_ATI_vertex_attrib_array_object)
+
+#endif /* GL_ATI_vertex_attrib_array_object */
+
+/* ------------------------- GL_ATI_vertex_streams ------------------------- */
+
+#ifndef GL_ATI_vertex_streams
+#define GL_ATI_vertex_streams 1
+
+#define GL_MAX_VERTEX_STREAMS_ATI 0x876B
+#define GL_VERTEX_SOURCE_ATI 0x876C
+#define GL_VERTEX_STREAM0_ATI 0x876D
+#define GL_VERTEX_STREAM1_ATI 0x876E
+#define GL_VERTEX_STREAM2_ATI 0x876F
+#define GL_VERTEX_STREAM3_ATI 0x8770
+#define GL_VERTEX_STREAM4_ATI 0x8771
+#define GL_VERTEX_STREAM5_ATI 0x8772
+#define GL_VERTEX_STREAM6_ATI 0x8773
+#define GL_VERTEX_STREAM7_ATI 0x8774
+
+typedef void (GLAPIENTRY * PFNGLCLIENTACTIVEVERTEXSTREAMATIPROC) (GLenum stream);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3BATIPROC) (GLenum stream, GLbyte x, GLbyte y, GLbyte z);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3BVATIPROC) (GLenum stream, const GLbyte *v);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3DATIPROC) (GLenum stream, GLdouble x, GLdouble y, GLdouble z);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3DVATIPROC) (GLenum stream, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3FATIPROC) (GLenum stream, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3FVATIPROC) (GLenum stream, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3IATIPROC) (GLenum stream, GLint x, GLint y, GLint z);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3IVATIPROC) (GLenum stream, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3SATIPROC) (GLenum stream, GLshort x, GLshort y, GLshort z);
+typedef void (GLAPIENTRY * PFNGLNORMALSTREAM3SVATIPROC) (GLenum stream, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXBLENDENVFATIPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLVERTEXBLENDENVIATIPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2DATIPROC) (GLenum stream, GLdouble x, GLdouble y);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2DVATIPROC) (GLenum stream, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2FATIPROC) (GLenum stream, GLfloat x, GLfloat y);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2FVATIPROC) (GLenum stream, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2IATIPROC) (GLenum stream, GLint x, GLint y);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2IVATIPROC) (GLenum stream, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2SATIPROC) (GLenum stream, GLshort x, GLshort y);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM2SVATIPROC) (GLenum stream, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3DATIPROC) (GLenum stream, GLdouble x, GLdouble y, GLdouble z);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3DVATIPROC) (GLenum stream, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3FATIPROC) (GLenum stream, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3FVATIPROC) (GLenum stream, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3IATIPROC) (GLenum stream, GLint x, GLint y, GLint z);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3IVATIPROC) (GLenum stream, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3SATIPROC) (GLenum stream, GLshort x, GLshort y, GLshort z);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM3SVATIPROC) (GLenum stream, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4DATIPROC) (GLenum stream, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4DVATIPROC) (GLenum stream, const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4FATIPROC) (GLenum stream, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4FVATIPROC) (GLenum stream, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4IATIPROC) (GLenum stream, GLint x, GLint y, GLint z, GLint w);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4IVATIPROC) (GLenum stream, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4SATIPROC) (GLenum stream, GLshort x, GLshort y, GLshort z, GLshort w);
+typedef void (GLAPIENTRY * PFNGLVERTEXSTREAM4SVATIPROC) (GLenum stream, const GLshort *v);
+
+#define glClientActiveVertexStreamATI GLEW_GET_FUN(__glewClientActiveVertexStreamATI)
+#define glNormalStream3bATI GLEW_GET_FUN(__glewNormalStream3bATI)
+#define glNormalStream3bvATI GLEW_GET_FUN(__glewNormalStream3bvATI)
+#define glNormalStream3dATI GLEW_GET_FUN(__glewNormalStream3dATI)
+#define glNormalStream3dvATI GLEW_GET_FUN(__glewNormalStream3dvATI)
+#define glNormalStream3fATI GLEW_GET_FUN(__glewNormalStream3fATI)
+#define glNormalStream3fvATI GLEW_GET_FUN(__glewNormalStream3fvATI)
+#define glNormalStream3iATI GLEW_GET_FUN(__glewNormalStream3iATI)
+#define glNormalStream3ivATI GLEW_GET_FUN(__glewNormalStream3ivATI)
+#define glNormalStream3sATI GLEW_GET_FUN(__glewNormalStream3sATI)
+#define glNormalStream3svATI GLEW_GET_FUN(__glewNormalStream3svATI)
+#define glVertexBlendEnvfATI GLEW_GET_FUN(__glewVertexBlendEnvfATI)
+#define glVertexBlendEnviATI GLEW_GET_FUN(__glewVertexBlendEnviATI)
+#define glVertexStream2dATI GLEW_GET_FUN(__glewVertexStream2dATI)
+#define glVertexStream2dvATI GLEW_GET_FUN(__glewVertexStream2dvATI)
+#define glVertexStream2fATI GLEW_GET_FUN(__glewVertexStream2fATI)
+#define glVertexStream2fvATI GLEW_GET_FUN(__glewVertexStream2fvATI)
+#define glVertexStream2iATI GLEW_GET_FUN(__glewVertexStream2iATI)
+#define glVertexStream2ivATI GLEW_GET_FUN(__glewVertexStream2ivATI)
+#define glVertexStream2sATI GLEW_GET_FUN(__glewVertexStream2sATI)
+#define glVertexStream2svATI GLEW_GET_FUN(__glewVertexStream2svATI)
+#define glVertexStream3dATI GLEW_GET_FUN(__glewVertexStream3dATI)
+#define glVertexStream3dvATI GLEW_GET_FUN(__glewVertexStream3dvATI)
+#define glVertexStream3fATI GLEW_GET_FUN(__glewVertexStream3fATI)
+#define glVertexStream3fvATI GLEW_GET_FUN(__glewVertexStream3fvATI)
+#define glVertexStream3iATI GLEW_GET_FUN(__glewVertexStream3iATI)
+#define glVertexStream3ivATI GLEW_GET_FUN(__glewVertexStream3ivATI)
+#define glVertexStream3sATI GLEW_GET_FUN(__glewVertexStream3sATI)
+#define glVertexStream3svATI GLEW_GET_FUN(__glewVertexStream3svATI)
+#define glVertexStream4dATI GLEW_GET_FUN(__glewVertexStream4dATI)
+#define glVertexStream4dvATI GLEW_GET_FUN(__glewVertexStream4dvATI)
+#define glVertexStream4fATI GLEW_GET_FUN(__glewVertexStream4fATI)
+#define glVertexStream4fvATI GLEW_GET_FUN(__glewVertexStream4fvATI)
+#define glVertexStream4iATI GLEW_GET_FUN(__glewVertexStream4iATI)
+#define glVertexStream4ivATI GLEW_GET_FUN(__glewVertexStream4ivATI)
+#define glVertexStream4sATI GLEW_GET_FUN(__glewVertexStream4sATI)
+#define glVertexStream4svATI GLEW_GET_FUN(__glewVertexStream4svATI)
+
+#define GLEW_ATI_vertex_streams GLEW_GET_VAR(__GLEW_ATI_vertex_streams)
+
+#endif /* GL_ATI_vertex_streams */
+
+/* --------------------------- GL_EXT_422_pixels --------------------------- */
+
+#ifndef GL_EXT_422_pixels
+#define GL_EXT_422_pixels 1
+
+#define GL_422_EXT 0x80CC
+#define GL_422_REV_EXT 0x80CD
+#define GL_422_AVERAGE_EXT 0x80CE
+#define GL_422_REV_AVERAGE_EXT 0x80CF
+
+#define GLEW_EXT_422_pixels GLEW_GET_VAR(__GLEW_EXT_422_pixels)
+
+#endif /* GL_EXT_422_pixels */
+
+/* ---------------------------- GL_EXT_Cg_shader --------------------------- */
+
+#ifndef GL_EXT_Cg_shader
+#define GL_EXT_Cg_shader 1
+
+#define GL_CG_VERTEX_SHADER_EXT 0x890E
+#define GL_CG_FRAGMENT_SHADER_EXT 0x890F
+
+#define GLEW_EXT_Cg_shader GLEW_GET_VAR(__GLEW_EXT_Cg_shader)
+
+#endif /* GL_EXT_Cg_shader */
+
+/* ------------------------------ GL_EXT_abgr ------------------------------ */
+
+#ifndef GL_EXT_abgr
+#define GL_EXT_abgr 1
+
+#define GL_ABGR_EXT 0x8000
+
+#define GLEW_EXT_abgr GLEW_GET_VAR(__GLEW_EXT_abgr)
+
+#endif /* GL_EXT_abgr */
+
+/* ------------------------------ GL_EXT_bgra ------------------------------ */
+
+#ifndef GL_EXT_bgra
+#define GL_EXT_bgra 1
+
+#define GL_BGR_EXT 0x80E0
+#define GL_BGRA_EXT 0x80E1
+
+#define GLEW_EXT_bgra GLEW_GET_VAR(__GLEW_EXT_bgra)
+
+#endif /* GL_EXT_bgra */
+
+/* ------------------------ GL_EXT_bindable_uniform ------------------------ */
+
+#ifndef GL_EXT_bindable_uniform
+#define GL_EXT_bindable_uniform 1
+
+#define GL_MAX_VERTEX_BINDABLE_UNIFORMS_EXT 0x8DE2
+#define GL_MAX_FRAGMENT_BINDABLE_UNIFORMS_EXT 0x8DE3
+#define GL_MAX_GEOMETRY_BINDABLE_UNIFORMS_EXT 0x8DE4
+#define GL_MAX_BINDABLE_UNIFORM_SIZE_EXT 0x8DED
+#define GL_UNIFORM_BUFFER_EXT 0x8DEE
+#define GL_UNIFORM_BUFFER_BINDING_EXT 0x8DEF
+
+typedef GLint (GLAPIENTRY * PFNGLGETUNIFORMBUFFERSIZEEXTPROC) (GLuint program, 

@@ -5218,4 +5218,260 @@ typedef void (GLAPIENTRY * PFNGLPIXELTRANSFORMPARAMETERIVEXTPROC) (GLenum target
 
 #define GLEW_EXT_pixel_transform_color_table GLEW_GET_VAR(__GLEW_EXT_pixel_transform_color_table)
 
-#endif /* GL_EXT_pixel
+#endif /* GL_EXT_pixel_transform_color_table */
+
+/* ------------------------ GL_EXT_point_parameters ------------------------ */
+
+#ifndef GL_EXT_point_parameters
+#define GL_EXT_point_parameters 1
+
+#define GL_POINT_SIZE_MIN_EXT 0x8126
+#define GL_POINT_SIZE_MAX_EXT 0x8127
+#define GL_POINT_FADE_THRESHOLD_SIZE_EXT 0x8128
+#define GL_DISTANCE_ATTENUATION_EXT 0x8129
+
+typedef void (GLAPIENTRY * PFNGLPOINTPARAMETERFEXTPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLPOINTPARAMETERFVEXTPROC) (GLenum pname, GLfloat* params);
+
+#define glPointParameterfEXT GLEW_GET_FUN(__glewPointParameterfEXT)
+#define glPointParameterfvEXT GLEW_GET_FUN(__glewPointParameterfvEXT)
+
+#define GLEW_EXT_point_parameters GLEW_GET_VAR(__GLEW_EXT_point_parameters)
+
+#endif /* GL_EXT_point_parameters */
+
+/* ------------------------- GL_EXT_polygon_offset ------------------------- */
+
+#ifndef GL_EXT_polygon_offset
+#define GL_EXT_polygon_offset 1
+
+#define GL_POLYGON_OFFSET_EXT 0x8037
+#define GL_POLYGON_OFFSET_FACTOR_EXT 0x8038
+#define GL_POLYGON_OFFSET_BIAS_EXT 0x8039
+
+typedef void (GLAPIENTRY * PFNGLPOLYGONOFFSETEXTPROC) (GLfloat factor, GLfloat bias);
+
+#define glPolygonOffsetEXT GLEW_GET_FUN(__glewPolygonOffsetEXT)
+
+#define GLEW_EXT_polygon_offset GLEW_GET_VAR(__GLEW_EXT_polygon_offset)
+
+#endif /* GL_EXT_polygon_offset */
+
+/* ------------------------- GL_EXT_rescale_normal ------------------------- */
+
+#ifndef GL_EXT_rescale_normal
+#define GL_EXT_rescale_normal 1
+
+#define GLEW_EXT_rescale_normal GLEW_GET_VAR(__GLEW_EXT_rescale_normal)
+
+#endif /* GL_EXT_rescale_normal */
+
+/* -------------------------- GL_EXT_scene_marker -------------------------- */
+
+#ifndef GL_EXT_scene_marker
+#define GL_EXT_scene_marker 1
+
+typedef void (GLAPIENTRY * PFNGLBEGINSCENEEXTPROC) (void);
+typedef void (GLAPIENTRY * PFNGLENDSCENEEXTPROC) (void);
+
+#define glBeginSceneEXT GLEW_GET_FUN(__glewBeginSceneEXT)
+#define glEndSceneEXT GLEW_GET_FUN(__glewEndSceneEXT)
+
+#define GLEW_EXT_scene_marker GLEW_GET_VAR(__GLEW_EXT_scene_marker)
+
+#endif /* GL_EXT_scene_marker */
+
+/* ------------------------- GL_EXT_secondary_color ------------------------ */
+
+#ifndef GL_EXT_secondary_color
+#define GL_EXT_secondary_color 1
+
+#define GL_COLOR_SUM_EXT 0x8458
+#define GL_CURRENT_SECONDARY_COLOR_EXT 0x8459
+#define GL_SECONDARY_COLOR_ARRAY_SIZE_EXT 0x845A
+#define GL_SECONDARY_COLOR_ARRAY_TYPE_EXT 0x845B
+#define GL_SECONDARY_COLOR_ARRAY_STRIDE_EXT 0x845C
+#define GL_SECONDARY_COLOR_ARRAY_POINTER_EXT 0x845D
+#define GL_SECONDARY_COLOR_ARRAY_EXT 0x845E
+
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3BEXTPROC) (GLbyte red, GLbyte green, GLbyte blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3BVEXTPROC) (const GLbyte *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3DEXTPROC) (GLdouble red, GLdouble green, GLdouble blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3DVEXTPROC) (const GLdouble *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3FEXTPROC) (GLfloat red, GLfloat green, GLfloat blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3FVEXTPROC) (const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3IEXTPROC) (GLint red, GLint green, GLint blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3IVEXTPROC) (const GLint *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3SEXTPROC) (GLshort red, GLshort green, GLshort blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3SVEXTPROC) (const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3UBEXTPROC) (GLubyte red, GLubyte green, GLubyte blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3UBVEXTPROC) (const GLubyte *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3UIEXTPROC) (GLuint red, GLuint green, GLuint blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3UIVEXTPROC) (const GLuint *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3USEXTPROC) (GLushort red, GLushort green, GLushort blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3USVEXTPROC) (const GLushort *v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLORPOINTEREXTPROC) (GLint size, GLenum type, GLsizei stride, GLvoid *pointer);
+
+#define glSecondaryColor3bEXT GLEW_GET_FUN(__glewSecondaryColor3bEXT)
+#define glSecondaryColor3bvEXT GLEW_GET_FUN(__glewSecondaryColor3bvEXT)
+#define glSecondaryColor3dEXT GLEW_GET_FUN(__glewSecondaryColor3dEXT)
+#define glSecondaryColor3dvEXT GLEW_GET_FUN(__glewSecondaryColor3dvEXT)
+#define glSecondaryColor3fEXT GLEW_GET_FUN(__glewSecondaryColor3fEXT)
+#define glSecondaryColor3fvEXT GLEW_GET_FUN(__glewSecondaryColor3fvEXT)
+#define glSecondaryColor3iEXT GLEW_GET_FUN(__glewSecondaryColor3iEXT)
+#define glSecondaryColor3ivEXT GLEW_GET_FUN(__glewSecondaryColor3ivEXT)
+#define glSecondaryColor3sEXT GLEW_GET_FUN(__glewSecondaryColor3sEXT)
+#define glSecondaryColor3svEXT GLEW_GET_FUN(__glewSecondaryColor3svEXT)
+#define glSecondaryColor3ubEXT GLEW_GET_FUN(__glewSecondaryColor3ubEXT)
+#define glSecondaryColor3ubvEXT GLEW_GET_FUN(__glewSecondaryColor3ubvEXT)
+#define glSecondaryColor3uiEXT GLEW_GET_FUN(__glewSecondaryColor3uiEXT)
+#define glSecondaryColor3uivEXT GLEW_GET_FUN(__glewSecondaryColor3uivEXT)
+#define glSecondaryColor3usEXT GLEW_GET_FUN(__glewSecondaryColor3usEXT)
+#define glSecondaryColor3usvEXT GLEW_GET_FUN(__glewSecondaryColor3usvEXT)
+#define glSecondaryColorPointerEXT GLEW_GET_FUN(__glewSecondaryColorPointerEXT)
+
+#define GLEW_EXT_secondary_color GLEW_GET_VAR(__GLEW_EXT_secondary_color)
+
+#endif /* GL_EXT_secondary_color */
+
+/* --------------------- GL_EXT_separate_specular_color -------------------- */
+
+#ifndef GL_EXT_separate_specular_color
+#define GL_EXT_separate_specular_color 1
+
+#define GL_LIGHT_MODEL_COLOR_CONTROL_EXT 0x81F8
+#define GL_SINGLE_COLOR_EXT 0x81F9
+#define GL_SEPARATE_SPECULAR_COLOR_EXT 0x81FA
+
+#define GLEW_EXT_separate_specular_color GLEW_GET_VAR(__GLEW_EXT_separate_specular_color)
+
+#endif /* GL_EXT_separate_specular_color */
+
+/* -------------------------- GL_EXT_shadow_funcs -------------------------- */
+
+#ifndef GL_EXT_shadow_funcs
+#define GL_EXT_shadow_funcs 1
+
+#define GLEW_EXT_shadow_funcs GLEW_GET_VAR(__GLEW_EXT_shadow_funcs)
+
+#endif /* GL_EXT_shadow_funcs */
+
+/* --------------------- GL_EXT_shared_texture_palette --------------------- */
+
+#ifndef GL_EXT_shared_texture_palette
+#define GL_EXT_shared_texture_palette 1
+
+#define GL_SHARED_TEXTURE_PALETTE_EXT 0x81FB
+
+#define GLEW_EXT_shared_texture_palette GLEW_GET_VAR(__GLEW_EXT_shared_texture_palette)
+
+#endif /* GL_EXT_shared_texture_palette */
+
+/* ------------------------ GL_EXT_stencil_clear_tag ----------------------- */
+
+#ifndef GL_EXT_stencil_clear_tag
+#define GL_EXT_stencil_clear_tag 1
+
+#define GL_STENCIL_TAG_BITS_EXT 0x88F2
+#define GL_STENCIL_CLEAR_TAG_VALUE_EXT 0x88F3
+
+#define GLEW_EXT_stencil_clear_tag GLEW_GET_VAR(__GLEW_EXT_stencil_clear_tag)
+
+#endif /* GL_EXT_stencil_clear_tag */
+
+/* ------------------------ GL_EXT_stencil_two_side ------------------------ */
+
+#ifndef GL_EXT_stencil_two_side
+#define GL_EXT_stencil_two_side 1
+
+#define GL_STENCIL_TEST_TWO_SIDE_EXT 0x8910
+#define GL_ACTIVE_STENCIL_FACE_EXT 0x8911
+
+typedef void (GLAPIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
+
+#define glActiveStencilFaceEXT GLEW_GET_FUN(__glewActiveStencilFaceEXT)
+
+#define GLEW_EXT_stencil_two_side GLEW_GET_VAR(__GLEW_EXT_stencil_two_side)
+
+#endif /* GL_EXT_stencil_two_side */
+
+/* -------------------------- GL_EXT_stencil_wrap -------------------------- */
+
+#ifndef GL_EXT_stencil_wrap
+#define GL_EXT_stencil_wrap 1
+
+#define GL_INCR_WRAP_EXT 0x8507
+#define GL_DECR_WRAP_EXT 0x8508
+
+#define GLEW_EXT_stencil_wrap GLEW_GET_VAR(__GLEW_EXT_stencil_wrap)
+
+#endif /* GL_EXT_stencil_wrap */
+
+/* --------------------------- GL_EXT_subtexture --------------------------- */
+
+#ifndef GL_EXT_subtexture
+#define GL_EXT_subtexture 1
+
+typedef void (GLAPIENTRY * PFNGLTEXSUBIMAGE1DEXTPROC) (GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void* pixels);
+typedef void (GLAPIENTRY * PFNGLTEXSUBIMAGE2DEXTPROC) (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* pixels);
+typedef void (GLAPIENTRY * PFNGLTEXSUBIMAGE3DEXTPROC) (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void* pixels);
+
+#define glTexSubImage1DEXT GLEW_GET_FUN(__glewTexSubImage1DEXT)
+#define glTexSubImage2DEXT GLEW_GET_FUN(__glewTexSubImage2DEXT)
+#define glTexSubImage3DEXT GLEW_GET_FUN(__glewTexSubImage3DEXT)
+
+#define GLEW_EXT_subtexture GLEW_GET_VAR(__GLEW_EXT_subtexture)
+
+#endif /* GL_EXT_subtexture */
+
+/* ----------------------------- GL_EXT_texture ---------------------------- */
+
+#ifndef GL_EXT_texture
+#define GL_EXT_texture 1
+
+#define GL_ALPHA4_EXT 0x803B
+#define GL_ALPHA8_EXT 0x803C
+#define GL_ALPHA12_EXT 0x803D
+#define GL_ALPHA16_EXT 0x803E
+#define GL_LUMINANCE4_EXT 0x803F
+#define GL_LUMINANCE8_EXT 0x8040
+#define GL_LUMINANCE12_EXT 0x8041
+#define GL_LUMINANCE16_EXT 0x8042
+#define GL_LUMINANCE4_ALPHA4_EXT 0x8043
+#define GL_LUMINANCE6_ALPHA2_EXT 0x8044
+#define GL_LUMINANCE8_ALPHA8_EXT 0x8045
+#define GL_LUMINANCE12_ALPHA4_EXT 0x8046
+#define GL_LUMINANCE12_ALPHA12_EXT 0x8047
+#define GL_LUMINANCE16_ALPHA16_EXT 0x8048
+#define GL_INTENSITY_EXT 0x8049
+#define GL_INTENSITY4_EXT 0x804A
+#define GL_INTENSITY8_EXT 0x804B
+#define GL_INTENSITY12_EXT 0x804C
+#define GL_INTENSITY16_EXT 0x804D
+#define GL_RGB2_EXT 0x804E
+#define GL_RGB4_EXT 0x804F
+#define GL_RGB5_EXT 0x8050
+#define GL_RGB8_EXT 0x8051
+#define GL_RGB10_EXT 0x8052
+#define GL_RGB12_EXT 0x8053
+#define GL_RGB16_EXT 0x8054
+#define GL_RGBA2_EXT 0x8055
+#define GL_RGBA4_EXT 0x8056
+#define GL_RGB5_A1_EXT 0x8057
+#define GL_RGBA8_EXT 0x8058
+#define GL_RGB10_A2_EXT 0x8059
+#define GL_RGBA12_EXT 0x805A
+#define GL_RGBA16_EXT 0x805B
+#define GL_TEXTURE_RED_SIZE_EXT 0x805C
+#define GL_TEXTURE_GREEN_SIZE_EXT 0x805D
+#define GL_TEXTURE_BLUE_SIZE_EXT 0x805E
+#define GL_TEXTURE_ALPHA_SIZE_EXT 0x805F
+#define GL_TEXTURE_LUMINANCE_SIZE_EXT 0x8060
+#define GL_TEXTURE_INTENSITY_SIZE_EXT 0x8061
+#define GL_REPLACE_EXT 0x8062
+#define GL_PROXY_TEXTURE_1D_EXT 0x8063
+#define GL_PROXY_TEXTURE_2D_EXT 0x8064
+
+#define GLEW_EXT_texture GLEW_GET_VAR(__GLEW_EXT_texture)
+
+#endif /* GL_EXT_texture 

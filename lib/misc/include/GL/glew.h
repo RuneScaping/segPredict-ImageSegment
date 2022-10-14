@@ -4790,4 +4790,171 @@ typedef void (GLAPIENTRY * PFNGLPROGRAMPARAMETERIEXTPROC) (GLuint program, GLenu
 #define GL_EXT_gpu_program_parameters 1
 
 typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERS4FVEXTPROC) (GLenum target, GLuint index, GLsizei count, const GLfloat* params);
-typedef void (GLAPIENTRY * PFNGLPROGRAM
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERS4FVEXTPROC) (GLenum target, GLuint index, GLsizei count, const GLfloat* params);
+
+#define glProgramEnvParameters4fvEXT GLEW_GET_FUN(__glewProgramEnvParameters4fvEXT)
+#define glProgramLocalParameters4fvEXT GLEW_GET_FUN(__glewProgramLocalParameters4fvEXT)
+
+#define GLEW_EXT_gpu_program_parameters GLEW_GET_VAR(__GLEW_EXT_gpu_program_parameters)
+
+#endif /* GL_EXT_gpu_program_parameters */
+
+/* --------------------------- GL_EXT_gpu_shader4 -------------------------- */
+
+#ifndef GL_EXT_gpu_shader4
+#define GL_EXT_gpu_shader4 1
+
+#define GL_VERTEX_ATTRIB_ARRAY_INTEGER_EXT 0x88FD
+#define GL_SAMPLER_1D_ARRAY_EXT 0x8DC0
+#define GL_SAMPLER_2D_ARRAY_EXT 0x8DC1
+#define GL_SAMPLER_BUFFER_EXT 0x8DC2
+#define GL_SAMPLER_1D_ARRAY_SHADOW_EXT 0x8DC3
+#define GL_SAMPLER_2D_ARRAY_SHADOW_EXT 0x8DC4
+#define GL_SAMPLER_CUBE_SHADOW_EXT 0x8DC5
+#define GL_UNSIGNED_INT_VEC2_EXT 0x8DC6
+#define GL_UNSIGNED_INT_VEC3_EXT 0x8DC7
+#define GL_UNSIGNED_INT_VEC4_EXT 0x8DC8
+#define GL_INT_SAMPLER_1D_EXT 0x8DC9
+#define GL_INT_SAMPLER_2D_EXT 0x8DCA
+#define GL_INT_SAMPLER_3D_EXT 0x8DCB
+#define GL_INT_SAMPLER_CUBE_EXT 0x8DCC
+#define GL_INT_SAMPLER_2D_RECT_EXT 0x8DCD
+#define GL_INT_SAMPLER_1D_ARRAY_EXT 0x8DCE
+#define GL_INT_SAMPLER_2D_ARRAY_EXT 0x8DCF
+#define GL_INT_SAMPLER_BUFFER_EXT 0x8DD0
+#define GL_UNSIGNED_INT_SAMPLER_1D_EXT 0x8DD1
+#define GL_UNSIGNED_INT_SAMPLER_2D_EXT 0x8DD2
+#define GL_UNSIGNED_INT_SAMPLER_3D_EXT 0x8DD3
+#define GL_UNSIGNED_INT_SAMPLER_CUBE_EXT 0x8DD4
+#define GL_UNSIGNED_INT_SAMPLER_2D_RECT_EXT 0x8DD5
+#define GL_UNSIGNED_INT_SAMPLER_1D_ARRAY_EXT 0x8DD6
+#define GL_UNSIGNED_INT_SAMPLER_2D_ARRAY_EXT 0x8DD7
+#define GL_UNSIGNED_INT_SAMPLER_BUFFER_EXT 0x8DD8
+
+typedef void (GLAPIENTRY * PFNGLBINDFRAGDATALOCATIONEXTPROC) (GLuint program, GLuint color, const GLchar *name);
+typedef GLint (GLAPIENTRY * PFNGLGETFRAGDATALOCATIONEXTPROC) (GLuint program, const GLchar *name);
+typedef void (GLAPIENTRY * PFNGLGETUNIFORMUIVEXTPROC) (GLuint program, GLint location, GLuint *params);
+typedef void (GLAPIENTRY * PFNGLGETVERTEXATTRIBIIVEXTPROC) (GLuint index, GLenum pname, GLint *params);
+typedef void (GLAPIENTRY * PFNGLGETVERTEXATTRIBIUIVEXTPROC) (GLuint index, GLenum pname, GLuint *params);
+typedef void (GLAPIENTRY * PFNGLUNIFORM1UIEXTPROC) (GLint location, GLuint v0);
+typedef void (GLAPIENTRY * PFNGLUNIFORM1UIVEXTPROC) (GLint location, GLsizei count, const GLuint *value);
+typedef void (GLAPIENTRY * PFNGLUNIFORM2UIEXTPROC) (GLint location, GLuint v0, GLuint v1);
+typedef void (GLAPIENTRY * PFNGLUNIFORM2UIVEXTPROC) (GLint location, GLsizei count, const GLuint *value);
+typedef void (GLAPIENTRY * PFNGLUNIFORM3UIEXTPROC) (GLint location, GLuint v0, GLuint v1, GLuint v2);
+typedef void (GLAPIENTRY * PFNGLUNIFORM3UIVEXTPROC) (GLint location, GLsizei count, const GLuint *value);
+typedef void (GLAPIENTRY * PFNGLUNIFORM4UIEXTPROC) (GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
+typedef void (GLAPIENTRY * PFNGLUNIFORM4UIVEXTPROC) (GLint location, GLsizei count, const GLuint *value);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI1IEXTPROC) (GLuint index, GLint x);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI1IVEXTPROC) (GLuint index, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI1UIEXTPROC) (GLuint index, GLuint x);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI1UIVEXTPROC) (GLuint index, const GLuint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI2IEXTPROC) (GLuint index, GLint x, GLint y);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI2IVEXTPROC) (GLuint index, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI2UIEXTPROC) (GLuint index, GLuint x, GLuint y);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI2UIVEXTPROC) (GLuint index, const GLuint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI3IEXTPROC) (GLuint index, GLint x, GLint y, GLint z);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI3IVEXTPROC) (GLuint index, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI3UIEXTPROC) (GLuint index, GLuint x, GLuint y, GLuint z);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI3UIVEXTPROC) (GLuint index, const GLuint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4BVEXTPROC) (GLuint index, const GLbyte *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4IEXTPROC) (GLuint index, GLint x, GLint y, GLint z, GLint w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4IVEXTPROC) (GLuint index, const GLint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4SVEXTPROC) (GLuint index, const GLshort *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4UBVEXTPROC) (GLuint index, const GLubyte *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4UIEXTPROC) (GLuint index, GLuint x, GLuint y, GLuint z, GLuint w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4UIVEXTPROC) (GLuint index, const GLuint *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBI4USVEXTPROC) (GLuint index, const GLushort *v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBIPOINTEREXTPROC) (GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
+
+#define glBindFragDataLocationEXT GLEW_GET_FUN(__glewBindFragDataLocationEXT)
+#define glGetFragDataLocationEXT GLEW_GET_FUN(__glewGetFragDataLocationEXT)
+#define glGetUniformuivEXT GLEW_GET_FUN(__glewGetUniformuivEXT)
+#define glGetVertexAttribIivEXT GLEW_GET_FUN(__glewGetVertexAttribIivEXT)
+#define glGetVertexAttribIuivEXT GLEW_GET_FUN(__glewGetVertexAttribIuivEXT)
+#define glUniform1uiEXT GLEW_GET_FUN(__glewUniform1uiEXT)
+#define glUniform1uivEXT GLEW_GET_FUN(__glewUniform1uivEXT)
+#define glUniform2uiEXT GLEW_GET_FUN(__glewUniform2uiEXT)
+#define glUniform2uivEXT GLEW_GET_FUN(__glewUniform2uivEXT)
+#define glUniform3uiEXT GLEW_GET_FUN(__glewUniform3uiEXT)
+#define glUniform3uivEXT GLEW_GET_FUN(__glewUniform3uivEXT)
+#define glUniform4uiEXT GLEW_GET_FUN(__glewUniform4uiEXT)
+#define glUniform4uivEXT GLEW_GET_FUN(__glewUniform4uivEXT)
+#define glVertexAttribI1iEXT GLEW_GET_FUN(__glewVertexAttribI1iEXT)
+#define glVertexAttribI1ivEXT GLEW_GET_FUN(__glewVertexAttribI1ivEXT)
+#define glVertexAttribI1uiEXT GLEW_GET_FUN(__glewVertexAttribI1uiEXT)
+#define glVertexAttribI1uivEXT GLEW_GET_FUN(__glewVertexAttribI1uivEXT)
+#define glVertexAttribI2iEXT GLEW_GET_FUN(__glewVertexAttribI2iEXT)
+#define glVertexAttribI2ivEXT GLEW_GET_FUN(__glewVertexAttribI2ivEXT)
+#define glVertexAttribI2uiEXT GLEW_GET_FUN(__glewVertexAttribI2uiEXT)
+#define glVertexAttribI2uivEXT GLEW_GET_FUN(__glewVertexAttribI2uivEXT)
+#define glVertexAttribI3iEXT GLEW_GET_FUN(__glewVertexAttribI3iEXT)
+#define glVertexAttribI3ivEXT GLEW_GET_FUN(__glewVertexAttribI3ivEXT)
+#define glVertexAttribI3uiEXT GLEW_GET_FUN(__glewVertexAttribI3uiEXT)
+#define glVertexAttribI3uivEXT GLEW_GET_FUN(__glewVertexAttribI3uivEXT)
+#define glVertexAttribI4bvEXT GLEW_GET_FUN(__glewVertexAttribI4bvEXT)
+#define glVertexAttribI4iEXT GLEW_GET_FUN(__glewVertexAttribI4iEXT)
+#define glVertexAttribI4ivEXT GLEW_GET_FUN(__glewVertexAttribI4ivEXT)
+#define glVertexAttribI4svEXT GLEW_GET_FUN(__glewVertexAttribI4svEXT)
+#define glVertexAttribI4ubvEXT GLEW_GET_FUN(__glewVertexAttribI4ubvEXT)
+#define glVertexAttribI4uiEXT GLEW_GET_FUN(__glewVertexAttribI4uiEXT)
+#define glVertexAttribI4uivEXT GLEW_GET_FUN(__glewVertexAttribI4uivEXT)
+#define glVertexAttribI4usvEXT GLEW_GET_FUN(__glewVertexAttribI4usvEXT)
+#define glVertexAttribIPointerEXT GLEW_GET_FUN(__glewVertexAttribIPointerEXT)
+
+#define GLEW_EXT_gpu_shader4 GLEW_GET_VAR(__GLEW_EXT_gpu_shader4)
+
+#endif /* GL_EXT_gpu_shader4 */
+
+/* ---------------------------- GL_EXT_histogram --------------------------- */
+
+#ifndef GL_EXT_histogram
+#define GL_EXT_histogram 1
+
+#define GL_HISTOGRAM_EXT 0x8024
+#define GL_PROXY_HISTOGRAM_EXT 0x8025
+#define GL_HISTOGRAM_WIDTH_EXT 0x8026
+#define GL_HISTOGRAM_FORMAT_EXT 0x8027
+#define GL_HISTOGRAM_RED_SIZE_EXT 0x8028
+#define GL_HISTOGRAM_GREEN_SIZE_EXT 0x8029
+#define GL_HISTOGRAM_BLUE_SIZE_EXT 0x802A
+#define GL_HISTOGRAM_ALPHA_SIZE_EXT 0x802B
+#define GL_HISTOGRAM_LUMINANCE_SIZE_EXT 0x802C
+#define GL_HISTOGRAM_SINK_EXT 0x802D
+#define GL_MINMAX_EXT 0x802E
+#define GL_MINMAX_FORMAT_EXT 0x802F
+#define GL_MINMAX_SINK_EXT 0x8030
+
+typedef void (GLAPIENTRY * PFNGLGETHISTOGRAMEXTPROC) (GLenum target, GLboolean reset, GLenum format, GLenum type, void* values);
+typedef void (GLAPIENTRY * PFNGLGETHISTOGRAMPARAMETERFVEXTPROC) (GLenum target, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETHISTOGRAMPARAMETERIVEXTPROC) (GLenum target, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETMINMAXEXTPROC) (GLenum target, GLboolean reset, GLenum format, GLenum type, void* values);
+typedef void (GLAPIENTRY * PFNGLGETMINMAXPARAMETERFVEXTPROC) (GLenum target, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETMINMAXPARAMETERIVEXTPROC) (GLenum target, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLHISTOGRAMEXTPROC) (GLenum target, GLsizei width, GLenum internalformat, GLboolean sink);
+typedef void (GLAPIENTRY * PFNGLMINMAXEXTPROC) (GLenum target, GLenum internalformat, GLboolean sink);
+typedef void (GLAPIENTRY * PFNGLRESETHISTOGRAMEXTPROC) (GLenum target);
+typedef void (GLAPIENTRY * PFNGLRESETMINMAXEXTPROC) (GLenum target);
+
+#define glGetHistogramEXT GLEW_GET_FUN(__glewGetHistogramEXT)
+#define glGetHistogramParameterfvEXT GLEW_GET_FUN(__glewGetHistogramParameterfvEXT)
+#define glGetHistogramParameterivEXT GLEW_GET_FUN(__glewGetHistogramParameterivEXT)
+#define glGetMinmaxEXT GLEW_GET_FUN(__glewGetMinmaxEXT)
+#define glGetMinmaxParameterfvEXT GLEW_GET_FUN(__glewGetMinmaxParameterfvEXT)
+#define glGetMinmaxParameterivEXT GLEW_GET_FUN(__glewGetMinmaxParameterivEXT)
+#define glHistogramEXT GLEW_GET_FUN(__glewHistogramEXT)
+#define glMinmaxEXT GLEW_GET_FUN(__glewMinmaxEXT)
+#define glResetHistogramEXT GLEW_GET_FUN(__glewResetHistogramEXT)
+#define glResetMinmaxEXT GLEW_GET_FUN(__glewResetMinmaxEXT)
+
+#define GLEW_EXT_histogram GLEW_GET_VAR(__GLEW_EXT_histogram)
+
+#endif /* GL_EXT_histogram */
+
+/* ----------------------- GL_EXT_index_array_formats ---------------------- */
+
+#ifndef GL_EXT_index_array_formats
+#define GL_EXT_index_array_formats 1
+
+#define GLEW_EXT_index_array_formats GLEW_GET_VAR(__GLEW_EXT_index_array_formats)
+
+#endif /* GL_EXT_index_array

@@ -5768,4 +5768,262 @@ typedef void (GLAPIENTRY * PFNGLGETTEXPARAMETERIUIVEXTPROC) (GLenum target, GLen
 typedef void (GLAPIENTRY * PFNGLTEXPARAMETERIIVEXTPROC) (GLenum target, GLenum pname, const GLint *params);
 typedef void (GLAPIENTRY * PFNGLTEXPARAMETERIUIVEXTPROC) (GLenum target, GLenum pname, const GLuint *params);
 
-#define glClearColorIiEX
+#define glClearColorIiEXT GLEW_GET_FUN(__glewClearColorIiEXT)
+#define glClearColorIuiEXT GLEW_GET_FUN(__glewClearColorIuiEXT)
+#define glGetTexParameterIivEXT GLEW_GET_FUN(__glewGetTexParameterIivEXT)
+#define glGetTexParameterIuivEXT GLEW_GET_FUN(__glewGetTexParameterIuivEXT)
+#define glTexParameterIivEXT GLEW_GET_FUN(__glewTexParameterIivEXT)
+#define glTexParameterIuivEXT GLEW_GET_FUN(__glewTexParameterIuivEXT)
+
+#define GLEW_EXT_texture_integer GLEW_GET_VAR(__GLEW_EXT_texture_integer)
+
+#endif /* GL_EXT_texture_integer */
+
+/* ------------------------ GL_EXT_texture_lod_bias ------------------------ */
+
+#ifndef GL_EXT_texture_lod_bias
+#define GL_EXT_texture_lod_bias 1
+
+#define GL_MAX_TEXTURE_LOD_BIAS_EXT 0x84FD
+#define GL_TEXTURE_FILTER_CONTROL_EXT 0x8500
+#define GL_TEXTURE_LOD_BIAS_EXT 0x8501
+
+#define GLEW_EXT_texture_lod_bias GLEW_GET_VAR(__GLEW_EXT_texture_lod_bias)
+
+#endif /* GL_EXT_texture_lod_bias */
+
+/* ---------------------- GL_EXT_texture_mirror_clamp ---------------------- */
+
+#ifndef GL_EXT_texture_mirror_clamp
+#define GL_EXT_texture_mirror_clamp 1
+
+#define GL_MIRROR_CLAMP_EXT 0x8742
+#define GL_MIRROR_CLAMP_TO_EDGE_EXT 0x8743
+#define GL_MIRROR_CLAMP_TO_BORDER_EXT 0x8912
+
+#define GLEW_EXT_texture_mirror_clamp GLEW_GET_VAR(__GLEW_EXT_texture_mirror_clamp)
+
+#endif /* GL_EXT_texture_mirror_clamp */
+
+/* ------------------------- GL_EXT_texture_object ------------------------- */
+
+#ifndef GL_EXT_texture_object
+#define GL_EXT_texture_object 1
+
+#define GL_TEXTURE_PRIORITY_EXT 0x8066
+#define GL_TEXTURE_RESIDENT_EXT 0x8067
+#define GL_TEXTURE_1D_BINDING_EXT 0x8068
+#define GL_TEXTURE_2D_BINDING_EXT 0x8069
+#define GL_TEXTURE_3D_BINDING_EXT 0x806A
+
+typedef GLboolean (GLAPIENTRY * PFNGLARETEXTURESRESIDENTEXTPROC) (GLsizei n, const GLuint* textures, GLboolean* residences);
+typedef void (GLAPIENTRY * PFNGLBINDTEXTUREEXTPROC) (GLenum target, GLuint texture);
+typedef void (GLAPIENTRY * PFNGLDELETETEXTURESEXTPROC) (GLsizei n, const GLuint* textures);
+typedef void (GLAPIENTRY * PFNGLGENTEXTURESEXTPROC) (GLsizei n, GLuint* textures);
+typedef GLboolean (GLAPIENTRY * PFNGLISTEXTUREEXTPROC) (GLuint texture);
+typedef void (GLAPIENTRY * PFNGLPRIORITIZETEXTURESEXTPROC) (GLsizei n, const GLuint* textures, const GLclampf* priorities);
+
+#define glAreTexturesResidentEXT GLEW_GET_FUN(__glewAreTexturesResidentEXT)
+#define glBindTextureEXT GLEW_GET_FUN(__glewBindTextureEXT)
+#define glDeleteTexturesEXT GLEW_GET_FUN(__glewDeleteTexturesEXT)
+#define glGenTexturesEXT GLEW_GET_FUN(__glewGenTexturesEXT)
+#define glIsTextureEXT GLEW_GET_FUN(__glewIsTextureEXT)
+#define glPrioritizeTexturesEXT GLEW_GET_FUN(__glewPrioritizeTexturesEXT)
+
+#define GLEW_EXT_texture_object GLEW_GET_VAR(__GLEW_EXT_texture_object)
+
+#endif /* GL_EXT_texture_object */
+
+/* --------------------- GL_EXT_texture_perturb_normal --------------------- */
+
+#ifndef GL_EXT_texture_perturb_normal
+#define GL_EXT_texture_perturb_normal 1
+
+#define GL_PERTURB_EXT 0x85AE
+#define GL_TEXTURE_NORMAL_EXT 0x85AF
+
+typedef void (GLAPIENTRY * PFNGLTEXTURENORMALEXTPROC) (GLenum mode);
+
+#define glTextureNormalEXT GLEW_GET_FUN(__glewTextureNormalEXT)
+
+#define GLEW_EXT_texture_perturb_normal GLEW_GET_VAR(__GLEW_EXT_texture_perturb_normal)
+
+#endif /* GL_EXT_texture_perturb_normal */
+
+/* ------------------------ GL_EXT_texture_rectangle ----------------------- */
+
+#ifndef GL_EXT_texture_rectangle
+#define GL_EXT_texture_rectangle 1
+
+#define GL_TEXTURE_RECTANGLE_EXT 0x84F5
+#define GL_TEXTURE_BINDING_RECTANGLE_EXT 0x84F6
+#define GL_PROXY_TEXTURE_RECTANGLE_EXT 0x84F7
+#define GL_MAX_RECTANGLE_TEXTURE_SIZE_EXT 0x84F8
+
+#define GLEW_EXT_texture_rectangle GLEW_GET_VAR(__GLEW_EXT_texture_rectangle)
+
+#endif /* GL_EXT_texture_rectangle */
+
+/* -------------------------- GL_EXT_texture_sRGB -------------------------- */
+
+#ifndef GL_EXT_texture_sRGB
+#define GL_EXT_texture_sRGB 1
+
+#define GL_SRGB_EXT 0x8C40
+#define GL_SRGB8_EXT 0x8C41
+#define GL_SRGB_ALPHA_EXT 0x8C42
+#define GL_SRGB8_ALPHA8_EXT 0x8C43
+#define GL_SLUMINANCE_ALPHA_EXT 0x8C44
+#define GL_SLUMINANCE8_ALPHA8_EXT 0x8C45
+#define GL_SLUMINANCE_EXT 0x8C46
+#define GL_SLUMINANCE8_EXT 0x8C47
+#define GL_COMPRESSED_SRGB_EXT 0x8C48
+#define GL_COMPRESSED_SRGB_ALPHA_EXT 0x8C49
+#define GL_COMPRESSED_SLUMINANCE_EXT 0x8C4A
+#define GL_COMPRESSED_SLUMINANCE_ALPHA_EXT 0x8C4B
+#define GL_COMPRESSED_SRGB_S3TC_DXT1_EXT 0x8C4C
+#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT 0x8C4D
+#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT 0x8C4E
+#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
+
+#define GLEW_EXT_texture_sRGB GLEW_GET_VAR(__GLEW_EXT_texture_sRGB)
+
+#endif /* GL_EXT_texture_sRGB */
+
+/* --------------------- GL_EXT_texture_shared_exponent -------------------- */
+
+#ifndef GL_EXT_texture_shared_exponent
+#define GL_EXT_texture_shared_exponent 1
+
+#define GL_RGB9_E5_EXT 0x8C3D
+#define GL_UNSIGNED_INT_5_9_9_9_REV_EXT 0x8C3E
+#define GL_TEXTURE_SHARED_SIZE_EXT 0x8C3F
+
+#define GLEW_EXT_texture_shared_exponent GLEW_GET_VAR(__GLEW_EXT_texture_shared_exponent)
+
+#endif /* GL_EXT_texture_shared_exponent */
+
+/* --------------------------- GL_EXT_timer_query -------------------------- */
+
+#ifndef GL_EXT_timer_query
+#define GL_EXT_timer_query 1
+
+#define GL_TIME_ELAPSED_EXT 0x88BF
+
+typedef void (GLAPIENTRY * PFNGLGETQUERYOBJECTI64VEXTPROC) (GLuint id, GLenum pname, GLint64EXT *params);
+typedef void (GLAPIENTRY * PFNGLGETQUERYOBJECTUI64VEXTPROC) (GLuint id, GLenum pname, GLuint64EXT *params);
+
+#define glGetQueryObjecti64vEXT GLEW_GET_FUN(__glewGetQueryObjecti64vEXT)
+#define glGetQueryObjectui64vEXT GLEW_GET_FUN(__glewGetQueryObjectui64vEXT)
+
+#define GLEW_EXT_timer_query GLEW_GET_VAR(__GLEW_EXT_timer_query)
+
+#endif /* GL_EXT_timer_query */
+
+/* -------------------------- GL_EXT_vertex_array -------------------------- */
+
+#ifndef GL_EXT_vertex_array
+#define GL_EXT_vertex_array 1
+
+#define GL_DOUBLE_EXT 0x140A
+#define GL_VERTEX_ARRAY_EXT 0x8074
+#define GL_NORMAL_ARRAY_EXT 0x8075
+#define GL_COLOR_ARRAY_EXT 0x8076
+#define GL_INDEX_ARRAY_EXT 0x8077
+#define GL_TEXTURE_COORD_ARRAY_EXT 0x8078
+#define GL_EDGE_FLAG_ARRAY_EXT 0x8079
+#define GL_VERTEX_ARRAY_SIZE_EXT 0x807A
+#define GL_VERTEX_ARRAY_TYPE_EXT 0x807B
+#define GL_VERTEX_ARRAY_STRIDE_EXT 0x807C
+#define GL_VERTEX_ARRAY_COUNT_EXT 0x807D
+#define GL_NORMAL_ARRAY_TYPE_EXT 0x807E
+#define GL_NORMAL_ARRAY_STRIDE_EXT 0x807F
+#define GL_NORMAL_ARRAY_COUNT_EXT 0x8080
+#define GL_COLOR_ARRAY_SIZE_EXT 0x8081
+#define GL_COLOR_ARRAY_TYPE_EXT 0x8082
+#define GL_COLOR_ARRAY_STRIDE_EXT 0x8083
+#define GL_COLOR_ARRAY_COUNT_EXT 0x8084
+#define GL_INDEX_ARRAY_TYPE_EXT 0x8085
+#define GL_INDEX_ARRAY_STRIDE_EXT 0x8086
+#define GL_INDEX_ARRAY_COUNT_EXT 0x8087
+#define GL_TEXTURE_COORD_ARRAY_SIZE_EXT 0x8088
+#define GL_TEXTURE_COORD_ARRAY_TYPE_EXT 0x8089
+#define GL_TEXTURE_COORD_ARRAY_STRIDE_EXT 0x808A
+#define GL_TEXTURE_COORD_ARRAY_COUNT_EXT 0x808B
+#define GL_EDGE_FLAG_ARRAY_STRIDE_EXT 0x808C
+#define GL_EDGE_FLAG_ARRAY_COUNT_EXT 0x808D
+#define GL_VERTEX_ARRAY_POINTER_EXT 0x808E
+#define GL_NORMAL_ARRAY_POINTER_EXT 0x808F
+#define GL_COLOR_ARRAY_POINTER_EXT 0x8090
+#define GL_INDEX_ARRAY_POINTER_EXT 0x8091
+#define GL_TEXTURE_COORD_ARRAY_POINTER_EXT 0x8092
+#define GL_EDGE_FLAG_ARRAY_POINTER_EXT 0x8093
+
+typedef void (GLAPIENTRY * PFNGLARRAYELEMENTEXTPROC) (GLint i);
+typedef void (GLAPIENTRY * PFNGLCOLORPOINTEREXTPROC) (GLint size, GLenum type, GLsizei stride, GLsizei count, const void* pointer);
+typedef void (GLAPIENTRY * PFNGLDRAWARRAYSEXTPROC) (GLenum mode, GLint first, GLsizei count);
+typedef void (GLAPIENTRY * PFNGLEDGEFLAGPOINTEREXTPROC) (GLsizei stride, GLsizei count, const GLboolean* pointer);
+typedef void (GLAPIENTRY * PFNGLGETPOINTERVEXTPROC) (GLenum pname, void** params);
+typedef void (GLAPIENTRY * PFNGLINDEXPOINTEREXTPROC) (GLenum type, GLsizei stride, GLsizei count, const void* pointer);
+typedef void (GLAPIENTRY * PFNGLNORMALPOINTEREXTPROC) (GLenum type, GLsizei stride, GLsizei count, const void* pointer);
+typedef void (GLAPIENTRY * PFNGLTEXCOORDPOINTEREXTPROC) (GLint size, GLenum type, GLsizei stride, GLsizei count, const void* pointer);
+typedef void (GLAPIENTRY * PFNGLVERTEXPOINTEREXTPROC) (GLint size, GLenum type, GLsizei stride, GLsizei count, const void* pointer);
+
+#define glArrayElementEXT GLEW_GET_FUN(__glewArrayElementEXT)
+#define glColorPointerEXT GLEW_GET_FUN(__glewColorPointerEXT)
+#define glDrawArraysEXT GLEW_GET_FUN(__glewDrawArraysEXT)
+#define glEdgeFlagPointerEXT GLEW_GET_FUN(__glewEdgeFlagPointerEXT)
+#define glGetPointervEXT GLEW_GET_FUN(__glewGetPointervEXT)
+#define glIndexPointerEXT GLEW_GET_FUN(__glewIndexPointerEXT)
+#define glNormalPointerEXT GLEW_GET_FUN(__glewNormalPointerEXT)
+#define glTexCoordPointerEXT GLEW_GET_FUN(__glewTexCoordPointerEXT)
+#define glVertexPointerEXT GLEW_GET_FUN(__glewVertexPointerEXT)
+
+#define GLEW_EXT_vertex_array GLEW_GET_VAR(__GLEW_EXT_vertex_array)
+
+#endif /* GL_EXT_vertex_array */
+
+/* -------------------------- GL_EXT_vertex_shader ------------------------- */
+
+#ifndef GL_EXT_vertex_shader
+#define GL_EXT_vertex_shader 1
+
+#define GL_VERTEX_SHADER_EXT 0x8780
+#define GL_VERTEX_SHADER_BINDING_EXT 0x8781
+#define GL_OP_INDEX_EXT 0x8782
+#define GL_OP_NEGATE_EXT 0x8783
+#define GL_OP_DOT3_EXT 0x8784
+#define GL_OP_DOT4_EXT 0x8785
+#define GL_OP_MUL_EXT 0x8786
+#define GL_OP_ADD_EXT 0x8787
+#define GL_OP_MADD_EXT 0x8788
+#define GL_OP_FRAC_EXT 0x8789
+#define GL_OP_MAX_EXT 0x878A
+#define GL_OP_MIN_EXT 0x878B
+#define GL_OP_SET_GE_EXT 0x878C
+#define GL_OP_SET_LT_EXT 0x878D
+#define GL_OP_CLAMP_EXT 0x878E
+#define GL_OP_FLOOR_EXT 0x878F
+#define GL_OP_ROUND_EXT 0x8790
+#define GL_OP_EXP_BASE_2_EXT 0x8791
+#define GL_OP_LOG_BASE_2_EXT 0x8792
+#define GL_OP_POWER_EXT 0x8793
+#define GL_OP_RECIP_EXT 0x8794
+#define GL_OP_RECIP_SQRT_EXT 0x8795
+#define GL_OP_SUB_EXT 0x8796
+#define GL_OP_CROSS_PRODUCT_EXT 0x8797
+#define GL_OP_MULTIPLY_MATRIX_EXT 0x8798
+#define GL_OP_MOV_EXT 0x8799
+#define GL_OUTPUT_VERTEX_EXT 0x879A
+#define GL_OUTPUT_COLOR0_EXT 0x879B
+#define GL_OUTPUT_COLOR1_EXT 0x879C
+#define GL_OUTPUT_TEXTURE_COORD0_EXT 0x879D
+#define GL_OUTPUT_TEXTURE_COORD1_EXT 0x879E
+#define GL_OUTPUT_TEXTURE_COORD2_EXT 0x879F
+#define GL_OUTPUT_TEXTURE_COORD3_EXT 0x87A0
+#define GL_OUTPUT_TEXTURE_COORD4_EXT 0x87A1
+#define GL_OUTPUT_TEXTURE_COORD5_EXT 0x87A2
+#define GL_OUTPUT_TEXTURE_COORD6_EXT 0x87A3
+#define GL_OUTPUT_TEXTURE_COORD7_EXT 0x87A4
+#define GL_OUTPUT_TEXTURE_COORD8_EXT 0x87A5
+#define GL_OUTPUT_TEXT

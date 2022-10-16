@@ -6026,4 +6026,176 @@ typedef void (GLAPIENTRY * PFNGLVERTEXPOINTEREXTPROC) (GLint size, GLenum type, 
 #define GL_OUTPUT_TEXTURE_COORD6_EXT 0x87A3
 #define GL_OUTPUT_TEXTURE_COORD7_EXT 0x87A4
 #define GL_OUTPUT_TEXTURE_COORD8_EXT 0x87A5
-#define GL_OUTPUT_TEXT
+#define GL_OUTPUT_TEXTURE_COORD9_EXT 0x87A6
+#define GL_OUTPUT_TEXTURE_COORD10_EXT 0x87A7
+#define GL_OUTPUT_TEXTURE_COORD11_EXT 0x87A8
+#define GL_OUTPUT_TEXTURE_COORD12_EXT 0x87A9
+#define GL_OUTPUT_TEXTURE_COORD13_EXT 0x87AA
+#define GL_OUTPUT_TEXTURE_COORD14_EXT 0x87AB
+#define GL_OUTPUT_TEXTURE_COORD15_EXT 0x87AC
+#define GL_OUTPUT_TEXTURE_COORD16_EXT 0x87AD
+#define GL_OUTPUT_TEXTURE_COORD17_EXT 0x87AE
+#define GL_OUTPUT_TEXTURE_COORD18_EXT 0x87AF
+#define GL_OUTPUT_TEXTURE_COORD19_EXT 0x87B0
+#define GL_OUTPUT_TEXTURE_COORD20_EXT 0x87B1
+#define GL_OUTPUT_TEXTURE_COORD21_EXT 0x87B2
+#define GL_OUTPUT_TEXTURE_COORD22_EXT 0x87B3
+#define GL_OUTPUT_TEXTURE_COORD23_EXT 0x87B4
+#define GL_OUTPUT_TEXTURE_COORD24_EXT 0x87B5
+#define GL_OUTPUT_TEXTURE_COORD25_EXT 0x87B6
+#define GL_OUTPUT_TEXTURE_COORD26_EXT 0x87B7
+#define GL_OUTPUT_TEXTURE_COORD27_EXT 0x87B8
+#define GL_OUTPUT_TEXTURE_COORD28_EXT 0x87B9
+#define GL_OUTPUT_TEXTURE_COORD29_EXT 0x87BA
+#define GL_OUTPUT_TEXTURE_COORD30_EXT 0x87BB
+#define GL_OUTPUT_TEXTURE_COORD31_EXT 0x87BC
+#define GL_OUTPUT_FOG_EXT 0x87BD
+#define GL_SCALAR_EXT 0x87BE
+#define GL_VECTOR_EXT 0x87BF
+#define GL_MATRIX_EXT 0x87C0
+#define GL_VARIANT_EXT 0x87C1
+#define GL_INVARIANT_EXT 0x87C2
+#define GL_LOCAL_CONSTANT_EXT 0x87C3
+#define GL_LOCAL_EXT 0x87C4
+#define GL_MAX_VERTEX_SHADER_INSTRUCTIONS_EXT 0x87C5
+#define GL_MAX_VERTEX_SHADER_VARIANTS_EXT 0x87C6
+#define GL_MAX_VERTEX_SHADER_INVARIANTS_EXT 0x87C7
+#define GL_MAX_VERTEX_SHADER_LOCAL_CONSTANTS_EXT 0x87C8
+#define GL_MAX_VERTEX_SHADER_LOCALS_EXT 0x87C9
+#define GL_MAX_OPTIMIZED_VERTEX_SHADER_INSTRUCTIONS_EXT 0x87CA
+#define GL_MAX_OPTIMIZED_VERTEX_SHADER_VARIANTS_EXT 0x87CB
+#define GL_MAX_OPTIMIZED_VERTEX_SHADER_INVARIANTS_EXT 0x87CC
+#define GL_MAX_OPTIMIZED_VERTEX_SHADER_LOCAL_CONSTANTS_EXT 0x87CD
+#define GL_MAX_OPTIMIZED_VERTEX_SHADER_LOCALS_EXT 0x87CE
+#define GL_VERTEX_SHADER_INSTRUCTIONS_EXT 0x87CF
+#define GL_VERTEX_SHADER_VARIANTS_EXT 0x87D0
+#define GL_VERTEX_SHADER_INVARIANTS_EXT 0x87D1
+#define GL_VERTEX_SHADER_LOCAL_CONSTANTS_EXT 0x87D2
+#define GL_VERTEX_SHADER_LOCALS_EXT 0x87D3
+#define GL_VERTEX_SHADER_OPTIMIZED_EXT 0x87D4
+#define GL_X_EXT 0x87D5
+#define GL_Y_EXT 0x87D6
+#define GL_Z_EXT 0x87D7
+#define GL_W_EXT 0x87D8
+#define GL_NEGATIVE_X_EXT 0x87D9
+#define GL_NEGATIVE_Y_EXT 0x87DA
+#define GL_NEGATIVE_Z_EXT 0x87DB
+#define GL_NEGATIVE_W_EXT 0x87DC
+#define GL_ZERO_EXT 0x87DD
+#define GL_ONE_EXT 0x87DE
+#define GL_NEGATIVE_ONE_EXT 0x87DF
+#define GL_NORMALIZED_RANGE_EXT 0x87E0
+#define GL_FULL_RANGE_EXT 0x87E1
+#define GL_CURRENT_VERTEX_EXT 0x87E2
+#define GL_MVP_MATRIX_EXT 0x87E3
+#define GL_VARIANT_VALUE_EXT 0x87E4
+#define GL_VARIANT_DATATYPE_EXT 0x87E5
+#define GL_VARIANT_ARRAY_STRIDE_EXT 0x87E6
+#define GL_VARIANT_ARRAY_TYPE_EXT 0x87E7
+#define GL_VARIANT_ARRAY_EXT 0x87E8
+#define GL_VARIANT_ARRAY_POINTER_EXT 0x87E9
+#define GL_INVARIANT_VALUE_EXT 0x87EA
+#define GL_INVARIANT_DATATYPE_EXT 0x87EB
+#define GL_LOCAL_CONSTANT_VALUE_EXT 0x87EC
+#define GL_LOCAL_CONSTANT_DATATYPE_EXT 0x87ED
+
+typedef void (GLAPIENTRY * PFNGLBEGINVERTEXSHADEREXTPROC) (void);
+typedef GLuint (GLAPIENTRY * PFNGLBINDLIGHTPARAMETEREXTPROC) (GLenum light, GLenum value);
+typedef GLuint (GLAPIENTRY * PFNGLBINDMATERIALPARAMETEREXTPROC) (GLenum face, GLenum value);
+typedef GLuint (GLAPIENTRY * PFNGLBINDPARAMETEREXTPROC) (GLenum value);
+typedef GLuint (GLAPIENTRY * PFNGLBINDTEXGENPARAMETEREXTPROC) (GLenum unit, GLenum coord, GLenum value);
+typedef GLuint (GLAPIENTRY * PFNGLBINDTEXTUREUNITPARAMETEREXTPROC) (GLenum unit, GLenum value);
+typedef void (GLAPIENTRY * PFNGLBINDVERTEXSHADEREXTPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLDELETEVERTEXSHADEREXTPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLDISABLEVARIANTCLIENTSTATEEXTPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLENABLEVARIANTCLIENTSTATEEXTPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLENDVERTEXSHADEREXTPROC) (void);
+typedef void (GLAPIENTRY * PFNGLEXTRACTCOMPONENTEXTPROC) (GLuint res, GLuint src, GLuint num);
+typedef GLuint (GLAPIENTRY * PFNGLGENSYMBOLSEXTPROC) (GLenum dataType, GLenum storageType, GLenum range, GLuint components);
+typedef GLuint (GLAPIENTRY * PFNGLGENVERTEXSHADERSEXTPROC) (GLuint range);
+typedef void (GLAPIENTRY * PFNGLGETINVARIANTBOOLEANVEXTPROC) (GLuint id, GLenum value, GLboolean *data);
+typedef void (GLAPIENTRY * PFNGLGETINVARIANTFLOATVEXTPROC) (GLuint id, GLenum value, GLfloat *data);
+typedef void (GLAPIENTRY * PFNGLGETINVARIANTINTEGERVEXTPROC) (GLuint id, GLenum value, GLint *data);
+typedef void (GLAPIENTRY * PFNGLGETLOCALCONSTANTBOOLEANVEXTPROC) (GLuint id, GLenum value, GLboolean *data);
+typedef void (GLAPIENTRY * PFNGLGETLOCALCONSTANTFLOATVEXTPROC) (GLuint id, GLenum value, GLfloat *data);
+typedef void (GLAPIENTRY * PFNGLGETLOCALCONSTANTINTEGERVEXTPROC) (GLuint id, GLenum value, GLint *data);
+typedef void (GLAPIENTRY * PFNGLGETVARIANTBOOLEANVEXTPROC) (GLuint id, GLenum value, GLboolean *data);
+typedef void (GLAPIENTRY * PFNGLGETVARIANTFLOATVEXTPROC) (GLuint id, GLenum value, GLfloat *data);
+typedef void (GLAPIENTRY * PFNGLGETVARIANTINTEGERVEXTPROC) (GLuint id, GLenum value, GLint *data);
+typedef void (GLAPIENTRY * PFNGLGETVARIANTPOINTERVEXTPROC) (GLuint id, GLenum value, GLvoid **data);
+typedef void (GLAPIENTRY * PFNGLINSERTCOMPONENTEXTPROC) (GLuint res, GLuint src, GLuint num);
+typedef GLboolean (GLAPIENTRY * PFNGLISVARIANTENABLEDEXTPROC) (GLuint id, GLenum cap);
+typedef void (GLAPIENTRY * PFNGLSETINVARIANTEXTPROC) (GLuint id, GLenum type, GLvoid *addr);
+typedef void (GLAPIENTRY * PFNGLSETLOCALCONSTANTEXTPROC) (GLuint id, GLenum type, GLvoid *addr);
+typedef void (GLAPIENTRY * PFNGLSHADEROP1EXTPROC) (GLenum op, GLuint res, GLuint arg1);
+typedef void (GLAPIENTRY * PFNGLSHADEROP2EXTPROC) (GLenum op, GLuint res, GLuint arg1, GLuint arg2);
+typedef void (GLAPIENTRY * PFNGLSHADEROP3EXTPROC) (GLenum op, GLuint res, GLuint arg1, GLuint arg2, GLuint arg3);
+typedef void (GLAPIENTRY * PFNGLSWIZZLEEXTPROC) (GLuint res, GLuint in, GLenum outX, GLenum outY, GLenum outZ, GLenum outW);
+typedef void (GLAPIENTRY * PFNGLVARIANTPOINTEREXTPROC) (GLuint id, GLenum type, GLuint stride, GLvoid *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTBVEXTPROC) (GLuint id, GLbyte *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTDVEXTPROC) (GLuint id, GLdouble *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTFVEXTPROC) (GLuint id, GLfloat *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTIVEXTPROC) (GLuint id, GLint *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTSVEXTPROC) (GLuint id, GLshort *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTUBVEXTPROC) (GLuint id, GLubyte *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTUIVEXTPROC) (GLuint id, GLuint *addr);
+typedef void (GLAPIENTRY * PFNGLVARIANTUSVEXTPROC) (GLuint id, GLushort *addr);
+typedef void (GLAPIENTRY * PFNGLWRITEMASKEXTPROC) (GLuint res, GLuint in, GLenum outX, GLenum outY, GLenum outZ, GLenum outW);
+
+#define glBeginVertexShaderEXT GLEW_GET_FUN(__glewBeginVertexShaderEXT)
+#define glBindLightParameterEXT GLEW_GET_FUN(__glewBindLightParameterEXT)
+#define glBindMaterialParameterEXT GLEW_GET_FUN(__glewBindMaterialParameterEXT)
+#define glBindParameterEXT GLEW_GET_FUN(__glewBindParameterEXT)
+#define glBindTexGenParameterEXT GLEW_GET_FUN(__glewBindTexGenParameterEXT)
+#define glBindTextureUnitParameterEXT GLEW_GET_FUN(__glewBindTextureUnitParameterEXT)
+#define glBindVertexShaderEXT GLEW_GET_FUN(__glewBindVertexShaderEXT)
+#define glDeleteVertexShaderEXT GLEW_GET_FUN(__glewDeleteVertexShaderEXT)
+#define glDisableVariantClientStateEXT GLEW_GET_FUN(__glewDisableVariantClientStateEXT)
+#define glEnableVariantClientStateEXT GLEW_GET_FUN(__glewEnableVariantClientStateEXT)
+#define glEndVertexShaderEXT GLEW_GET_FUN(__glewEndVertexShaderEXT)
+#define glExtractComponentEXT GLEW_GET_FUN(__glewExtractComponentEXT)
+#define glGenSymbolsEXT GLEW_GET_FUN(__glewGenSymbolsEXT)
+#define glGenVertexShadersEXT GLEW_GET_FUN(__glewGenVertexShadersEXT)
+#define glGetInvariantBooleanvEXT GLEW_GET_FUN(__glewGetInvariantBooleanvEXT)
+#define glGetInvariantFloatvEXT GLEW_GET_FUN(__glewGetInvariantFloatvEXT)
+#define glGetInvariantIntegervEXT GLEW_GET_FUN(__glewGetInvariantIntegervEXT)
+#define glGetLocalConstantBooleanvEXT GLEW_GET_FUN(__glewGetLocalConstantBooleanvEXT)
+#define glGetLocalConstantFloatvEXT GLEW_GET_FUN(__glewGetLocalConstantFloatvEXT)
+#define glGetLocalConstantIntegervEXT GLEW_GET_FUN(__glewGetLocalConstantIntegervEXT)
+#define glGetVariantBooleanvEXT GLEW_GET_FUN(__glewGetVariantBooleanvEXT)
+#define glGetVariantFloatvEXT GLEW_GET_FUN(__glewGetVariantFloatvEXT)
+#define glGetVariantIntegervEXT GLEW_GET_FUN(__glewGetVariantIntegervEXT)
+#define glGetVariantPointervEXT GLEW_GET_FUN(__glewGetVariantPointervEXT)
+#define glInsertComponentEXT GLEW_GET_FUN(__glewInsertComponentEXT)
+#define glIsVariantEnabledEXT GLEW_GET_FUN(__glewIsVariantEnabledEXT)
+#define glSetInvariantEXT GLEW_GET_FUN(__glewSetInvariantEXT)
+#define glSetLocalConstantEXT GLEW_GET_FUN(__glewSetLocalConstantEXT)
+#define glShaderOp1EXT GLEW_GET_FUN(__glewShaderOp1EXT)
+#define glShaderOp2EXT GLEW_GET_FUN(__glewShaderOp2EXT)
+#define glShaderOp3EXT GLEW_GET_FUN(__glewShaderOp3EXT)
+#define glSwizzleEXT GLEW_GET_FUN(__glewSwizzleEXT)
+#define glVariantPointerEXT GLEW_GET_FUN(__glewVariantPointerEXT)
+#define glVariantbvEXT GLEW_GET_FUN(__glewVariantbvEXT)
+#define glVariantdvEXT GLEW_GET_FUN(__glewVariantdvEXT)
+#define glVariantfvEXT GLEW_GET_FUN(__glewVariantfvEXT)
+#define glVariantivEXT GLEW_GET_FUN(__glewVariantivEXT)
+#define glVariantsvEXT GLEW_GET_FUN(__glewVariantsvEXT)
+#define glVariantubvEXT GLEW_GET_FUN(__glewVariantubvEXT)
+#define glVariantuivEXT GLEW_GET_FUN(__glewVariantuivEXT)
+#define glVariantusvEXT GLEW_GET_FUN(__glewVariantusvEXT)
+#define glWriteMaskEXT GLEW_GET_FUN(__glewWriteMaskEXT)
+
+#define GLEW_EXT_vertex_shader GLEW_GET_VAR(__GLEW_EXT_vertex_shader)
+
+#endif /* GL_EXT_vertex_shader */
+
+/* ------------------------ GL_EXT_vertex_weighting ------------------------ */
+
+#ifndef GL_EXT_vertex_weighting
+#define GL_EXT_vertex_weighting 1
+
+#define GL_MODELVIEW0_STACK_DEPTH_EXT 0x0BA3
+#define GL_MODELVIEW0_MATRIX_EXT 0x0BA6
+#define GL_MODELVIEW0_EXT 0x1700
+#define GL_MODELVIEW1_STACK_DEPTH_EXT 0x8502
+#define GL_MODELVIEW1_MATRI

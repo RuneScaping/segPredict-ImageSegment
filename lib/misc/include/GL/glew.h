@@ -6440,4 +6440,243 @@ typedef void (GLAPIENTRY * PFNGLVERTEXPOINTERLISTIBMPROC) (GLint size, GLenum ty
 #define GL_PARALLEL_ARRAYS_INTEL 0x83F4
 #define GL_VERTEX_ARRAY_PARALLEL_POINTERS_INTEL 0x83F5
 #define GL_NORMAL_ARRAY_PARALLEL_POINTERS_INTEL 0x83F6
-#define GL_COLOR_ARRAY_PARALLEL_POINT
+#define GL_COLOR_ARRAY_PARALLEL_POINTERS_INTEL 0x83F7
+#define GL_TEXTURE_COORD_ARRAY_PARALLEL_POINTERS_INTEL 0x83F8
+
+typedef void (GLAPIENTRY * PFNGLCOLORPOINTERVINTELPROC) (GLint size, GLenum type, const void** pointer);
+typedef void (GLAPIENTRY * PFNGLNORMALPOINTERVINTELPROC) (GLenum type, const void** pointer);
+typedef void (GLAPIENTRY * PFNGLTEXCOORDPOINTERVINTELPROC) (GLint size, GLenum type, const void** pointer);
+typedef void (GLAPIENTRY * PFNGLVERTEXPOINTERVINTELPROC) (GLint size, GLenum type, const void** pointer);
+
+#define glColorPointervINTEL GLEW_GET_FUN(__glewColorPointervINTEL)
+#define glNormalPointervINTEL GLEW_GET_FUN(__glewNormalPointervINTEL)
+#define glTexCoordPointervINTEL GLEW_GET_FUN(__glewTexCoordPointervINTEL)
+#define glVertexPointervINTEL GLEW_GET_FUN(__glewVertexPointervINTEL)
+
+#define GLEW_INTEL_parallel_arrays GLEW_GET_VAR(__GLEW_INTEL_parallel_arrays)
+
+#endif /* GL_INTEL_parallel_arrays */
+
+/* ------------------------ GL_INTEL_texture_scissor ----------------------- */
+
+#ifndef GL_INTEL_texture_scissor
+#define GL_INTEL_texture_scissor 1
+
+typedef void (GLAPIENTRY * PFNGLTEXSCISSORFUNCINTELPROC) (GLenum target, GLenum lfunc, GLenum hfunc);
+typedef void (GLAPIENTRY * PFNGLTEXSCISSORINTELPROC) (GLenum target, GLclampf tlow, GLclampf thigh);
+
+#define glTexScissorFuncINTEL GLEW_GET_FUN(__glewTexScissorFuncINTEL)
+#define glTexScissorINTEL GLEW_GET_FUN(__glewTexScissorINTEL)
+
+#define GLEW_INTEL_texture_scissor GLEW_GET_VAR(__GLEW_INTEL_texture_scissor)
+
+#endif /* GL_INTEL_texture_scissor */
+
+/* -------------------------- GL_KTX_buffer_region ------------------------- */
+
+#ifndef GL_KTX_buffer_region
+#define GL_KTX_buffer_region 1
+
+#define GL_KTX_FRONT_REGION 0x0
+#define GL_KTX_BACK_REGION 0x1
+#define GL_KTX_Z_REGION 0x2
+#define GL_KTX_STENCIL_REGION 0x3
+
+typedef GLuint (GLAPIENTRY * PFNGLBUFFERREGIONENABLEDEXTPROC) (void);
+typedef void (GLAPIENTRY * PFNGLDELETEBUFFERREGIONEXTPROC) (GLenum region);
+typedef void (GLAPIENTRY * PFNGLDRAWBUFFERREGIONEXTPROC) (GLuint region, GLint x, GLint y, GLsizei width, GLsizei height, GLint xDest, GLint yDest);
+typedef GLuint (GLAPIENTRY * PFNGLNEWBUFFERREGIONEXTPROC) (GLenum region);
+typedef void (GLAPIENTRY * PFNGLREADBUFFERREGIONEXTPROC) (GLuint region, GLint x, GLint y, GLsizei width, GLsizei height);
+
+#define glBufferRegionEnabledEXT GLEW_GET_FUN(__glewBufferRegionEnabledEXT)
+#define glDeleteBufferRegionEXT GLEW_GET_FUN(__glewDeleteBufferRegionEXT)
+#define glDrawBufferRegionEXT GLEW_GET_FUN(__glewDrawBufferRegionEXT)
+#define glNewBufferRegionEXT GLEW_GET_FUN(__glewNewBufferRegionEXT)
+#define glReadBufferRegionEXT GLEW_GET_FUN(__glewReadBufferRegionEXT)
+
+#define GLEW_KTX_buffer_region GLEW_GET_VAR(__GLEW_KTX_buffer_region)
+
+#endif /* GL_KTX_buffer_region */
+
+/* ------------------------- GL_MESAX_texture_stack ------------------------ */
+
+#ifndef GL_MESAX_texture_stack
+#define GL_MESAX_texture_stack 1
+
+#define GL_TEXTURE_1D_STACK_MESAX 0x8759
+#define GL_TEXTURE_2D_STACK_MESAX 0x875A
+#define GL_PROXY_TEXTURE_1D_STACK_MESAX 0x875B
+#define GL_PROXY_TEXTURE_2D_STACK_MESAX 0x875C
+#define GL_TEXTURE_1D_STACK_BINDING_MESAX 0x875D
+#define GL_TEXTURE_2D_STACK_BINDING_MESAX 0x875E
+
+#define GLEW_MESAX_texture_stack GLEW_GET_VAR(__GLEW_MESAX_texture_stack)
+
+#endif /* GL_MESAX_texture_stack */
+
+/* -------------------------- GL_MESA_pack_invert -------------------------- */
+
+#ifndef GL_MESA_pack_invert
+#define GL_MESA_pack_invert 1
+
+#define GL_PACK_INVERT_MESA 0x8758
+
+#define GLEW_MESA_pack_invert GLEW_GET_VAR(__GLEW_MESA_pack_invert)
+
+#endif /* GL_MESA_pack_invert */
+
+/* ------------------------- GL_MESA_resize_buffers ------------------------ */
+
+#ifndef GL_MESA_resize_buffers
+#define GL_MESA_resize_buffers 1
+
+typedef void (GLAPIENTRY * PFNGLRESIZEBUFFERSMESAPROC) (void);
+
+#define glResizeBuffersMESA GLEW_GET_FUN(__glewResizeBuffersMESA)
+
+#define GLEW_MESA_resize_buffers GLEW_GET_VAR(__GLEW_MESA_resize_buffers)
+
+#endif /* GL_MESA_resize_buffers */
+
+/* --------------------------- GL_MESA_window_pos -------------------------- */
+
+#ifndef GL_MESA_window_pos
+#define GL_MESA_window_pos 1
+
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2DMESAPROC) (GLdouble x, GLdouble y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2DVMESAPROC) (const GLdouble* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2FMESAPROC) (GLfloat x, GLfloat y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2FVMESAPROC) (const GLfloat* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2IMESAPROC) (GLint x, GLint y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2IVMESAPROC) (const GLint* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2SMESAPROC) (GLshort x, GLshort y);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS2SVMESAPROC) (const GLshort* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3DMESAPROC) (GLdouble x, GLdouble y, GLdouble z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3DVMESAPROC) (const GLdouble* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3FMESAPROC) (GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3FVMESAPROC) (const GLfloat* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3IMESAPROC) (GLint x, GLint y, GLint z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3IVMESAPROC) (const GLint* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3SMESAPROC) (GLshort x, GLshort y, GLshort z);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS3SVMESAPROC) (const GLshort* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4DMESAPROC) (GLdouble x, GLdouble y, GLdouble z, GLdouble);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4DVMESAPROC) (const GLdouble* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4FMESAPROC) (GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4FVMESAPROC) (const GLfloat* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4IMESAPROC) (GLint x, GLint y, GLint z, GLint w);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4IVMESAPROC) (const GLint* p);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4SMESAPROC) (GLshort x, GLshort y, GLshort z, GLshort w);
+typedef void (GLAPIENTRY * PFNGLWINDOWPOS4SVMESAPROC) (const GLshort* p);
+
+#define glWindowPos2dMESA GLEW_GET_FUN(__glewWindowPos2dMESA)
+#define glWindowPos2dvMESA GLEW_GET_FUN(__glewWindowPos2dvMESA)
+#define glWindowPos2fMESA GLEW_GET_FUN(__glewWindowPos2fMESA)
+#define glWindowPos2fvMESA GLEW_GET_FUN(__glewWindowPos2fvMESA)
+#define glWindowPos2iMESA GLEW_GET_FUN(__glewWindowPos2iMESA)
+#define glWindowPos2ivMESA GLEW_GET_FUN(__glewWindowPos2ivMESA)
+#define glWindowPos2sMESA GLEW_GET_FUN(__glewWindowPos2sMESA)
+#define glWindowPos2svMESA GLEW_GET_FUN(__glewWindowPos2svMESA)
+#define glWindowPos3dMESA GLEW_GET_FUN(__glewWindowPos3dMESA)
+#define glWindowPos3dvMESA GLEW_GET_FUN(__glewWindowPos3dvMESA)
+#define glWindowPos3fMESA GLEW_GET_FUN(__glewWindowPos3fMESA)
+#define glWindowPos3fvMESA GLEW_GET_FUN(__glewWindowPos3fvMESA)
+#define glWindowPos3iMESA GLEW_GET_FUN(__glewWindowPos3iMESA)
+#define glWindowPos3ivMESA GLEW_GET_FUN(__glewWindowPos3ivMESA)
+#define glWindowPos3sMESA GLEW_GET_FUN(__glewWindowPos3sMESA)
+#define glWindowPos3svMESA GLEW_GET_FUN(__glewWindowPos3svMESA)
+#define glWindowPos4dMESA GLEW_GET_FUN(__glewWindowPos4dMESA)
+#define glWindowPos4dvMESA GLEW_GET_FUN(__glewWindowPos4dvMESA)
+#define glWindowPos4fMESA GLEW_GET_FUN(__glewWindowPos4fMESA)
+#define glWindowPos4fvMESA GLEW_GET_FUN(__glewWindowPos4fvMESA)
+#define glWindowPos4iMESA GLEW_GET_FUN(__glewWindowPos4iMESA)
+#define glWindowPos4ivMESA GLEW_GET_FUN(__glewWindowPos4ivMESA)
+#define glWindowPos4sMESA GLEW_GET_FUN(__glewWindowPos4sMESA)
+#define glWindowPos4svMESA GLEW_GET_FUN(__glewWindowPos4svMESA)
+
+#define GLEW_MESA_window_pos GLEW_GET_VAR(__GLEW_MESA_window_pos)
+
+#endif /* GL_MESA_window_pos */
+
+/* ------------------------- GL_MESA_ycbcr_texture ------------------------- */
+
+#ifndef GL_MESA_ycbcr_texture
+#define GL_MESA_ycbcr_texture 1
+
+#define GL_UNSIGNED_SHORT_8_8_MESA 0x85BA
+#define GL_UNSIGNED_SHORT_8_8_REV_MESA 0x85BB
+#define GL_YCBCR_MESA 0x8757
+
+#define GLEW_MESA_ycbcr_texture GLEW_GET_VAR(__GLEW_MESA_ycbcr_texture)
+
+#endif /* GL_MESA_ycbcr_texture */
+
+/* --------------------------- GL_NV_blend_square -------------------------- */
+
+#ifndef GL_NV_blend_square
+#define GL_NV_blend_square 1
+
+#define GLEW_NV_blend_square GLEW_GET_VAR(__GLEW_NV_blend_square)
+
+#endif /* GL_NV_blend_square */
+
+/* ----------------------- GL_NV_copy_depth_to_color ----------------------- */
+
+#ifndef GL_NV_copy_depth_to_color
+#define GL_NV_copy_depth_to_color 1
+
+#define GL_DEPTH_STENCIL_TO_RGBA_NV 0x886E
+#define GL_DEPTH_STENCIL_TO_BGRA_NV 0x886F
+
+#define GLEW_NV_copy_depth_to_color GLEW_GET_VAR(__GLEW_NV_copy_depth_to_color)
+
+#endif /* GL_NV_copy_depth_to_color */
+
+/* ------------------------ GL_NV_depth_buffer_float ----------------------- */
+
+#ifndef GL_NV_depth_buffer_float
+#define GL_NV_depth_buffer_float 1
+
+#define GL_DEPTH_COMPONENT32F_NV 0x8DAB
+#define GL_DEPTH32F_STENCIL8_NV 0x8DAC
+#define GL_FLOAT_32_UNSIGNED_INT_24_8_REV_NV 0x8DAD
+#define GL_DEPTH_BUFFER_FLOAT_MODE_NV 0x8DAF
+
+typedef void (GLAPIENTRY * PFNGLCLEARDEPTHDNVPROC) (GLdouble depth);
+typedef void (GLAPIENTRY * PFNGLDEPTHBOUNDSDNVPROC) (GLdouble zmin, GLdouble zmax);
+typedef void (GLAPIENTRY * PFNGLDEPTHRANGEDNVPROC) (GLdouble zNear, GLdouble zFar);
+
+#define glClearDepthdNV GLEW_GET_FUN(__glewClearDepthdNV)
+#define glDepthBoundsdNV GLEW_GET_FUN(__glewDepthBoundsdNV)
+#define glDepthRangedNV GLEW_GET_FUN(__glewDepthRangedNV)
+
+#define GLEW_NV_depth_buffer_float GLEW_GET_VAR(__GLEW_NV_depth_buffer_float)
+
+#endif /* GL_NV_depth_buffer_float */
+
+/* --------------------------- GL_NV_depth_clamp --------------------------- */
+
+#ifndef GL_NV_depth_clamp
+#define GL_NV_depth_clamp 1
+
+#define GL_DEPTH_CLAMP_NV 0x864F
+
+#define GLEW_NV_depth_clamp GLEW_GET_VAR(__GLEW_NV_depth_clamp)
+
+#endif /* GL_NV_depth_clamp */
+
+/* ---------------------- GL_NV_depth_range_unclamped ---------------------- */
+
+#ifndef GL_NV_depth_range_unclamped
+#define GL_NV_depth_range_unclamped 1
+
+#define GL_SAMPLE_COUNT_BITS_NV 0x8864
+#define GL_CURRENT_SAMPLE_COUNT_QUERY_NV 0x8865
+#define GL_QUERY_RESULT_NV 0x8866
+#define GL_QUERY_RESULT_AVAILABLE_NV 0x8867
+#define GL_SAMPLE_COUNT_NV 0x8914
+
+#define GLEW_NV_depth_range_unclamped GLEW_GET_VAR(__GLEW_NV_depth_range_unclamped)
+
+#endif /* GL_NV_depth_range_unclamped */
+
+/* ----------------

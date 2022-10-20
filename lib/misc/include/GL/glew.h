@@ -6198,4 +6198,246 @@ typedef void (GLAPIENTRY * PFNGLWRITEMASKEXTPROC) (GLuint res, GLuint in, GLenum
 #define GL_MODELVIEW0_MATRIX_EXT 0x0BA6
 #define GL_MODELVIEW0_EXT 0x1700
 #define GL_MODELVIEW1_STACK_DEPTH_EXT 0x8502
-#define GL_MODELVIEW1_MATRI
+#define GL_MODELVIEW1_MATRIX_EXT 0x8506
+#define GL_VERTEX_WEIGHTING_EXT 0x8509
+#define GL_MODELVIEW1_EXT 0x850A
+#define GL_CURRENT_VERTEX_WEIGHT_EXT 0x850B
+#define GL_VERTEX_WEIGHT_ARRAY_EXT 0x850C
+#define GL_VERTEX_WEIGHT_ARRAY_SIZE_EXT 0x850D
+#define GL_VERTEX_WEIGHT_ARRAY_TYPE_EXT 0x850E
+#define GL_VERTEX_WEIGHT_ARRAY_STRIDE_EXT 0x850F
+#define GL_VERTEX_WEIGHT_ARRAY_POINTER_EXT 0x8510
+
+typedef void (GLAPIENTRY * PFNGLVERTEXWEIGHTPOINTEREXTPROC) (GLint size, GLenum type, GLsizei stride, void* pointer);
+typedef void (GLAPIENTRY * PFNGLVERTEXWEIGHTFEXTPROC) (GLfloat weight);
+typedef void (GLAPIENTRY * PFNGLVERTEXWEIGHTFVEXTPROC) (GLfloat* weight);
+
+#define glVertexWeightPointerEXT GLEW_GET_FUN(__glewVertexWeightPointerEXT)
+#define glVertexWeightfEXT GLEW_GET_FUN(__glewVertexWeightfEXT)
+#define glVertexWeightfvEXT GLEW_GET_FUN(__glewVertexWeightfvEXT)
+
+#define GLEW_EXT_vertex_weighting GLEW_GET_VAR(__GLEW_EXT_vertex_weighting)
+
+#endif /* GL_EXT_vertex_weighting */
+
+/* ---------------------- GL_GREMEDY_frame_terminator ---------------------- */
+
+#ifndef GL_GREMEDY_frame_terminator
+#define GL_GREMEDY_frame_terminator 1
+
+typedef void (GLAPIENTRY * PFNGLFRAMETERMINATORGREMEDYPROC) (void);
+
+#define glFrameTerminatorGREMEDY GLEW_GET_FUN(__glewFrameTerminatorGREMEDY)
+
+#define GLEW_GREMEDY_frame_terminator GLEW_GET_VAR(__GLEW_GREMEDY_frame_terminator)
+
+#endif /* GL_GREMEDY_frame_terminator */
+
+/* ------------------------ GL_GREMEDY_string_marker ----------------------- */
+
+#ifndef GL_GREMEDY_string_marker
+#define GL_GREMEDY_string_marker 1
+
+typedef void (GLAPIENTRY * PFNGLSTRINGMARKERGREMEDYPROC) (GLsizei len, const void* string);
+
+#define glStringMarkerGREMEDY GLEW_GET_FUN(__glewStringMarkerGREMEDY)
+
+#define GLEW_GREMEDY_string_marker GLEW_GET_VAR(__GLEW_GREMEDY_string_marker)
+
+#endif /* GL_GREMEDY_string_marker */
+
+/* --------------------- GL_HP_convolution_border_modes -------------------- */
+
+#ifndef GL_HP_convolution_border_modes
+#define GL_HP_convolution_border_modes 1
+
+#define GLEW_HP_convolution_border_modes GLEW_GET_VAR(__GLEW_HP_convolution_border_modes)
+
+#endif /* GL_HP_convolution_border_modes */
+
+/* ------------------------- GL_HP_image_transform ------------------------- */
+
+#ifndef GL_HP_image_transform
+#define GL_HP_image_transform 1
+
+typedef void (GLAPIENTRY * PFNGLGETIMAGETRANSFORMPARAMETERFVHPPROC) (GLenum target, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETIMAGETRANSFORMPARAMETERIVHPPROC) (GLenum target, GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLIMAGETRANSFORMPARAMETERFHPPROC) (GLenum target, GLenum pname, const GLfloat param);
+typedef void (GLAPIENTRY * PFNGLIMAGETRANSFORMPARAMETERFVHPPROC) (GLenum target, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLIMAGETRANSFORMPARAMETERIHPPROC) (GLenum target, GLenum pname, const GLint param);
+typedef void (GLAPIENTRY * PFNGLIMAGETRANSFORMPARAMETERIVHPPROC) (GLenum target, GLenum pname, const GLint* params);
+
+#define glGetImageTransformParameterfvHP GLEW_GET_FUN(__glewGetImageTransformParameterfvHP)
+#define glGetImageTransformParameterivHP GLEW_GET_FUN(__glewGetImageTransformParameterivHP)
+#define glImageTransformParameterfHP GLEW_GET_FUN(__glewImageTransformParameterfHP)
+#define glImageTransformParameterfvHP GLEW_GET_FUN(__glewImageTransformParameterfvHP)
+#define glImageTransformParameteriHP GLEW_GET_FUN(__glewImageTransformParameteriHP)
+#define glImageTransformParameterivHP GLEW_GET_FUN(__glewImageTransformParameterivHP)
+
+#define GLEW_HP_image_transform GLEW_GET_VAR(__GLEW_HP_image_transform)
+
+#endif /* GL_HP_image_transform */
+
+/* -------------------------- GL_HP_occlusion_test ------------------------- */
+
+#ifndef GL_HP_occlusion_test
+#define GL_HP_occlusion_test 1
+
+#define GL_OCCLUSION_TEST_HP 0x8165
+#define GL_OCCLUSION_TEST_RESULT_HP 0x8166
+
+#define GLEW_HP_occlusion_test GLEW_GET_VAR(__GLEW_HP_occlusion_test)
+
+#endif /* GL_HP_occlusion_test */
+
+/* ------------------------- GL_HP_texture_lighting ------------------------ */
+
+#ifndef GL_HP_texture_lighting
+#define GL_HP_texture_lighting 1
+
+#define GLEW_HP_texture_lighting GLEW_GET_VAR(__GLEW_HP_texture_lighting)
+
+#endif /* GL_HP_texture_lighting */
+
+/* --------------------------- GL_IBM_cull_vertex -------------------------- */
+
+#ifndef GL_IBM_cull_vertex
+#define GL_IBM_cull_vertex 1
+
+#define GL_CULL_VERTEX_IBM 103050
+
+#define GLEW_IBM_cull_vertex GLEW_GET_VAR(__GLEW_IBM_cull_vertex)
+
+#endif /* GL_IBM_cull_vertex */
+
+/* ---------------------- GL_IBM_multimode_draw_arrays --------------------- */
+
+#ifndef GL_IBM_multimode_draw_arrays
+#define GL_IBM_multimode_draw_arrays 1
+
+typedef void (GLAPIENTRY * PFNGLMULTIMODEDRAWARRAYSIBMPROC) (const GLenum* mode, const GLint *first, const GLsizei *count, GLsizei primcount, GLint modestride);
+typedef void (GLAPIENTRY * PFNGLMULTIMODEDRAWELEMENTSIBMPROC) (const GLenum* mode, const GLsizei *count, GLenum type, const GLvoid * const *indices, GLsizei primcount, GLint modestride);
+
+#define glMultiModeDrawArraysIBM GLEW_GET_FUN(__glewMultiModeDrawArraysIBM)
+#define glMultiModeDrawElementsIBM GLEW_GET_FUN(__glewMultiModeDrawElementsIBM)
+
+#define GLEW_IBM_multimode_draw_arrays GLEW_GET_VAR(__GLEW_IBM_multimode_draw_arrays)
+
+#endif /* GL_IBM_multimode_draw_arrays */
+
+/* ------------------------- GL_IBM_rasterpos_clip ------------------------- */
+
+#ifndef GL_IBM_rasterpos_clip
+#define GL_IBM_rasterpos_clip 1
+
+#define GL_RASTER_POSITION_UNCLIPPED_IBM 103010
+
+#define GLEW_IBM_rasterpos_clip GLEW_GET_VAR(__GLEW_IBM_rasterpos_clip)
+
+#endif /* GL_IBM_rasterpos_clip */
+
+/* --------------------------- GL_IBM_static_data -------------------------- */
+
+#ifndef GL_IBM_static_data
+#define GL_IBM_static_data 1
+
+#define GL_ALL_STATIC_DATA_IBM 103060
+#define GL_STATIC_VERTEX_ARRAY_IBM 103061
+
+#define GLEW_IBM_static_data GLEW_GET_VAR(__GLEW_IBM_static_data)
+
+#endif /* GL_IBM_static_data */
+
+/* --------------------- GL_IBM_texture_mirrored_repeat -------------------- */
+
+#ifndef GL_IBM_texture_mirrored_repeat
+#define GL_IBM_texture_mirrored_repeat 1
+
+#define GL_MIRRORED_REPEAT_IBM 0x8370
+
+#define GLEW_IBM_texture_mirrored_repeat GLEW_GET_VAR(__GLEW_IBM_texture_mirrored_repeat)
+
+#endif /* GL_IBM_texture_mirrored_repeat */
+
+/* ----------------------- GL_IBM_vertex_array_lists ----------------------- */
+
+#ifndef GL_IBM_vertex_array_lists
+#define GL_IBM_vertex_array_lists 1
+
+#define GL_VERTEX_ARRAY_LIST_IBM 103070
+#define GL_NORMAL_ARRAY_LIST_IBM 103071
+#define GL_COLOR_ARRAY_LIST_IBM 103072
+#define GL_INDEX_ARRAY_LIST_IBM 103073
+#define GL_TEXTURE_COORD_ARRAY_LIST_IBM 103074
+#define GL_EDGE_FLAG_ARRAY_LIST_IBM 103075
+#define GL_FOG_COORDINATE_ARRAY_LIST_IBM 103076
+#define GL_SECONDARY_COLOR_ARRAY_LIST_IBM 103077
+#define GL_VERTEX_ARRAY_LIST_STRIDE_IBM 103080
+#define GL_NORMAL_ARRAY_LIST_STRIDE_IBM 103081
+#define GL_COLOR_ARRAY_LIST_STRIDE_IBM 103082
+#define GL_INDEX_ARRAY_LIST_STRIDE_IBM 103083
+#define GL_TEXTURE_COORD_ARRAY_LIST_STRIDE_IBM 103084
+#define GL_EDGE_FLAG_ARRAY_LIST_STRIDE_IBM 103085
+#define GL_FOG_COORDINATE_ARRAY_LIST_STRIDE_IBM 103086
+#define GL_SECONDARY_COLOR_ARRAY_LIST_STRIDE_IBM 103087
+
+typedef void (GLAPIENTRY * PFNGLCOLORPOINTERLISTIBMPROC) (GLint size, GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLEDGEFLAGPOINTERLISTIBMPROC) (GLint stride, const GLboolean ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDPOINTERLISTIBMPROC) (GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLINDEXPOINTERLISTIBMPROC) (GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLNORMALPOINTERLISTIBMPROC) (GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLORPOINTERLISTIBMPROC) (GLint size, GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLTEXCOORDPOINTERLISTIBMPROC) (GLint size, GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+typedef void (GLAPIENTRY * PFNGLVERTEXPOINTERLISTIBMPROC) (GLint size, GLenum type, GLint stride, const GLvoid ** pointer, GLint ptrstride);
+
+#define glColorPointerListIBM GLEW_GET_FUN(__glewColorPointerListIBM)
+#define glEdgeFlagPointerListIBM GLEW_GET_FUN(__glewEdgeFlagPointerListIBM)
+#define glFogCoordPointerListIBM GLEW_GET_FUN(__glewFogCoordPointerListIBM)
+#define glIndexPointerListIBM GLEW_GET_FUN(__glewIndexPointerListIBM)
+#define glNormalPointerListIBM GLEW_GET_FUN(__glewNormalPointerListIBM)
+#define glSecondaryColorPointerListIBM GLEW_GET_FUN(__glewSecondaryColorPointerListIBM)
+#define glTexCoordPointerListIBM GLEW_GET_FUN(__glewTexCoordPointerListIBM)
+#define glVertexPointerListIBM GLEW_GET_FUN(__glewVertexPointerListIBM)
+
+#define GLEW_IBM_vertex_array_lists GLEW_GET_VAR(__GLEW_IBM_vertex_array_lists)
+
+#endif /* GL_IBM_vertex_array_lists */
+
+/* -------------------------- GL_INGR_color_clamp -------------------------- */
+
+#ifndef GL_INGR_color_clamp
+#define GL_INGR_color_clamp 1
+
+#define GL_RED_MIN_CLAMP_INGR 0x8560
+#define GL_GREEN_MIN_CLAMP_INGR 0x8561
+#define GL_BLUE_MIN_CLAMP_INGR 0x8562
+#define GL_ALPHA_MIN_CLAMP_INGR 0x8563
+#define GL_RED_MAX_CLAMP_INGR 0x8564
+#define GL_GREEN_MAX_CLAMP_INGR 0x8565
+#define GL_BLUE_MAX_CLAMP_INGR 0x8566
+#define GL_ALPHA_MAX_CLAMP_INGR 0x8567
+
+#define GLEW_INGR_color_clamp GLEW_GET_VAR(__GLEW_INGR_color_clamp)
+
+#endif /* GL_INGR_color_clamp */
+
+/* ------------------------- GL_INGR_interlace_read ------------------------ */
+
+#ifndef GL_INGR_interlace_read
+#define GL_INGR_interlace_read 1
+
+#define GL_INTERLACE_READ_INGR 0x8568
+
+#define GLEW_INGR_interlace_read GLEW_GET_VAR(__GLEW_INGR_interlace_read)
+
+#endif /* GL_INGR_interlace_read */
+
+/* ------------------------ GL_INTEL_parallel_arrays ----------------------- */
+
+#ifndef GL_INTEL_parallel_arrays
+#define GL_INTEL_parallel_arrays 1
+
+#define GL_PARALLEL_ARRAYS_INTEL 0x83F4
+#define GL_VERTEX_ARRAY_PARALLEL_POINTERS_INTEL 0x83F5
+#define GL_NORMAL_ARRAY_PARALLEL_POINTERS_INTEL 0x83F6
+#define GL_COLOR_ARRAY_PARALLEL_POINT

@@ -6679,4 +6679,241 @@ typedef void (GLAPIENTRY * PFNGLDEPTHRANGEDNVPROC) (GLdouble zNear, GLdouble zFa
 
 #endif /* GL_NV_depth_range_unclamped */
 
-/* ----------------
+/* ---------------------------- GL_NV_evaluators --------------------------- */
+
+#ifndef GL_NV_evaluators
+#define GL_NV_evaluators 1
+
+#define GL_EVAL_2D_NV 0x86C0
+#define GL_EVAL_TRIANGULAR_2D_NV 0x86C1
+#define GL_MAP_TESSELLATION_NV 0x86C2
+#define GL_MAP_ATTRIB_U_ORDER_NV 0x86C3
+#define GL_MAP_ATTRIB_V_ORDER_NV 0x86C4
+#define GL_EVAL_FRACTIONAL_TESSELLATION_NV 0x86C5
+#define GL_EVAL_VERTEX_ATTRIB0_NV 0x86C6
+#define GL_EVAL_VERTEX_ATTRIB1_NV 0x86C7
+#define GL_EVAL_VERTEX_ATTRIB2_NV 0x86C8
+#define GL_EVAL_VERTEX_ATTRIB3_NV 0x86C9
+#define GL_EVAL_VERTEX_ATTRIB4_NV 0x86CA
+#define GL_EVAL_VERTEX_ATTRIB5_NV 0x86CB
+#define GL_EVAL_VERTEX_ATTRIB6_NV 0x86CC
+#define GL_EVAL_VERTEX_ATTRIB7_NV 0x86CD
+#define GL_EVAL_VERTEX_ATTRIB8_NV 0x86CE
+#define GL_EVAL_VERTEX_ATTRIB9_NV 0x86CF
+#define GL_EVAL_VERTEX_ATTRIB10_NV 0x86D0
+#define GL_EVAL_VERTEX_ATTRIB11_NV 0x86D1
+#define GL_EVAL_VERTEX_ATTRIB12_NV 0x86D2
+#define GL_EVAL_VERTEX_ATTRIB13_NV 0x86D3
+#define GL_EVAL_VERTEX_ATTRIB14_NV 0x86D4
+#define GL_EVAL_VERTEX_ATTRIB15_NV 0x86D5
+#define GL_MAX_MAP_TESSELLATION_NV 0x86D6
+#define GL_MAX_RATIONAL_EVAL_ORDER_NV 0x86D7
+
+typedef void (GLAPIENTRY * PFNGLEVALMAPSNVPROC) (GLenum target, GLenum mode);
+typedef void (GLAPIENTRY * PFNGLGETMAPATTRIBPARAMETERFVNVPROC) (GLenum target, GLuint index, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETMAPATTRIBPARAMETERIVNVPROC) (GLenum target, GLuint index, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETMAPCONTROLPOINTSNVPROC) (GLenum target, GLuint index, GLenum type, GLsizei ustride, GLsizei vstride, GLboolean packed, void* points);
+typedef void (GLAPIENTRY * PFNGLGETMAPPARAMETERFVNVPROC) (GLenum target, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETMAPPARAMETERIVNVPROC) (GLenum target, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLMAPCONTROLPOINTSNVPROC) (GLenum target, GLuint index, GLenum type, GLsizei ustride, GLsizei vstride, GLint uorder, GLint vorder, GLboolean packed, const void* points);
+typedef void (GLAPIENTRY * PFNGLMAPPARAMETERFVNVPROC) (GLenum target, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLMAPPARAMETERIVNVPROC) (GLenum target, GLenum pname, const GLint* params);
+
+#define glEvalMapsNV GLEW_GET_FUN(__glewEvalMapsNV)
+#define glGetMapAttribParameterfvNV GLEW_GET_FUN(__glewGetMapAttribParameterfvNV)
+#define glGetMapAttribParameterivNV GLEW_GET_FUN(__glewGetMapAttribParameterivNV)
+#define glGetMapControlPointsNV GLEW_GET_FUN(__glewGetMapControlPointsNV)
+#define glGetMapParameterfvNV GLEW_GET_FUN(__glewGetMapParameterfvNV)
+#define glGetMapParameterivNV GLEW_GET_FUN(__glewGetMapParameterivNV)
+#define glMapControlPointsNV GLEW_GET_FUN(__glewMapControlPointsNV)
+#define glMapParameterfvNV GLEW_GET_FUN(__glewMapParameterfvNV)
+#define glMapParameterivNV GLEW_GET_FUN(__glewMapParameterivNV)
+
+#define GLEW_NV_evaluators GLEW_GET_VAR(__GLEW_NV_evaluators)
+
+#endif /* GL_NV_evaluators */
+
+/* ------------------------------ GL_NV_fence ------------------------------ */
+
+#ifndef GL_NV_fence
+#define GL_NV_fence 1
+
+#define GL_ALL_COMPLETED_NV 0x84F2
+#define GL_FENCE_STATUS_NV 0x84F3
+#define GL_FENCE_CONDITION_NV 0x84F4
+
+typedef void (GLAPIENTRY * PFNGLDELETEFENCESNVPROC) (GLsizei n, const GLuint* fences);
+typedef void (GLAPIENTRY * PFNGLFINISHFENCENVPROC) (GLuint fence);
+typedef void (GLAPIENTRY * PFNGLGENFENCESNVPROC) (GLsizei n, GLuint* fences);
+typedef void (GLAPIENTRY * PFNGLGETFENCEIVNVPROC) (GLuint fence, GLenum pname, GLint* params);
+typedef GLboolean (GLAPIENTRY * PFNGLISFENCENVPROC) (GLuint fence);
+typedef void (GLAPIENTRY * PFNGLSETFENCENVPROC) (GLuint fence, GLenum condition);
+typedef GLboolean (GLAPIENTRY * PFNGLTESTFENCENVPROC) (GLuint fence);
+
+#define glDeleteFencesNV GLEW_GET_FUN(__glewDeleteFencesNV)
+#define glFinishFenceNV GLEW_GET_FUN(__glewFinishFenceNV)
+#define glGenFencesNV GLEW_GET_FUN(__glewGenFencesNV)
+#define glGetFenceivNV GLEW_GET_FUN(__glewGetFenceivNV)
+#define glIsFenceNV GLEW_GET_FUN(__glewIsFenceNV)
+#define glSetFenceNV GLEW_GET_FUN(__glewSetFenceNV)
+#define glTestFenceNV GLEW_GET_FUN(__glewTestFenceNV)
+
+#define GLEW_NV_fence GLEW_GET_VAR(__GLEW_NV_fence)
+
+#endif /* GL_NV_fence */
+
+/* --------------------------- GL_NV_float_buffer -------------------------- */
+
+#ifndef GL_NV_float_buffer
+#define GL_NV_float_buffer 1
+
+#define GL_FLOAT_R_NV 0x8880
+#define GL_FLOAT_RG_NV 0x8881
+#define GL_FLOAT_RGB_NV 0x8882
+#define GL_FLOAT_RGBA_NV 0x8883
+#define GL_FLOAT_R16_NV 0x8884
+#define GL_FLOAT_R32_NV 0x8885
+#define GL_FLOAT_RG16_NV 0x8886
+#define GL_FLOAT_RG32_NV 0x8887
+#define GL_FLOAT_RGB16_NV 0x8888
+#define GL_FLOAT_RGB32_NV 0x8889
+#define GL_FLOAT_RGBA16_NV 0x888A
+#define GL_FLOAT_RGBA32_NV 0x888B
+#define GL_TEXTURE_FLOAT_COMPONENTS_NV 0x888C
+#define GL_FLOAT_CLEAR_COLOR_VALUE_NV 0x888D
+#define GL_FLOAT_RGBA_MODE_NV 0x888E
+
+#define GLEW_NV_float_buffer GLEW_GET_VAR(__GLEW_NV_float_buffer)
+
+#endif /* GL_NV_float_buffer */
+
+/* --------------------------- GL_NV_fog_distance -------------------------- */
+
+#ifndef GL_NV_fog_distance
+#define GL_NV_fog_distance 1
+
+#define GL_FOG_DISTANCE_MODE_NV 0x855A
+#define GL_EYE_RADIAL_NV 0x855B
+#define GL_EYE_PLANE_ABSOLUTE_NV 0x855C
+
+#define GLEW_NV_fog_distance GLEW_GET_VAR(__GLEW_NV_fog_distance)
+
+#endif /* GL_NV_fog_distance */
+
+/* ------------------------- GL_NV_fragment_program ------------------------ */
+
+#ifndef GL_NV_fragment_program
+#define GL_NV_fragment_program 1
+
+#define GL_MAX_FRAGMENT_PROGRAM_LOCAL_PARAMETERS_NV 0x8868
+#define GL_FRAGMENT_PROGRAM_NV 0x8870
+#define GL_MAX_TEXTURE_COORDS_NV 0x8871
+#define GL_MAX_TEXTURE_IMAGE_UNITS_NV 0x8872
+#define GL_FRAGMENT_PROGRAM_BINDING_NV 0x8873
+#define GL_PROGRAM_ERROR_STRING_NV 0x8874
+
+typedef void (GLAPIENTRY * PFNGLGETPROGRAMNAMEDPARAMETERDVNVPROC) (GLuint id, GLsizei len, const GLubyte* name, GLdouble *params);
+typedef void (GLAPIENTRY * PFNGLGETPROGRAMNAMEDPARAMETERFVNVPROC) (GLuint id, GLsizei len, const GLubyte* name, GLfloat *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMNAMEDPARAMETER4DNVPROC) (GLuint id, GLsizei len, const GLubyte* name, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
+typedef void (GLAPIENTRY * PFNGLPROGRAMNAMEDPARAMETER4DVNVPROC) (GLuint id, GLsizei len, const GLubyte* name, const GLdouble v[]);
+typedef void (GLAPIENTRY * PFNGLPROGRAMNAMEDPARAMETER4FNVPROC) (GLuint id, GLsizei len, const GLubyte* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+typedef void (GLAPIENTRY * PFNGLPROGRAMNAMEDPARAMETER4FVNVPROC) (GLuint id, GLsizei len, const GLubyte* name, const GLfloat v[]);
+
+#define glGetProgramNamedParameterdvNV GLEW_GET_FUN(__glewGetProgramNamedParameterdvNV)
+#define glGetProgramNamedParameterfvNV GLEW_GET_FUN(__glewGetProgramNamedParameterfvNV)
+#define glProgramNamedParameter4dNV GLEW_GET_FUN(__glewProgramNamedParameter4dNV)
+#define glProgramNamedParameter4dvNV GLEW_GET_FUN(__glewProgramNamedParameter4dvNV)
+#define glProgramNamedParameter4fNV GLEW_GET_FUN(__glewProgramNamedParameter4fNV)
+#define glProgramNamedParameter4fvNV GLEW_GET_FUN(__glewProgramNamedParameter4fvNV)
+
+#define GLEW_NV_fragment_program GLEW_GET_VAR(__GLEW_NV_fragment_program)
+
+#endif /* GL_NV_fragment_program */
+
+/* ------------------------ GL_NV_fragment_program2 ------------------------ */
+
+#ifndef GL_NV_fragment_program2
+#define GL_NV_fragment_program2 1
+
+#define GL_MAX_PROGRAM_EXEC_INSTRUCTIONS_NV 0x88F4
+#define GL_MAX_PROGRAM_CALL_DEPTH_NV 0x88F5
+#define GL_MAX_PROGRAM_IF_DEPTH_NV 0x88F6
+#define GL_MAX_PROGRAM_LOOP_DEPTH_NV 0x88F7
+#define GL_MAX_PROGRAM_LOOP_COUNT_NV 0x88F8
+
+#define GLEW_NV_fragment_program2 GLEW_GET_VAR(__GLEW_NV_fragment_program2)
+
+#endif /* GL_NV_fragment_program2 */
+
+/* ------------------------ GL_NV_fragment_program4 ------------------------ */
+
+#ifndef GL_NV_fragment_program4
+#define GL_NV_fragment_program4 1
+
+#define GLEW_NV_fragment_program4 GLEW_GET_VAR(__GLEW_NV_fragment_program4)
+
+#endif /* GL_NV_fragment_program4 */
+
+/* --------------------- GL_NV_fragment_program_option --------------------- */
+
+#ifndef GL_NV_fragment_program_option
+#define GL_NV_fragment_program_option 1
+
+#define GLEW_NV_fragment_program_option GLEW_GET_VAR(__GLEW_NV_fragment_program_option)
+
+#endif /* GL_NV_fragment_program_option */
+
+/* ----------------- GL_NV_framebuffer_multisample_coverage ---------------- */
+
+#ifndef GL_NV_framebuffer_multisample_coverage
+#define GL_NV_framebuffer_multisample_coverage 1
+
+#define GL_RENDERBUFFER_COVERAGE_SAMPLES_NV 0x8CAB
+#define GL_RENDERBUFFER_COLOR_SAMPLES_NV 0x8E10
+#define GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV 0x8E11
+#define GL_MULTISAMPLE_COVERAGE_MODES_NV 0x8E12
+
+typedef void (GLAPIENTRY * PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC) (GLenum target, GLsizei coverageSamples, GLsizei colorSamples, GLenum internalformat, GLsizei width, GLsizei height);
+
+#define glRenderbufferStorageMultisampleCoverageNV GLEW_GET_FUN(__glewRenderbufferStorageMultisampleCoverageNV)
+
+#define GLEW_NV_framebuffer_multisample_coverage GLEW_GET_VAR(__GLEW_NV_framebuffer_multisample_coverage)
+
+#endif /* GL_NV_framebuffer_multisample_coverage */
+
+/* ------------------------ GL_NV_geometry_program4 ------------------------ */
+
+#ifndef GL_NV_geometry_program4
+#define GL_NV_geometry_program4 1
+
+#define GL_GEOMETRY_PROGRAM_NV 0x8C26
+#define GL_MAX_PROGRAM_OUTPUT_VERTICES_NV 0x8C27
+#define GL_MAX_PROGRAM_TOTAL_OUTPUT_COMPONENTS_NV 0x8C28
+
+typedef void (GLAPIENTRY * PFNGLPROGRAMVERTEXLIMITNVPROC) (GLenum target, GLint limit);
+
+#define glProgramVertexLimitNV GLEW_GET_FUN(__glewProgramVertexLimitNV)
+
+#define GLEW_NV_geometry_program4 GLEW_GET_VAR(__GLEW_NV_geometry_program4)
+
+#endif /* GL_NV_geometry_program4 */
+
+/* ------------------------- GL_NV_geometry_shader4 ------------------------ */
+
+#ifndef GL_NV_geometry_shader4
+#define GL_NV_geometry_shader4 1
+
+#define GLEW_NV_geometry_shader4 GLEW_GET_VAR(__GLEW_NV_geometry_shader4)
+
+#endif /* GL_NV_geometry_shader4 */
+
+/* --------------------------- GL_NV_gpu_program4 -------------------------- */
+
+#ifndef GL_NV_gpu_program4
+#define GL_NV_gpu_program4 1
+
+#define GL_MIN_PROGRAM_TEXEL_OFFSET_NV 0x8904
+#define GL_MAX_PROGRAM_TEXEL_OFFSET_NV 0x8905
+#define GL_PROGRAM_ATTRIB_COMPONENTS_NV 0x8906
+#define GL_PROGRAM_RESULT_COMPONENTS_NV 0x8907
+#define GL_MAX_PROGRAM_ATTRIB_COMPONEN

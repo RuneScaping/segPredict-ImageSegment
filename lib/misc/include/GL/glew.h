@@ -7070,3 +7070,220 @@ typedef void (GLAPIENTRY * PFNGLVERTEXWEIGHTHVNVPROC) (const GLhalf* weight);
 
 #endif /* GL_NV_light_max_exponent */
 
+/* --------------------- GL_NV_multisample_filter_hint --------------------- */
+
+#ifndef GL_NV_multisample_filter_hint
+#define GL_NV_multisample_filter_hint 1
+
+#define GL_MULTISAMPLE_FILTER_HINT_NV 0x8534
+
+#define GLEW_NV_multisample_filter_hint GLEW_GET_VAR(__GLEW_NV_multisample_filter_hint)
+
+#endif /* GL_NV_multisample_filter_hint */
+
+/* ------------------------- GL_NV_occlusion_query ------------------------- */
+
+#ifndef GL_NV_occlusion_query
+#define GL_NV_occlusion_query 1
+
+#define GL_PIXEL_COUNTER_BITS_NV 0x8864
+#define GL_CURRENT_OCCLUSION_QUERY_ID_NV 0x8865
+#define GL_PIXEL_COUNT_NV 0x8866
+#define GL_PIXEL_COUNT_AVAILABLE_NV 0x8867
+
+typedef void (GLAPIENTRY * PFNGLBEGINOCCLUSIONQUERYNVPROC) (GLuint id);
+typedef void (GLAPIENTRY * PFNGLDELETEOCCLUSIONQUERIESNVPROC) (GLsizei n, const GLuint* ids);
+typedef void (GLAPIENTRY * PFNGLENDOCCLUSIONQUERYNVPROC) (void);
+typedef void (GLAPIENTRY * PFNGLGENOCCLUSIONQUERIESNVPROC) (GLsizei n, GLuint* ids);
+typedef void (GLAPIENTRY * PFNGLGETOCCLUSIONQUERYIVNVPROC) (GLuint id, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETOCCLUSIONQUERYUIVNVPROC) (GLuint id, GLenum pname, GLuint* params);
+typedef GLboolean (GLAPIENTRY * PFNGLISOCCLUSIONQUERYNVPROC) (GLuint id);
+
+#define glBeginOcclusionQueryNV GLEW_GET_FUN(__glewBeginOcclusionQueryNV)
+#define glDeleteOcclusionQueriesNV GLEW_GET_FUN(__glewDeleteOcclusionQueriesNV)
+#define glEndOcclusionQueryNV GLEW_GET_FUN(__glewEndOcclusionQueryNV)
+#define glGenOcclusionQueriesNV GLEW_GET_FUN(__glewGenOcclusionQueriesNV)
+#define glGetOcclusionQueryivNV GLEW_GET_FUN(__glewGetOcclusionQueryivNV)
+#define glGetOcclusionQueryuivNV GLEW_GET_FUN(__glewGetOcclusionQueryuivNV)
+#define glIsOcclusionQueryNV GLEW_GET_FUN(__glewIsOcclusionQueryNV)
+
+#define GLEW_NV_occlusion_query GLEW_GET_VAR(__GLEW_NV_occlusion_query)
+
+#endif /* GL_NV_occlusion_query */
+
+/* ----------------------- GL_NV_packed_depth_stencil ---------------------- */
+
+#ifndef GL_NV_packed_depth_stencil
+#define GL_NV_packed_depth_stencil 1
+
+#define GL_DEPTH_STENCIL_NV 0x84F9
+#define GL_UNSIGNED_INT_24_8_NV 0x84FA
+
+#define GLEW_NV_packed_depth_stencil GLEW_GET_VAR(__GLEW_NV_packed_depth_stencil)
+
+#endif /* GL_NV_packed_depth_stencil */
+
+/* --------------------- GL_NV_parameter_buffer_object --------------------- */
+
+#ifndef GL_NV_parameter_buffer_object
+#define GL_NV_parameter_buffer_object 1
+
+#define GL_MAX_PROGRAM_PARAMETER_BUFFER_BINDINGS_NV 0x8DA0
+#define GL_MAX_PROGRAM_PARAMETER_BUFFER_SIZE_NV 0x8DA1
+#define GL_VERTEX_PROGRAM_PARAMETER_BUFFER_NV 0x8DA2
+#define GL_GEOMETRY_PROGRAM_PARAMETER_BUFFER_NV 0x8DA3
+#define GL_FRAGMENT_PROGRAM_PARAMETER_BUFFER_NV 0x8DA4
+
+typedef void (GLAPIENTRY * PFNGLPROGRAMBUFFERPARAMETERSIIVNVPROC) (GLenum target, GLuint buffer, GLuint index, GLsizei count, const GLint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMBUFFERPARAMETERSIUIVNVPROC) (GLenum target, GLuint buffer, GLuint index, GLsizei count, const GLuint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMBUFFERPARAMETERSFVNVPROC) (GLenum target, GLuint buffer, GLuint index, GLsizei count, const GLfloat *params);
+
+#define glProgramBufferParametersIivNV GLEW_GET_FUN(__glewProgramBufferParametersIivNV)
+#define glProgramBufferParametersIuivNV GLEW_GET_FUN(__glewProgramBufferParametersIuivNV)
+#define glProgramBufferParametersfvNV GLEW_GET_FUN(__glewProgramBufferParametersfvNV)
+
+#define GLEW_NV_parameter_buffer_object GLEW_GET_VAR(__GLEW_NV_parameter_buffer_object)
+
+#endif /* GL_NV_parameter_buffer_object */
+
+/* ------------------------- GL_NV_pixel_data_range ------------------------ */
+
+#ifndef GL_NV_pixel_data_range
+#define GL_NV_pixel_data_range 1
+
+#define GL_WRITE_PIXEL_DATA_RANGE_NV 0x8878
+#define GL_READ_PIXEL_DATA_RANGE_NV 0x8879
+#define GL_WRITE_PIXEL_DATA_RANGE_LENGTH_NV 0x887A
+#define GL_READ_PIXEL_DATA_RANGE_LENGTH_NV 0x887B
+#define GL_WRITE_PIXEL_DATA_RANGE_POINTER_NV 0x887C
+#define GL_READ_PIXEL_DATA_RANGE_POINTER_NV 0x887D
+
+typedef void (GLAPIENTRY * PFNGLFLUSHPIXELDATARANGENVPROC) (GLenum target);
+typedef void (GLAPIENTRY * PFNGLPIXELDATARANGENVPROC) (GLenum target, GLsizei length, void* pointer);
+
+#define glFlushPixelDataRangeNV GLEW_GET_FUN(__glewFlushPixelDataRangeNV)
+#define glPixelDataRangeNV GLEW_GET_FUN(__glewPixelDataRangeNV)
+
+#define GLEW_NV_pixel_data_range GLEW_GET_VAR(__GLEW_NV_pixel_data_range)
+
+#endif /* GL_NV_pixel_data_range */
+
+/* --------------------------- GL_NV_point_sprite -------------------------- */
+
+#ifndef GL_NV_point_sprite
+#define GL_NV_point_sprite 1
+
+#define GL_POINT_SPRITE_NV 0x8861
+#define GL_COORD_REPLACE_NV 0x8862
+#define GL_POINT_SPRITE_R_MODE_NV 0x8863
+
+typedef void (GLAPIENTRY * PFNGLPOINTPARAMETERINVPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLPOINTPARAMETERIVNVPROC) (GLenum pname, const GLint* params);
+
+#define glPointParameteriNV GLEW_GET_FUN(__glewPointParameteriNV)
+#define glPointParameterivNV GLEW_GET_FUN(__glewPointParameterivNV)
+
+#define GLEW_NV_point_sprite GLEW_GET_VAR(__GLEW_NV_point_sprite)
+
+#endif /* GL_NV_point_sprite */
+
+/* ------------------------ GL_NV_primitive_restart ------------------------ */
+
+#ifndef GL_NV_primitive_restart
+#define GL_NV_primitive_restart 1
+
+#define GL_PRIMITIVE_RESTART_NV 0x8558
+#define GL_PRIMITIVE_RESTART_INDEX_NV 0x8559
+
+typedef void (GLAPIENTRY * PFNGLPRIMITIVERESTARTINDEXNVPROC) (GLuint index);
+typedef void (GLAPIENTRY * PFNGLPRIMITIVERESTARTNVPROC) (void);
+
+#define glPrimitiveRestartIndexNV GLEW_GET_FUN(__glewPrimitiveRestartIndexNV)
+#define glPrimitiveRestartNV GLEW_GET_FUN(__glewPrimitiveRestartNV)
+
+#define GLEW_NV_primitive_restart GLEW_GET_VAR(__GLEW_NV_primitive_restart)
+
+#endif /* GL_NV_primitive_restart */
+
+/* ------------------------ GL_NV_register_combiners ----------------------- */
+
+#ifndef GL_NV_register_combiners
+#define GL_NV_register_combiners 1
+
+#define GL_REGISTER_COMBINERS_NV 0x8522
+#define GL_VARIABLE_A_NV 0x8523
+#define GL_VARIABLE_B_NV 0x8524
+#define GL_VARIABLE_C_NV 0x8525
+#define GL_VARIABLE_D_NV 0x8526
+#define GL_VARIABLE_E_NV 0x8527
+#define GL_VARIABLE_F_NV 0x8528
+#define GL_VARIABLE_G_NV 0x8529
+#define GL_CONSTANT_COLOR0_NV 0x852A
+#define GL_CONSTANT_COLOR1_NV 0x852B
+#define GL_PRIMARY_COLOR_NV 0x852C
+#define GL_SECONDARY_COLOR_NV 0x852D
+#define GL_SPARE0_NV 0x852E
+#define GL_SPARE1_NV 0x852F
+#define GL_DISCARD_NV 0x8530
+#define GL_E_TIMES_F_NV 0x8531
+#define GL_SPARE0_PLUS_SECONDARY_COLOR_NV 0x8532
+#define GL_UNSIGNED_IDENTITY_NV 0x8536
+#define GL_UNSIGNED_INVERT_NV 0x8537
+#define GL_EXPAND_NORMAL_NV 0x8538
+#define GL_EXPAND_NEGATE_NV 0x8539
+#define GL_HALF_BIAS_NORMAL_NV 0x853A
+#define GL_HALF_BIAS_NEGATE_NV 0x853B
+#define GL_SIGNED_IDENTITY_NV 0x853C
+#define GL_SIGNED_NEGATE_NV 0x853D
+#define GL_SCALE_BY_TWO_NV 0x853E
+#define GL_SCALE_BY_FOUR_NV 0x853F
+#define GL_SCALE_BY_ONE_HALF_NV 0x8540
+#define GL_BIAS_BY_NEGATIVE_ONE_HALF_NV 0x8541
+#define GL_COMBINER_INPUT_NV 0x8542
+#define GL_COMBINER_MAPPING_NV 0x8543
+#define GL_COMBINER_COMPONENT_USAGE_NV 0x8544
+#define GL_COMBINER_AB_DOT_PRODUCT_NV 0x8545
+#define GL_COMBINER_CD_DOT_PRODUCT_NV 0x8546
+#define GL_COMBINER_MUX_SUM_NV 0x8547
+#define GL_COMBINER_SCALE_NV 0x8548
+#define GL_COMBINER_BIAS_NV 0x8549
+#define GL_COMBINER_AB_OUTPUT_NV 0x854A
+#define GL_COMBINER_CD_OUTPUT_NV 0x854B
+#define GL_COMBINER_SUM_OUTPUT_NV 0x854C
+#define GL_MAX_GENERAL_COMBINERS_NV 0x854D
+#define GL_NUM_GENERAL_COMBINERS_NV 0x854E
+#define GL_COLOR_SUM_CLAMP_NV 0x854F
+#define GL_COMBINER0_NV 0x8550
+#define GL_COMBINER1_NV 0x8551
+#define GL_COMBINER2_NV 0x8552
+#define GL_COMBINER3_NV 0x8553
+#define GL_COMBINER4_NV 0x8554
+#define GL_COMBINER5_NV 0x8555
+#define GL_COMBINER6_NV 0x8556
+#define GL_COMBINER7_NV 0x8557
+
+typedef void (GLAPIENTRY * PFNGLCOMBINERINPUTNVPROC) (GLenum stage, GLenum portion, GLenum variable, GLenum input, GLenum mapping, GLenum componentUsage);
+typedef void (GLAPIENTRY * PFNGLCOMBINEROUTPUTNVPROC) (GLenum stage, GLenum portion, GLenum abOutput, GLenum cdOutput, GLenum sumOutput, GLenum scale, GLenum bias, GLboolean abDotProduct, GLboolean cdDotProduct, GLboolean muxSum);
+typedef void (GLAPIENTRY * PFNGLCOMBINERPARAMETERFNVPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLCOMBINERPARAMETERFVNVPROC) (GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLCOMBINERPARAMETERINVPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLCOMBINERPARAMETERIVNVPROC) (GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLFINALCOMBINERINPUTNVPROC) (GLenum variable, GLenum input, GLenum mapping, GLenum componentUsage);
+typedef void (GLAPIENTRY * PFNGLGETCOMBINERINPUTPARAMETERFVNVPROC) (GLenum stage, GLenum portion, GLenum variable, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETCOMBINERINPUTPARAMETERIVNVPROC) (GLenum stage, GLenum portion, GLenum variable, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETCOMBINEROUTPUTPARAMETERFVNVPROC) (GLenum stage, GLenum portion, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETCOMBINEROUTPUTPARAMETERIVNVPROC) (GLenum stage, GLenum portion, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETFINALCOMBINERINPUTPARAMETERFVNVPROC) (GLenum variable, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETFINALCOMBINERINPUTPARAMETERIVNVPROC) (GLenum variable, GLenum pname, GLint* params);
+
+#define glCombinerInputNV GLEW_GET_FUN(__glewCombinerInputNV)
+#define glCombinerOutputNV GLEW_GET_FUN(__glewCombinerOutputNV)
+#define glCombinerParameterfNV GLEW_GET_FUN(__glewCombinerParameterfNV)
+#define glCombinerParameterfvNV GLEW_GET_FUN(__glewCombinerParameterfvNV)
+#define glCombinerParameteriNV GLEW_GET_FUN(__glewCombinerParameteriNV)
+#define glCombinerParameterivNV GLEW_GET_FUN(__glewCombinerParameterivNV)
+#define glFinalCombinerInputNV GLEW_GET_FUN(__glewFinalCombinerInputNV)
+#define glGetCombinerInputParameterfvNV GLEW_GET_FUN(__glewGetCombinerInputParameterfvNV)
+#define glGetCombinerInputParameterivNV GLEW_GET_FUN(__glewGetCombinerInputParameterivNV)
+#define glGetCombinerOutputParameterfvNV GLEW_GET_FUN(__glewGetCombinerOutputParameterfvNV)
+#define glGetCombinerOutputParame

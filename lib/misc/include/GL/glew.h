@@ -6916,4 +6916,157 @@ typedef void (GLAPIENTRY * PFNGLPROGRAMVERTEXLIMITNVPROC) (GLenum target, GLint 
 #define GL_MAX_PROGRAM_TEXEL_OFFSET_NV 0x8905
 #define GL_PROGRAM_ATTRIB_COMPONENTS_NV 0x8906
 #define GL_PROGRAM_RESULT_COMPONENTS_NV 0x8907
-#define GL_MAX_PROGRAM_ATTRIB_COMPONEN
+#define GL_MAX_PROGRAM_ATTRIB_COMPONENTS_NV 0x8908
+#define GL_MAX_PROGRAM_RESULT_COMPONENTS_NV 0x8909
+#define GL_MAX_PROGRAM_GENERIC_ATTRIBS_NV 0x8DA5
+#define GL_MAX_PROGRAM_GENERIC_RESULTS_NV 0x8DA6
+
+typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERI4INVPROC) (GLenum target, GLuint index, GLint x, GLint y, GLint z, GLint w);
+typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERI4IVNVPROC) (GLenum target, GLuint index, const GLint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERI4UINVPROC) (GLenum target, GLuint index, GLuint x, GLuint y, GLuint z, GLuint w);
+typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERI4UIVNVPROC) (GLenum target, GLuint index, const GLuint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERSI4IVNVPROC) (GLenum target, GLuint index, GLsizei count, const GLint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMENVPARAMETERSI4UIVNVPROC) (GLenum target, GLuint index, GLsizei count, const GLuint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERI4INVPROC) (GLenum target, GLuint index, GLint x, GLint y, GLint z, GLint w);
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERI4IVNVPROC) (GLenum target, GLuint index, const GLint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERI4UINVPROC) (GLenum target, GLuint index, GLuint x, GLuint y, GLuint z, GLuint w);
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERI4UIVNVPROC) (GLenum target, GLuint index, const GLuint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERSI4IVNVPROC) (GLenum target, GLuint index, GLsizei count, const GLint *params);
+typedef void (GLAPIENTRY * PFNGLPROGRAMLOCALPARAMETERSI4UIVNVPROC) (GLenum target, GLuint index, GLsizei count, const GLuint *params);
+
+#define glProgramEnvParameterI4iNV GLEW_GET_FUN(__glewProgramEnvParameterI4iNV)
+#define glProgramEnvParameterI4ivNV GLEW_GET_FUN(__glewProgramEnvParameterI4ivNV)
+#define glProgramEnvParameterI4uiNV GLEW_GET_FUN(__glewProgramEnvParameterI4uiNV)
+#define glProgramEnvParameterI4uivNV GLEW_GET_FUN(__glewProgramEnvParameterI4uivNV)
+#define glProgramEnvParametersI4ivNV GLEW_GET_FUN(__glewProgramEnvParametersI4ivNV)
+#define glProgramEnvParametersI4uivNV GLEW_GET_FUN(__glewProgramEnvParametersI4uivNV)
+#define glProgramLocalParameterI4iNV GLEW_GET_FUN(__glewProgramLocalParameterI4iNV)
+#define glProgramLocalParameterI4ivNV GLEW_GET_FUN(__glewProgramLocalParameterI4ivNV)
+#define glProgramLocalParameterI4uiNV GLEW_GET_FUN(__glewProgramLocalParameterI4uiNV)
+#define glProgramLocalParameterI4uivNV GLEW_GET_FUN(__glewProgramLocalParameterI4uivNV)
+#define glProgramLocalParametersI4ivNV GLEW_GET_FUN(__glewProgramLocalParametersI4ivNV)
+#define glProgramLocalParametersI4uivNV GLEW_GET_FUN(__glewProgramLocalParametersI4uivNV)
+
+#define GLEW_NV_gpu_program4 GLEW_GET_VAR(__GLEW_NV_gpu_program4)
+
+#endif /* GL_NV_gpu_program4 */
+
+/* ---------------------------- GL_NV_half_float --------------------------- */
+
+#ifndef GL_NV_half_float
+#define GL_NV_half_float 1
+
+#define GL_HALF_FLOAT_NV 0x140B
+
+typedef unsigned short GLhalf;
+
+typedef void (GLAPIENTRY * PFNGLCOLOR3HNVPROC) (GLhalf red, GLhalf green, GLhalf blue);
+typedef void (GLAPIENTRY * PFNGLCOLOR3HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLCOLOR4HNVPROC) (GLhalf red, GLhalf green, GLhalf blue, GLhalf alpha);
+typedef void (GLAPIENTRY * PFNGLCOLOR4HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDHNVPROC) (GLhalf fog);
+typedef void (GLAPIENTRY * PFNGLFOGCOORDHVNVPROC) (const GLhalf* fog);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1HNVPROC) (GLenum target, GLhalf s);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD1HVNVPROC) (GLenum target, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2HNVPROC) (GLenum target, GLhalf s, GLhalf t);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD2HVNVPROC) (GLenum target, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3HNVPROC) (GLenum target, GLhalf s, GLhalf t, GLhalf r);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD3HVNVPROC) (GLenum target, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4HNVPROC) (GLenum target, GLhalf s, GLhalf t, GLhalf r, GLhalf q);
+typedef void (GLAPIENTRY * PFNGLMULTITEXCOORD4HVNVPROC) (GLenum target, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLNORMAL3HNVPROC) (GLhalf nx, GLhalf ny, GLhalf nz);
+typedef void (GLAPIENTRY * PFNGLNORMAL3HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3HNVPROC) (GLhalf red, GLhalf green, GLhalf blue);
+typedef void (GLAPIENTRY * PFNGLSECONDARYCOLOR3HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD1HNVPROC) (GLhalf s);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD1HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2HNVPROC) (GLhalf s, GLhalf t);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD3HNVPROC) (GLhalf s, GLhalf t, GLhalf r);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD3HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD4HNVPROC) (GLhalf s, GLhalf t, GLhalf r, GLhalf q);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD4HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEX2HNVPROC) (GLhalf x, GLhalf y);
+typedef void (GLAPIENTRY * PFNGLVERTEX2HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEX3HNVPROC) (GLhalf x, GLhalf y, GLhalf z);
+typedef void (GLAPIENTRY * PFNGLVERTEX3HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEX4HNVPROC) (GLhalf x, GLhalf y, GLhalf z, GLhalf w);
+typedef void (GLAPIENTRY * PFNGLVERTEX4HVNVPROC) (const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB1HNVPROC) (GLuint index, GLhalf x);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB1HVNVPROC) (GLuint index, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2HNVPROC) (GLuint index, GLhalf x, GLhalf y);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2HVNVPROC) (GLuint index, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3HNVPROC) (GLuint index, GLhalf x, GLhalf y, GLhalf z);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3HVNVPROC) (GLuint index, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4HNVPROC) (GLuint index, GLhalf x, GLhalf y, GLhalf z, GLhalf w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4HVNVPROC) (GLuint index, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS1HVNVPROC) (GLuint index, GLsizei n, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS2HVNVPROC) (GLuint index, GLsizei n, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS3HVNVPROC) (GLuint index, GLsizei n, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS4HVNVPROC) (GLuint index, GLsizei n, const GLhalf* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXWEIGHTHNVPROC) (GLhalf weight);
+typedef void (GLAPIENTRY * PFNGLVERTEXWEIGHTHVNVPROC) (const GLhalf* weight);
+
+#define glColor3hNV GLEW_GET_FUN(__glewColor3hNV)
+#define glColor3hvNV GLEW_GET_FUN(__glewColor3hvNV)
+#define glColor4hNV GLEW_GET_FUN(__glewColor4hNV)
+#define glColor4hvNV GLEW_GET_FUN(__glewColor4hvNV)
+#define glFogCoordhNV GLEW_GET_FUN(__glewFogCoordhNV)
+#define glFogCoordhvNV GLEW_GET_FUN(__glewFogCoordhvNV)
+#define glMultiTexCoord1hNV GLEW_GET_FUN(__glewMultiTexCoord1hNV)
+#define glMultiTexCoord1hvNV GLEW_GET_FUN(__glewMultiTexCoord1hvNV)
+#define glMultiTexCoord2hNV GLEW_GET_FUN(__glewMultiTexCoord2hNV)
+#define glMultiTexCoord2hvNV GLEW_GET_FUN(__glewMultiTexCoord2hvNV)
+#define glMultiTexCoord3hNV GLEW_GET_FUN(__glewMultiTexCoord3hNV)
+#define glMultiTexCoord3hvNV GLEW_GET_FUN(__glewMultiTexCoord3hvNV)
+#define glMultiTexCoord4hNV GLEW_GET_FUN(__glewMultiTexCoord4hNV)
+#define glMultiTexCoord4hvNV GLEW_GET_FUN(__glewMultiTexCoord4hvNV)
+#define glNormal3hNV GLEW_GET_FUN(__glewNormal3hNV)
+#define glNormal3hvNV GLEW_GET_FUN(__glewNormal3hvNV)
+#define glSecondaryColor3hNV GLEW_GET_FUN(__glewSecondaryColor3hNV)
+#define glSecondaryColor3hvNV GLEW_GET_FUN(__glewSecondaryColor3hvNV)
+#define glTexCoord1hNV GLEW_GET_FUN(__glewTexCoord1hNV)
+#define glTexCoord1hvNV GLEW_GET_FUN(__glewTexCoord1hvNV)
+#define glTexCoord2hNV GLEW_GET_FUN(__glewTexCoord2hNV)
+#define glTexCoord2hvNV GLEW_GET_FUN(__glewTexCoord2hvNV)
+#define glTexCoord3hNV GLEW_GET_FUN(__glewTexCoord3hNV)
+#define glTexCoord3hvNV GLEW_GET_FUN(__glewTexCoord3hvNV)
+#define glTexCoord4hNV GLEW_GET_FUN(__glewTexCoord4hNV)
+#define glTexCoord4hvNV GLEW_GET_FUN(__glewTexCoord4hvNV)
+#define glVertex2hNV GLEW_GET_FUN(__glewVertex2hNV)
+#define glVertex2hvNV GLEW_GET_FUN(__glewVertex2hvNV)
+#define glVertex3hNV GLEW_GET_FUN(__glewVertex3hNV)
+#define glVertex3hvNV GLEW_GET_FUN(__glewVertex3hvNV)
+#define glVertex4hNV GLEW_GET_FUN(__glewVertex4hNV)
+#define glVertex4hvNV GLEW_GET_FUN(__glewVertex4hvNV)
+#define glVertexAttrib1hNV GLEW_GET_FUN(__glewVertexAttrib1hNV)
+#define glVertexAttrib1hvNV GLEW_GET_FUN(__glewVertexAttrib1hvNV)
+#define glVertexAttrib2hNV GLEW_GET_FUN(__glewVertexAttrib2hNV)
+#define glVertexAttrib2hvNV GLEW_GET_FUN(__glewVertexAttrib2hvNV)
+#define glVertexAttrib3hNV GLEW_GET_FUN(__glewVertexAttrib3hNV)
+#define glVertexAttrib3hvNV GLEW_GET_FUN(__glewVertexAttrib3hvNV)
+#define glVertexAttrib4hNV GLEW_GET_FUN(__glewVertexAttrib4hNV)
+#define glVertexAttrib4hvNV GLEW_GET_FUN(__glewVertexAttrib4hvNV)
+#define glVertexAttribs1hvNV GLEW_GET_FUN(__glewVertexAttribs1hvNV)
+#define glVertexAttribs2hvNV GLEW_GET_FUN(__glewVertexAttribs2hvNV)
+#define glVertexAttribs3hvNV GLEW_GET_FUN(__glewVertexAttribs3hvNV)
+#define glVertexAttribs4hvNV GLEW_GET_FUN(__glewVertexAttribs4hvNV)
+#define glVertexWeighthNV GLEW_GET_FUN(__glewVertexWeighthNV)
+#define glVertexWeighthvNV GLEW_GET_FUN(__glewVertexWeighthvNV)
+
+#define GLEW_NV_half_float GLEW_GET_VAR(__GLEW_NV_half_float)
+
+#endif /* GL_NV_half_float */
+
+/* ------------------------ GL_NV_light_max_exponent ----------------------- */
+
+#ifndef GL_NV_light_max_exponent
+#define GL_NV_light_max_exponent 1
+
+#define GL_MAX_SHININESS_NV 0x8504
+#define GL_MAX_SPOT_EXPONENT_NV 0x8505
+
+#define GLEW_NV_light_max_exponent GLEW_GET_VAR(__GLEW_NV_light_max_exponent)
+
+#endif /* GL_NV_light_max_exponent */
+

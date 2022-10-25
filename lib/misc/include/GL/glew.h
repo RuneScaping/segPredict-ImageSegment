@@ -7286,4 +7286,281 @@ typedef void (GLAPIENTRY * PFNGLGETFINALCOMBINERINPUTPARAMETERIVNVPROC) (GLenum 
 #define glGetCombinerInputParameterfvNV GLEW_GET_FUN(__glewGetCombinerInputParameterfvNV)
 #define glGetCombinerInputParameterivNV GLEW_GET_FUN(__glewGetCombinerInputParameterivNV)
 #define glGetCombinerOutputParameterfvNV GLEW_GET_FUN(__glewGetCombinerOutputParameterfvNV)
-#define glGetCombinerOutputParame
+#define glGetCombinerOutputParameterivNV GLEW_GET_FUN(__glewGetCombinerOutputParameterivNV)
+#define glGetFinalCombinerInputParameterfvNV GLEW_GET_FUN(__glewGetFinalCombinerInputParameterfvNV)
+#define glGetFinalCombinerInputParameterivNV GLEW_GET_FUN(__glewGetFinalCombinerInputParameterivNV)
+
+#define GLEW_NV_register_combiners GLEW_GET_VAR(__GLEW_NV_register_combiners)
+
+#endif /* GL_NV_register_combiners */
+
+/* ----------------------- GL_NV_register_combiners2 ----------------------- */
+
+#ifndef GL_NV_register_combiners2
+#define GL_NV_register_combiners2 1
+
+#define GL_PER_STAGE_CONSTANTS_NV 0x8535
+
+typedef void (GLAPIENTRY * PFNGLCOMBINERSTAGEPARAMETERFVNVPROC) (GLenum stage, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETCOMBINERSTAGEPARAMETERFVNVPROC) (GLenum stage, GLenum pname, GLfloat* params);
+
+#define glCombinerStageParameterfvNV GLEW_GET_FUN(__glewCombinerStageParameterfvNV)
+#define glGetCombinerStageParameterfvNV GLEW_GET_FUN(__glewGetCombinerStageParameterfvNV)
+
+#define GLEW_NV_register_combiners2 GLEW_GET_VAR(__GLEW_NV_register_combiners2)
+
+#endif /* GL_NV_register_combiners2 */
+
+/* -------------------------- GL_NV_texgen_emboss -------------------------- */
+
+#ifndef GL_NV_texgen_emboss
+#define GL_NV_texgen_emboss 1
+
+#define GL_EMBOSS_LIGHT_NV 0x855D
+#define GL_EMBOSS_CONSTANT_NV 0x855E
+#define GL_EMBOSS_MAP_NV 0x855F
+
+#define GLEW_NV_texgen_emboss GLEW_GET_VAR(__GLEW_NV_texgen_emboss)
+
+#endif /* GL_NV_texgen_emboss */
+
+/* ------------------------ GL_NV_texgen_reflection ------------------------ */
+
+#ifndef GL_NV_texgen_reflection
+#define GL_NV_texgen_reflection 1
+
+#define GL_NORMAL_MAP_NV 0x8511
+#define GL_REFLECTION_MAP_NV 0x8512
+
+#define GLEW_NV_texgen_reflection GLEW_GET_VAR(__GLEW_NV_texgen_reflection)
+
+#endif /* GL_NV_texgen_reflection */
+
+/* --------------------- GL_NV_texture_compression_vtc --------------------- */
+
+#ifndef GL_NV_texture_compression_vtc
+#define GL_NV_texture_compression_vtc 1
+
+#define GLEW_NV_texture_compression_vtc GLEW_GET_VAR(__GLEW_NV_texture_compression_vtc)
+
+#endif /* GL_NV_texture_compression_vtc */
+
+/* ----------------------- GL_NV_texture_env_combine4 ---------------------- */
+
+#ifndef GL_NV_texture_env_combine4
+#define GL_NV_texture_env_combine4 1
+
+#define GL_COMBINE4_NV 0x8503
+#define GL_SOURCE3_RGB_NV 0x8583
+#define GL_SOURCE3_ALPHA_NV 0x858B
+#define GL_OPERAND3_RGB_NV 0x8593
+#define GL_OPERAND3_ALPHA_NV 0x859B
+
+#define GLEW_NV_texture_env_combine4 GLEW_GET_VAR(__GLEW_NV_texture_env_combine4)
+
+#endif /* GL_NV_texture_env_combine4 */
+
+/* ---------------------- GL_NV_texture_expand_normal ---------------------- */
+
+#ifndef GL_NV_texture_expand_normal
+#define GL_NV_texture_expand_normal 1
+
+#define GL_TEXTURE_UNSIGNED_REMAP_MODE_NV 0x888F
+
+#define GLEW_NV_texture_expand_normal GLEW_GET_VAR(__GLEW_NV_texture_expand_normal)
+
+#endif /* GL_NV_texture_expand_normal */
+
+/* ------------------------ GL_NV_texture_rectangle ------------------------ */
+
+#ifndef GL_NV_texture_rectangle
+#define GL_NV_texture_rectangle 1
+
+#define GL_TEXTURE_RECTANGLE_NV 0x84F5
+#define GL_TEXTURE_BINDING_RECTANGLE_NV 0x84F6
+#define GL_PROXY_TEXTURE_RECTANGLE_NV 0x84F7
+#define GL_MAX_RECTANGLE_TEXTURE_SIZE_NV 0x84F8
+
+#define GLEW_NV_texture_rectangle GLEW_GET_VAR(__GLEW_NV_texture_rectangle)
+
+#endif /* GL_NV_texture_rectangle */
+
+/* -------------------------- GL_NV_texture_shader ------------------------- */
+
+#ifndef GL_NV_texture_shader
+#define GL_NV_texture_shader 1
+
+#define GL_OFFSET_TEXTURE_RECTANGLE_NV 0x864C
+#define GL_OFFSET_TEXTURE_RECTANGLE_SCALE_NV 0x864D
+#define GL_DOT_PRODUCT_TEXTURE_RECTANGLE_NV 0x864E
+#define GL_RGBA_UNSIGNED_DOT_PRODUCT_MAPPING_NV 0x86D9
+#define GL_UNSIGNED_INT_S8_S8_8_8_NV 0x86DA
+#define GL_UNSIGNED_INT_8_8_S8_S8_REV_NV 0x86DB
+#define GL_DSDT_MAG_INTENSITY_NV 0x86DC
+#define GL_SHADER_CONSISTENT_NV 0x86DD
+#define GL_TEXTURE_SHADER_NV 0x86DE
+#define GL_SHADER_OPERATION_NV 0x86DF
+#define GL_CULL_MODES_NV 0x86E0
+#define GL_OFFSET_TEXTURE_MATRIX_NV 0x86E1
+#define GL_OFFSET_TEXTURE_SCALE_NV 0x86E2
+#define GL_OFFSET_TEXTURE_BIAS_NV 0x86E3
+#define GL_PREVIOUS_TEXTURE_INPUT_NV 0x86E4
+#define GL_CONST_EYE_NV 0x86E5
+#define GL_PASS_THROUGH_NV 0x86E6
+#define GL_CULL_FRAGMENT_NV 0x86E7
+#define GL_OFFSET_TEXTURE_2D_NV 0x86E8
+#define GL_DEPENDENT_AR_TEXTURE_2D_NV 0x86E9
+#define GL_DEPENDENT_GB_TEXTURE_2D_NV 0x86EA
+#define GL_DOT_PRODUCT_NV 0x86EC
+#define GL_DOT_PRODUCT_DEPTH_REPLACE_NV 0x86ED
+#define GL_DOT_PRODUCT_TEXTURE_2D_NV 0x86EE
+#define GL_DOT_PRODUCT_TEXTURE_CUBE_MAP_NV 0x86F0
+#define GL_DOT_PRODUCT_DIFFUSE_CUBE_MAP_NV 0x86F1
+#define GL_DOT_PRODUCT_REFLECT_CUBE_MAP_NV 0x86F2
+#define GL_DOT_PRODUCT_CONST_EYE_REFLECT_CUBE_MAP_NV 0x86F3
+#define GL_HILO_NV 0x86F4
+#define GL_DSDT_NV 0x86F5
+#define GL_DSDT_MAG_NV 0x86F6
+#define GL_DSDT_MAG_VIB_NV 0x86F7
+#define GL_HILO16_NV 0x86F8
+#define GL_SIGNED_HILO_NV 0x86F9
+#define GL_SIGNED_HILO16_NV 0x86FA
+#define GL_SIGNED_RGBA_NV 0x86FB
+#define GL_SIGNED_RGBA8_NV 0x86FC
+#define GL_SIGNED_RGB_NV 0x86FE
+#define GL_SIGNED_RGB8_NV 0x86FF
+#define GL_SIGNED_LUMINANCE_NV 0x8701
+#define GL_SIGNED_LUMINANCE8_NV 0x8702
+#define GL_SIGNED_LUMINANCE_ALPHA_NV 0x8703
+#define GL_SIGNED_LUMINANCE8_ALPHA8_NV 0x8704
+#define GL_SIGNED_ALPHA_NV 0x8705
+#define GL_SIGNED_ALPHA8_NV 0x8706
+#define GL_SIGNED_INTENSITY_NV 0x8707
+#define GL_SIGNED_INTENSITY8_NV 0x8708
+#define GL_DSDT8_NV 0x8709
+#define GL_DSDT8_MAG8_NV 0x870A
+#define GL_DSDT8_MAG8_INTENSITY8_NV 0x870B
+#define GL_SIGNED_RGB_UNSIGNED_ALPHA_NV 0x870C
+#define GL_SIGNED_RGB8_UNSIGNED_ALPHA8_NV 0x870D
+#define GL_HI_SCALE_NV 0x870E
+#define GL_LO_SCALE_NV 0x870F
+#define GL_DS_SCALE_NV 0x8710
+#define GL_DT_SCALE_NV 0x8711
+#define GL_MAGNITUDE_SCALE_NV 0x8712
+#define GL_VIBRANCE_SCALE_NV 0x8713
+#define GL_HI_BIAS_NV 0x8714
+#define GL_LO_BIAS_NV 0x8715
+#define GL_DS_BIAS_NV 0x8716
+#define GL_DT_BIAS_NV 0x8717
+#define GL_MAGNITUDE_BIAS_NV 0x8718
+#define GL_VIBRANCE_BIAS_NV 0x8719
+#define GL_TEXTURE_BORDER_VALUES_NV 0x871A
+#define GL_TEXTURE_HI_SIZE_NV 0x871B
+#define GL_TEXTURE_LO_SIZE_NV 0x871C
+#define GL_TEXTURE_DS_SIZE_NV 0x871D
+#define GL_TEXTURE_DT_SIZE_NV 0x871E
+#define GL_TEXTURE_MAG_SIZE_NV 0x871F
+
+#define GLEW_NV_texture_shader GLEW_GET_VAR(__GLEW_NV_texture_shader)
+
+#endif /* GL_NV_texture_shader */
+
+/* ------------------------- GL_NV_texture_shader2 ------------------------- */
+
+#ifndef GL_NV_texture_shader2
+#define GL_NV_texture_shader2 1
+
+#define GL_UNSIGNED_INT_S8_S8_8_8_NV 0x86DA
+#define GL_UNSIGNED_INT_8_8_S8_S8_REV_NV 0x86DB
+#define GL_DSDT_MAG_INTENSITY_NV 0x86DC
+#define GL_DOT_PRODUCT_TEXTURE_3D_NV 0x86EF
+#define GL_HILO_NV 0x86F4
+#define GL_DSDT_NV 0x86F5
+#define GL_DSDT_MAG_NV 0x86F6
+#define GL_DSDT_MAG_VIB_NV 0x86F7
+#define GL_HILO16_NV 0x86F8
+#define GL_SIGNED_HILO_NV 0x86F9
+#define GL_SIGNED_HILO16_NV 0x86FA
+#define GL_SIGNED_RGBA_NV 0x86FB
+#define GL_SIGNED_RGBA8_NV 0x86FC
+#define GL_SIGNED_RGB_NV 0x86FE
+#define GL_SIGNED_RGB8_NV 0x86FF
+#define GL_SIGNED_LUMINANCE_NV 0x8701
+#define GL_SIGNED_LUMINANCE8_NV 0x8702
+#define GL_SIGNED_LUMINANCE_ALPHA_NV 0x8703
+#define GL_SIGNED_LUMINANCE8_ALPHA8_NV 0x8704
+#define GL_SIGNED_ALPHA_NV 0x8705
+#define GL_SIGNED_ALPHA8_NV 0x8706
+#define GL_SIGNED_INTENSITY_NV 0x8707
+#define GL_SIGNED_INTENSITY8_NV 0x8708
+#define GL_DSDT8_NV 0x8709
+#define GL_DSDT8_MAG8_NV 0x870A
+#define GL_DSDT8_MAG8_INTENSITY8_NV 0x870B
+#define GL_SIGNED_RGB_UNSIGNED_ALPHA_NV 0x870C
+#define GL_SIGNED_RGB8_UNSIGNED_ALPHA8_NV 0x870D
+
+#define GLEW_NV_texture_shader2 GLEW_GET_VAR(__GLEW_NV_texture_shader2)
+
+#endif /* GL_NV_texture_shader2 */
+
+/* ------------------------- GL_NV_texture_shader3 ------------------------- */
+
+#ifndef GL_NV_texture_shader3
+#define GL_NV_texture_shader3 1
+
+#define GL_OFFSET_PROJECTIVE_TEXTURE_2D_NV 0x8850
+#define GL_OFFSET_PROJECTIVE_TEXTURE_2D_SCALE_NV 0x8851
+#define GL_OFFSET_PROJECTIVE_TEXTURE_RECTANGLE_NV 0x8852
+#define GL_OFFSET_PROJECTIVE_TEXTURE_RECTANGLE_SCALE_NV 0x8853
+#define GL_OFFSET_HILO_TEXTURE_2D_NV 0x8854
+#define GL_OFFSET_HILO_TEXTURE_RECTANGLE_NV 0x8855
+#define GL_OFFSET_HILO_PROJECTIVE_TEXTURE_2D_NV 0x8856
+#define GL_OFFSET_HILO_PROJECTIVE_TEXTURE_RECTANGLE_NV 0x8857
+#define GL_DEPENDENT_HILO_TEXTURE_2D_NV 0x8858
+#define GL_DEPENDENT_RGB_TEXTURE_3D_NV 0x8859
+#define GL_DEPENDENT_RGB_TEXTURE_CUBE_MAP_NV 0x885A
+#define GL_DOT_PRODUCT_PASS_THROUGH_NV 0x885B
+#define GL_DOT_PRODUCT_TEXTURE_1D_NV 0x885C
+#define GL_DOT_PRODUCT_AFFINE_DEPTH_REPLACE_NV 0x885D
+#define GL_HILO8_NV 0x885E
+#define GL_SIGNED_HILO8_NV 0x885F
+#define GL_FORCE_BLUE_TO_ONE_NV 0x8860
+
+#define GLEW_NV_texture_shader3 GLEW_GET_VAR(__GLEW_NV_texture_shader3)
+
+#endif /* GL_NV_texture_shader3 */
+
+/* ------------------------ GL_NV_transform_feedback ----------------------- */
+
+#ifndef GL_NV_transform_feedback
+#define GL_NV_transform_feedback 1
+
+#define GL_BACK_PRIMARY_COLOR_NV 0x8C77
+#define GL_BACK_SECONDARY_COLOR_NV 0x8C78
+#define GL_TEXTURE_COORD_NV 0x8C79
+#define GL_CLIP_DISTANCE_NV 0x8C7A
+#define GL_VERTEX_ID_NV 0x8C7B
+#define GL_PRIMITIVE_ID_NV 0x8C7C
+#define GL_GENERIC_ATTRIB_NV 0x8C7D
+#define GL_TRANSFORM_FEEDBACK_ATTRIBS_NV 0x8C7E
+#define GL_TRANSFORM_FEEDBACK_BUFFER_MODE_NV 0x8C7F
+#define GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS_NV 0x8C80
+#define GL_ACTIVE_VARYINGS_NV 0x8C81
+#define GL_ACTIVE_VARYING_MAX_LENGTH_NV 0x8C82
+#define GL_TRANSFORM_FEEDBACK_VARYINGS_NV 0x8C83
+#define GL_TRANSFORM_FEEDBACK_BUFFER_START_NV 0x8C84
+#define GL_TRANSFORM_FEEDBACK_BUFFER_SIZE_NV 0x8C85
+#define GL_TRANSFORM_FEEDBACK_RECORD_NV 0x8C86
+#define GL_PRIMITIVES_GENERATED_NV 0x8C87
+#define GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN_NV 0x8C88
+#define GL_RASTERIZER_DISCARD_NV 0x8C89
+#define GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS_NV 0x8C8A
+#define GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_NV 0x8C8B
+#define GL_INTERLEAVED_ATTRIBS_NV 0x8C8C
+#define GL_SEPARATE_ATTRIBS_NV 0x8C8D
+#define GL_TRANSFORM_FEEDBACK_BUFFER_NV 0x8C8E
+#define GL_TRANSFORM_FEEDBACK_BUFFER_BINDING_NV 0x8C8F
+
+typedef void (GLAPIENTRY * PFNGLACTIVEVARYINGNVPROC) (GLuint program, const GLchar *name);
+typedef void (GLAPIENTRY * PFNGLBEGINTRANSFORMFEEDBACKNVPROC) (GLenum primitiveMode);
+type

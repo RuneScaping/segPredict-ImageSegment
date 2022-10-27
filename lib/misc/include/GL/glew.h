@@ -7744,3 +7744,193 @@ typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2DNVPROC) (GLuint index, GLdouble x,
 typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2DVNVPROC) (GLuint index, const GLdouble* v);
 typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2FNVPROC) (GLuint index, GLfloat x, GLfloat y);
 typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2FVNVPROC) (GLuint index, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2SNVPROC) (GLuint index, GLshort x, GLshort y);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB2SVNVPROC) (GLuint index, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3DNVPROC) (GLuint index, GLdouble x, GLdouble y, GLdouble z);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3DVNVPROC) (GLuint index, const GLdouble* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3FNVPROC) (GLuint index, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3FVNVPROC) (GLuint index, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3SNVPROC) (GLuint index, GLshort x, GLshort y, GLshort z);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB3SVNVPROC) (GLuint index, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4DNVPROC) (GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4DVNVPROC) (GLuint index, const GLdouble* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4FNVPROC) (GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4FVNVPROC) (GLuint index, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4SNVPROC) (GLuint index, GLshort x, GLshort y, GLshort z, GLshort w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4SVNVPROC) (GLuint index, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4UBNVPROC) (GLuint index, GLubyte x, GLubyte y, GLubyte z, GLubyte w);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIB4UBVNVPROC) (GLuint index, const GLubyte* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBPOINTERNVPROC) (GLuint index, GLint size, GLenum type, GLsizei stride, const void* pointer);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS1DVNVPROC) (GLuint index, GLsizei n, const GLdouble* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS1FVNVPROC) (GLuint index, GLsizei n, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS1SVNVPROC) (GLuint index, GLsizei n, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS2DVNVPROC) (GLuint index, GLsizei n, const GLdouble* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS2FVNVPROC) (GLuint index, GLsizei n, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS2SVNVPROC) (GLuint index, GLsizei n, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS3DVNVPROC) (GLuint index, GLsizei n, const GLdouble* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS3FVNVPROC) (GLuint index, GLsizei n, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS3SVNVPROC) (GLuint index, GLsizei n, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS4DVNVPROC) (GLuint index, GLsizei n, const GLdouble* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS4FVNVPROC) (GLuint index, GLsizei n, const GLfloat* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS4SVNVPROC) (GLuint index, GLsizei n, const GLshort* v);
+typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS4UBVNVPROC) (GLuint index, GLsizei n, const GLubyte* v);
+
+#define glAreProgramsResidentNV GLEW_GET_FUN(__glewAreProgramsResidentNV)
+#define glBindProgramNV GLEW_GET_FUN(__glewBindProgramNV)
+#define glDeleteProgramsNV GLEW_GET_FUN(__glewDeleteProgramsNV)
+#define glExecuteProgramNV GLEW_GET_FUN(__glewExecuteProgramNV)
+#define glGenProgramsNV GLEW_GET_FUN(__glewGenProgramsNV)
+#define glGetProgramParameterdvNV GLEW_GET_FUN(__glewGetProgramParameterdvNV)
+#define glGetProgramParameterfvNV GLEW_GET_FUN(__glewGetProgramParameterfvNV)
+#define glGetProgramStringNV GLEW_GET_FUN(__glewGetProgramStringNV)
+#define glGetProgramivNV GLEW_GET_FUN(__glewGetProgramivNV)
+#define glGetTrackMatrixivNV GLEW_GET_FUN(__glewGetTrackMatrixivNV)
+#define glGetVertexAttribPointervNV GLEW_GET_FUN(__glewGetVertexAttribPointervNV)
+#define glGetVertexAttribdvNV GLEW_GET_FUN(__glewGetVertexAttribdvNV)
+#define glGetVertexAttribfvNV GLEW_GET_FUN(__glewGetVertexAttribfvNV)
+#define glGetVertexAttribivNV GLEW_GET_FUN(__glewGetVertexAttribivNV)
+#define glIsProgramNV GLEW_GET_FUN(__glewIsProgramNV)
+#define glLoadProgramNV GLEW_GET_FUN(__glewLoadProgramNV)
+#define glProgramParameter4dNV GLEW_GET_FUN(__glewProgramParameter4dNV)
+#define glProgramParameter4dvNV GLEW_GET_FUN(__glewProgramParameter4dvNV)
+#define glProgramParameter4fNV GLEW_GET_FUN(__glewProgramParameter4fNV)
+#define glProgramParameter4fvNV GLEW_GET_FUN(__glewProgramParameter4fvNV)
+#define glProgramParameters4dvNV GLEW_GET_FUN(__glewProgramParameters4dvNV)
+#define glProgramParameters4fvNV GLEW_GET_FUN(__glewProgramParameters4fvNV)
+#define glRequestResidentProgramsNV GLEW_GET_FUN(__glewRequestResidentProgramsNV)
+#define glTrackMatrixNV GLEW_GET_FUN(__glewTrackMatrixNV)
+#define glVertexAttrib1dNV GLEW_GET_FUN(__glewVertexAttrib1dNV)
+#define glVertexAttrib1dvNV GLEW_GET_FUN(__glewVertexAttrib1dvNV)
+#define glVertexAttrib1fNV GLEW_GET_FUN(__glewVertexAttrib1fNV)
+#define glVertexAttrib1fvNV GLEW_GET_FUN(__glewVertexAttrib1fvNV)
+#define glVertexAttrib1sNV GLEW_GET_FUN(__glewVertexAttrib1sNV)
+#define glVertexAttrib1svNV GLEW_GET_FUN(__glewVertexAttrib1svNV)
+#define glVertexAttrib2dNV GLEW_GET_FUN(__glewVertexAttrib2dNV)
+#define glVertexAttrib2dvNV GLEW_GET_FUN(__glewVertexAttrib2dvNV)
+#define glVertexAttrib2fNV GLEW_GET_FUN(__glewVertexAttrib2fNV)
+#define glVertexAttrib2fvNV GLEW_GET_FUN(__glewVertexAttrib2fvNV)
+#define glVertexAttrib2sNV GLEW_GET_FUN(__glewVertexAttrib2sNV)
+#define glVertexAttrib2svNV GLEW_GET_FUN(__glewVertexAttrib2svNV)
+#define glVertexAttrib3dNV GLEW_GET_FUN(__glewVertexAttrib3dNV)
+#define glVertexAttrib3dvNV GLEW_GET_FUN(__glewVertexAttrib3dvNV)
+#define glVertexAttrib3fNV GLEW_GET_FUN(__glewVertexAttrib3fNV)
+#define glVertexAttrib3fvNV GLEW_GET_FUN(__glewVertexAttrib3fvNV)
+#define glVertexAttrib3sNV GLEW_GET_FUN(__glewVertexAttrib3sNV)
+#define glVertexAttrib3svNV GLEW_GET_FUN(__glewVertexAttrib3svNV)
+#define glVertexAttrib4dNV GLEW_GET_FUN(__glewVertexAttrib4dNV)
+#define glVertexAttrib4dvNV GLEW_GET_FUN(__glewVertexAttrib4dvNV)
+#define glVertexAttrib4fNV GLEW_GET_FUN(__glewVertexAttrib4fNV)
+#define glVertexAttrib4fvNV GLEW_GET_FUN(__glewVertexAttrib4fvNV)
+#define glVertexAttrib4sNV GLEW_GET_FUN(__glewVertexAttrib4sNV)
+#define glVertexAttrib4svNV GLEW_GET_FUN(__glewVertexAttrib4svNV)
+#define glVertexAttrib4ubNV GLEW_GET_FUN(__glewVertexAttrib4ubNV)
+#define glVertexAttrib4ubvNV GLEW_GET_FUN(__glewVertexAttrib4ubvNV)
+#define glVertexAttribPointerNV GLEW_GET_FUN(__glewVertexAttribPointerNV)
+#define glVertexAttribs1dvNV GLEW_GET_FUN(__glewVertexAttribs1dvNV)
+#define glVertexAttribs1fvNV GLEW_GET_FUN(__glewVertexAttribs1fvNV)
+#define glVertexAttribs1svNV GLEW_GET_FUN(__glewVertexAttribs1svNV)
+#define glVertexAttribs2dvNV GLEW_GET_FUN(__glewVertexAttribs2dvNV)
+#define glVertexAttribs2fvNV GLEW_GET_FUN(__glewVertexAttribs2fvNV)
+#define glVertexAttribs2svNV GLEW_GET_FUN(__glewVertexAttribs2svNV)
+#define glVertexAttribs3dvNV GLEW_GET_FUN(__glewVertexAttribs3dvNV)
+#define glVertexAttribs3fvNV GLEW_GET_FUN(__glewVertexAttribs3fvNV)
+#define glVertexAttribs3svNV GLEW_GET_FUN(__glewVertexAttribs3svNV)
+#define glVertexAttribs4dvNV GLEW_GET_FUN(__glewVertexAttribs4dvNV)
+#define glVertexAttribs4fvNV GLEW_GET_FUN(__glewVertexAttribs4fvNV)
+#define glVertexAttribs4svNV GLEW_GET_FUN(__glewVertexAttribs4svNV)
+#define glVertexAttribs4ubvNV GLEW_GET_FUN(__glewVertexAttribs4ubvNV)
+
+#define GLEW_NV_vertex_program GLEW_GET_VAR(__GLEW_NV_vertex_program)
+
+#endif /* GL_NV_vertex_program */
+
+/* ------------------------ GL_NV_vertex_program1_1 ------------------------ */
+
+#ifndef GL_NV_vertex_program1_1
+#define GL_NV_vertex_program1_1 1
+
+#define GLEW_NV_vertex_program1_1 GLEW_GET_VAR(__GLEW_NV_vertex_program1_1)
+
+#endif /* GL_NV_vertex_program1_1 */
+
+/* ------------------------- GL_NV_vertex_program2 ------------------------- */
+
+#ifndef GL_NV_vertex_program2
+#define GL_NV_vertex_program2 1
+
+#define GLEW_NV_vertex_program2 GLEW_GET_VAR(__GLEW_NV_vertex_program2)
+
+#endif /* GL_NV_vertex_program2 */
+
+/* ---------------------- GL_NV_vertex_program2_option --------------------- */
+
+#ifndef GL_NV_vertex_program2_option
+#define GL_NV_vertex_program2_option 1
+
+#define GL_MAX_PROGRAM_EXEC_INSTRUCTIONS_NV 0x88F4
+#define GL_MAX_PROGRAM_CALL_DEPTH_NV 0x88F5
+
+#define GLEW_NV_vertex_program2_option GLEW_GET_VAR(__GLEW_NV_vertex_program2_option)
+
+#endif /* GL_NV_vertex_program2_option */
+
+/* ------------------------- GL_NV_vertex_program3 ------------------------- */
+
+#ifndef GL_NV_vertex_program3
+#define GL_NV_vertex_program3 1
+
+#define MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB 0x8B4C
+
+#define GLEW_NV_vertex_program3 GLEW_GET_VAR(__GLEW_NV_vertex_program3)
+
+#endif /* GL_NV_vertex_program3 */
+
+/* ------------------------- GL_NV_vertex_program4 ------------------------- */
+
+#ifndef GL_NV_vertex_program4
+#define GL_NV_vertex_program4 1
+
+#define GLEW_NV_vertex_program4 GLEW_GET_VAR(__GLEW_NV_vertex_program4)
+
+#endif /* GL_NV_vertex_program4 */
+
+/* ------------------------ GL_OES_byte_coordinates ------------------------ */
+
+#ifndef GL_OES_byte_coordinates
+#define GL_OES_byte_coordinates 1
+
+#define GL_BYTE 0x1400
+
+#define GLEW_OES_byte_coordinates GLEW_GET_VAR(__GLEW_OES_byte_coordinates)
+
+#endif /* GL_OES_byte_coordinates */
+
+/* ------------------- GL_OES_compressed_paletted_texture ------------------ */
+
+#ifndef GL_OES_compressed_paletted_texture
+#define GL_OES_compressed_paletted_texture 1
+
+#define GL_PALETTE4_RGB8_OES 0x8B90
+#define GL_PALETTE4_RGBA8_OES 0x8B91
+#define GL_PALETTE4_R5_G6_B5_OES 0x8B92
+#define GL_PALETTE4_RGBA4_OES 0x8B93
+#define GL_PALETTE4_RGB5_A1_OES 0x8B94
+#define GL_PALETTE8_RGB8_OES 0x8B95
+#define GL_PALETTE8_RGBA8_OES 0x8B96
+#define GL_PALETTE8_R5_G6_B5_OES 0x8B97
+#define GL_PALETTE8_RGBA4_OES 0x8B98
+#define GL_PALETTE8_RGB5_A1_OES 0x8B99
+
+#define GLEW_OES_compressed_paletted_texture GLEW_GET_VAR(__GLEW_OES_compressed_paletted_texture)
+
+#endif /* GL_OES_compressed_paletted_texture */
+
+/* --------------------------- GL_OES_read_format -------------------------- */
+
+#ifndef GL_OES_read_format
+#define GL_OES_read_format 1
+
+#define GL_IMPLEMENTATION_COLOR_READ_TYPE_OES 0x8B9A
+#define GL_IMPLEMENTATION_COLOR_READ_FORMAT_OES 0x8B9B
+
+#define GLEW_OES_read_format GLEW_GET_VAR(__GLEW_OES_read

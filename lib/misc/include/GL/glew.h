@@ -7933,4 +7933,294 @@ typedef void (GLAPIENTRY * PFNGLVERTEXATTRIBS4UBVNVPROC) (GLuint index, GLsizei 
 #define GL_IMPLEMENTATION_COLOR_READ_TYPE_OES 0x8B9A
 #define GL_IMPLEMENTATION_COLOR_READ_FORMAT_OES 0x8B9B
 
-#define GLEW_OES_read_format GLEW_GET_VAR(__GLEW_OES_read
+#define GLEW_OES_read_format GLEW_GET_VAR(__GLEW_OES_read_format)
+
+#endif /* GL_OES_read_format */
+
+/* ------------------------ GL_OES_single_precision ------------------------ */
+
+#ifndef GL_OES_single_precision
+#define GL_OES_single_precision 1
+
+typedef void (GLAPIENTRY * PFNGLCLEARDEPTHFOESPROC) (GLclampd depth);
+typedef void (GLAPIENTRY * PFNGLCLIPPLANEFOESPROC) (GLenum plane, const GLfloat* equation);
+typedef void (GLAPIENTRY * PFNGLDEPTHRANGEFOESPROC) (GLclampf n, GLclampf f);
+typedef void (GLAPIENTRY * PFNGLFRUSTUMFOESPROC) (GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
+typedef void (GLAPIENTRY * PFNGLGETCLIPPLANEFOESPROC) (GLenum plane, GLfloat* equation);
+typedef void (GLAPIENTRY * PFNGLORTHOFOESPROC) (GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f);
+
+#define glClearDepthfOES GLEW_GET_FUN(__glewClearDepthfOES)
+#define glClipPlanefOES GLEW_GET_FUN(__glewClipPlanefOES)
+#define glDepthRangefOES GLEW_GET_FUN(__glewDepthRangefOES)
+#define glFrustumfOES GLEW_GET_FUN(__glewFrustumfOES)
+#define glGetClipPlanefOES GLEW_GET_FUN(__glewGetClipPlanefOES)
+#define glOrthofOES GLEW_GET_FUN(__glewOrthofOES)
+
+#define GLEW_OES_single_precision GLEW_GET_VAR(__GLEW_OES_single_precision)
+
+#endif /* GL_OES_single_precision */
+
+/* ---------------------------- GL_OML_interlace --------------------------- */
+
+#ifndef GL_OML_interlace
+#define GL_OML_interlace 1
+
+#define GL_INTERLACE_OML 0x8980
+#define GL_INTERLACE_READ_OML 0x8981
+
+#define GLEW_OML_interlace GLEW_GET_VAR(__GLEW_OML_interlace)
+
+#endif /* GL_OML_interlace */
+
+/* ---------------------------- GL_OML_resample ---------------------------- */
+
+#ifndef GL_OML_resample
+#define GL_OML_resample 1
+
+#define GL_PACK_RESAMPLE_OML 0x8984
+#define GL_UNPACK_RESAMPLE_OML 0x8985
+#define GL_RESAMPLE_REPLICATE_OML 0x8986
+#define GL_RESAMPLE_ZERO_FILL_OML 0x8987
+#define GL_RESAMPLE_AVERAGE_OML 0x8988
+#define GL_RESAMPLE_DECIMATE_OML 0x8989
+
+#define GLEW_OML_resample GLEW_GET_VAR(__GLEW_OML_resample)
+
+#endif /* GL_OML_resample */
+
+/* ---------------------------- GL_OML_subsample --------------------------- */
+
+#ifndef GL_OML_subsample
+#define GL_OML_subsample 1
+
+#define GL_FORMAT_SUBSAMPLE_24_24_OML 0x8982
+#define GL_FORMAT_SUBSAMPLE_244_244_OML 0x8983
+
+#define GLEW_OML_subsample GLEW_GET_VAR(__GLEW_OML_subsample)
+
+#endif /* GL_OML_subsample */
+
+/* --------------------------- GL_PGI_misc_hints --------------------------- */
+
+#ifndef GL_PGI_misc_hints
+#define GL_PGI_misc_hints 1
+
+#define GL_PREFER_DOUBLEBUFFER_HINT_PGI 107000
+#define GL_CONSERVE_MEMORY_HINT_PGI 107005
+#define GL_RECLAIM_MEMORY_HINT_PGI 107006
+#define GL_NATIVE_GRAPHICS_HANDLE_PGI 107010
+#define GL_NATIVE_GRAPHICS_BEGIN_HINT_PGI 107011
+#define GL_NATIVE_GRAPHICS_END_HINT_PGI 107012
+#define GL_ALWAYS_FAST_HINT_PGI 107020
+#define GL_ALWAYS_SOFT_HINT_PGI 107021
+#define GL_ALLOW_DRAW_OBJ_HINT_PGI 107022
+#define GL_ALLOW_DRAW_WIN_HINT_PGI 107023
+#define GL_ALLOW_DRAW_FRG_HINT_PGI 107024
+#define GL_ALLOW_DRAW_MEM_HINT_PGI 107025
+#define GL_STRICT_DEPTHFUNC_HINT_PGI 107030
+#define GL_STRICT_LIGHTING_HINT_PGI 107031
+#define GL_STRICT_SCISSOR_HINT_PGI 107032
+#define GL_FULL_STIPPLE_HINT_PGI 107033
+#define GL_CLIP_NEAR_HINT_PGI 107040
+#define GL_CLIP_FAR_HINT_PGI 107041
+#define GL_WIDE_LINE_HINT_PGI 107042
+#define GL_BACK_NORMALS_HINT_PGI 107043
+
+#define GLEW_PGI_misc_hints GLEW_GET_VAR(__GLEW_PGI_misc_hints)
+
+#endif /* GL_PGI_misc_hints */
+
+/* -------------------------- GL_PGI_vertex_hints -------------------------- */
+
+#ifndef GL_PGI_vertex_hints
+#define GL_PGI_vertex_hints 1
+
+#define GL_VERTEX23_BIT_PGI 0x00000004
+#define GL_VERTEX4_BIT_PGI 0x00000008
+#define GL_COLOR3_BIT_PGI 0x00010000
+#define GL_COLOR4_BIT_PGI 0x00020000
+#define GL_EDGEFLAG_BIT_PGI 0x00040000
+#define GL_INDEX_BIT_PGI 0x00080000
+#define GL_MAT_AMBIENT_BIT_PGI 0x00100000
+#define GL_VERTEX_DATA_HINT_PGI 107050
+#define GL_VERTEX_CONSISTENT_HINT_PGI 107051
+#define GL_MATERIAL_SIDE_HINT_PGI 107052
+#define GL_MAX_VERTEX_HINT_PGI 107053
+#define GL_MAT_AMBIENT_AND_DIFFUSE_BIT_PGI 0x00200000
+#define GL_MAT_DIFFUSE_BIT_PGI 0x00400000
+#define GL_MAT_EMISSION_BIT_PGI 0x00800000
+#define GL_MAT_COLOR_INDEXES_BIT_PGI 0x01000000
+#define GL_MAT_SHININESS_BIT_PGI 0x02000000
+#define GL_MAT_SPECULAR_BIT_PGI 0x04000000
+#define GL_NORMAL_BIT_PGI 0x08000000
+#define GL_TEXCOORD1_BIT_PGI 0x10000000
+#define GL_TEXCOORD2_BIT_PGI 0x20000000
+#define GL_TEXCOORD3_BIT_PGI 0x40000000
+#define GL_TEXCOORD4_BIT_PGI 0x80000000
+
+#define GLEW_PGI_vertex_hints GLEW_GET_VAR(__GLEW_PGI_vertex_hints)
+
+#endif /* GL_PGI_vertex_hints */
+
+/* ----------------------- GL_REND_screen_coordinates ---------------------- */
+
+#ifndef GL_REND_screen_coordinates
+#define GL_REND_screen_coordinates 1
+
+#define GL_SCREEN_COORDINATES_REND 0x8490
+#define GL_INVERTED_SCREEN_W_REND 0x8491
+
+#define GLEW_REND_screen_coordinates GLEW_GET_VAR(__GLEW_REND_screen_coordinates)
+
+#endif /* GL_REND_screen_coordinates */
+
+/* ------------------------------- GL_S3_s3tc ------------------------------ */
+
+#ifndef GL_S3_s3tc
+#define GL_S3_s3tc 1
+
+#define GL_RGB_S3TC 0x83A0
+#define GL_RGB4_S3TC 0x83A1
+#define GL_RGBA_S3TC 0x83A2
+#define GL_RGBA4_S3TC 0x83A3
+#define GL_RGBA_DXT5_S3TC 0x83A4
+#define GL_RGBA4_DXT5_S3TC 0x83A5
+
+#define GLEW_S3_s3tc GLEW_GET_VAR(__GLEW_S3_s3tc)
+
+#endif /* GL_S3_s3tc */
+
+/* -------------------------- GL_SGIS_color_range -------------------------- */
+
+#ifndef GL_SGIS_color_range
+#define GL_SGIS_color_range 1
+
+#define GL_EXTENDED_RANGE_SGIS 0x85A5
+#define GL_MIN_RED_SGIS 0x85A6
+#define GL_MAX_RED_SGIS 0x85A7
+#define GL_MIN_GREEN_SGIS 0x85A8
+#define GL_MAX_GREEN_SGIS 0x85A9
+#define GL_MIN_BLUE_SGIS 0x85AA
+#define GL_MAX_BLUE_SGIS 0x85AB
+#define GL_MIN_ALPHA_SGIS 0x85AC
+#define GL_MAX_ALPHA_SGIS 0x85AD
+
+#define GLEW_SGIS_color_range GLEW_GET_VAR(__GLEW_SGIS_color_range)
+
+#endif /* GL_SGIS_color_range */
+
+/* ------------------------- GL_SGIS_detail_texture ------------------------ */
+
+#ifndef GL_SGIS_detail_texture
+#define GL_SGIS_detail_texture 1
+
+typedef void (GLAPIENTRY * PFNGLDETAILTEXFUNCSGISPROC) (GLenum target, GLsizei n, const GLfloat* points);
+typedef void (GLAPIENTRY * PFNGLGETDETAILTEXFUNCSGISPROC) (GLenum target, GLfloat* points);
+
+#define glDetailTexFuncSGIS GLEW_GET_FUN(__glewDetailTexFuncSGIS)
+#define glGetDetailTexFuncSGIS GLEW_GET_FUN(__glewGetDetailTexFuncSGIS)
+
+#define GLEW_SGIS_detail_texture GLEW_GET_VAR(__GLEW_SGIS_detail_texture)
+
+#endif /* GL_SGIS_detail_texture */
+
+/* -------------------------- GL_SGIS_fog_function ------------------------- */
+
+#ifndef GL_SGIS_fog_function
+#define GL_SGIS_fog_function 1
+
+typedef void (GLAPIENTRY * PFNGLFOGFUNCSGISPROC) (GLsizei n, const GLfloat* points);
+typedef void (GLAPIENTRY * PFNGLGETFOGFUNCSGISPROC) (GLfloat* points);
+
+#define glFogFuncSGIS GLEW_GET_FUN(__glewFogFuncSGIS)
+#define glGetFogFuncSGIS GLEW_GET_FUN(__glewGetFogFuncSGIS)
+
+#define GLEW_SGIS_fog_function GLEW_GET_VAR(__GLEW_SGIS_fog_function)
+
+#endif /* GL_SGIS_fog_function */
+
+/* ------------------------ GL_SGIS_generate_mipmap ------------------------ */
+
+#ifndef GL_SGIS_generate_mipmap
+#define GL_SGIS_generate_mipmap 1
+
+#define GL_GENERATE_MIPMAP_SGIS 0x8191
+#define GL_GENERATE_MIPMAP_HINT_SGIS 0x8192
+
+#define GLEW_SGIS_generate_mipmap GLEW_GET_VAR(__GLEW_SGIS_generate_mipmap)
+
+#endif /* GL_SGIS_generate_mipmap */
+
+/* -------------------------- GL_SGIS_multisample -------------------------- */
+
+#ifndef GL_SGIS_multisample
+#define GL_SGIS_multisample 1
+
+#define GL_MULTISAMPLE_SGIS 0x809D
+#define GL_SAMPLE_ALPHA_TO_MASK_SGIS 0x809E
+#define GL_SAMPLE_ALPHA_TO_ONE_SGIS 0x809F
+#define GL_SAMPLE_MASK_SGIS 0x80A0
+#define GL_1PASS_SGIS 0x80A1
+#define GL_2PASS_0_SGIS 0x80A2
+#define GL_2PASS_1_SGIS 0x80A3
+#define GL_4PASS_0_SGIS 0x80A4
+#define GL_4PASS_1_SGIS 0x80A5
+#define GL_4PASS_2_SGIS 0x80A6
+#define GL_4PASS_3_SGIS 0x80A7
+#define GL_SAMPLE_BUFFERS_SGIS 0x80A8
+#define GL_SAMPLES_SGIS 0x80A9
+#define GL_SAMPLE_MASK_VALUE_SGIS 0x80AA
+#define GL_SAMPLE_MASK_INVERT_SGIS 0x80AB
+#define GL_SAMPLE_PATTERN_SGIS 0x80AC
+#define GL_MULTISAMPLE_BIT_EXT 0x20000000
+
+typedef void (GLAPIENTRY * PFNGLSAMPLEMASKSGISPROC) (GLclampf value, GLboolean invert);
+typedef void (GLAPIENTRY * PFNGLSAMPLEPATTERNSGISPROC) (GLenum pattern);
+
+#define glSampleMaskSGIS GLEW_GET_FUN(__glewSampleMaskSGIS)
+#define glSamplePatternSGIS GLEW_GET_FUN(__glewSamplePatternSGIS)
+
+#define GLEW_SGIS_multisample GLEW_GET_VAR(__GLEW_SGIS_multisample)
+
+#endif /* GL_SGIS_multisample */
+
+/* ------------------------- GL_SGIS_pixel_texture ------------------------- */
+
+#ifndef GL_SGIS_pixel_texture
+#define GL_SGIS_pixel_texture 1
+
+#define GLEW_SGIS_pixel_texture GLEW_GET_VAR(__GLEW_SGIS_pixel_texture)
+
+#endif /* GL_SGIS_pixel_texture */
+
+/* ------------------------ GL_SGIS_sharpen_texture ------------------------ */
+
+#ifndef GL_SGIS_sharpen_texture
+#define GL_SGIS_sharpen_texture 1
+
+typedef void (GLAPIENTRY * PFNGLGETSHARPENTEXFUNCSGISPROC) (GLenum target, GLfloat* points);
+typedef void (GLAPIENTRY * PFNGLSHARPENTEXFUNCSGISPROC) (GLenum target, GLsizei n, const GLfloat* points);
+
+#define glGetSharpenTexFuncSGIS GLEW_GET_FUN(__glewGetSharpenTexFuncSGIS)
+#define glSharpenTexFuncSGIS GLEW_GET_FUN(__glewSharpenTexFuncSGIS)
+
+#define GLEW_SGIS_sharpen_texture GLEW_GET_VAR(__GLEW_SGIS_sharpen_texture)
+
+#endif /* GL_SGIS_sharpen_texture */
+
+/* --------------------------- GL_SGIS_texture4D --------------------------- */
+
+#ifndef GL_SGIS_texture4D
+#define GL_SGIS_texture4D 1
+
+typedef void (GLAPIENTRY * PFNGLTEXIMAGE4DSGISPROC) (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLsizei extent, GLint border, GLenum format, GLenum type, const void* pixels);
+typedef void (GLAPIENTRY * PFNGLTEXSUBIMAGE4DSGISPROC) (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint woffset, GLsizei width, GLsizei height, GLsizei depth, GLsizei extent, GLenum format, GLenum type, const void* pixels);
+
+#define glTexImage4DSGIS GLEW_GET_FUN(__glewTexImage4DSGIS)
+#define glTexSubImage4DSGIS GLEW_GET_FUN(__glewTexSubImage4DSGIS)
+
+#define GLEW_SGIS_texture4D GLEW_GET_VAR(__GLEW_SGIS_texture4D)
+
+#endif /* GL_SGIS_texture4D */
+
+/*

@@ -8223,4 +8223,268 @@ typedef void (GLAPIENTRY * PFNGLTEXSUBIMAGE4DSGISPROC) (GLenum target, GLint lev
 
 #endif /* GL_SGIS_texture4D */
 
-/*
+/* ---------------------- GL_SGIS_texture_border_clamp --------------------- */
+
+#ifndef GL_SGIS_texture_border_clamp
+#define GL_SGIS_texture_border_clamp 1
+
+#define GL_CLAMP_TO_BORDER_SGIS 0x812D
+
+#define GLEW_SGIS_texture_border_clamp GLEW_GET_VAR(__GLEW_SGIS_texture_border_clamp)
+
+#endif /* GL_SGIS_texture_border_clamp */
+
+/* ----------------------- GL_SGIS_texture_edge_clamp ---------------------- */
+
+#ifndef GL_SGIS_texture_edge_clamp
+#define GL_SGIS_texture_edge_clamp 1
+
+#define GL_CLAMP_TO_EDGE_SGIS 0x812F
+
+#define GLEW_SGIS_texture_edge_clamp GLEW_GET_VAR(__GLEW_SGIS_texture_edge_clamp)
+
+#endif /* GL_SGIS_texture_edge_clamp */
+
+/* ------------------------ GL_SGIS_texture_filter4 ------------------------ */
+
+#ifndef GL_SGIS_texture_filter4
+#define GL_SGIS_texture_filter4 1
+
+typedef void (GLAPIENTRY * PFNGLGETTEXFILTERFUNCSGISPROC) (GLenum target, GLenum filter, GLfloat* weights);
+typedef void (GLAPIENTRY * PFNGLTEXFILTERFUNCSGISPROC) (GLenum target, GLenum filter, GLsizei n, const GLfloat* weights);
+
+#define glGetTexFilterFuncSGIS GLEW_GET_FUN(__glewGetTexFilterFuncSGIS)
+#define glTexFilterFuncSGIS GLEW_GET_FUN(__glewTexFilterFuncSGIS)
+
+#define GLEW_SGIS_texture_filter4 GLEW_GET_VAR(__GLEW_SGIS_texture_filter4)
+
+#endif /* GL_SGIS_texture_filter4 */
+
+/* -------------------------- GL_SGIS_texture_lod -------------------------- */
+
+#ifndef GL_SGIS_texture_lod
+#define GL_SGIS_texture_lod 1
+
+#define GL_TEXTURE_MIN_LOD_SGIS 0x813A
+#define GL_TEXTURE_MAX_LOD_SGIS 0x813B
+#define GL_TEXTURE_BASE_LEVEL_SGIS 0x813C
+#define GL_TEXTURE_MAX_LEVEL_SGIS 0x813D
+
+#define GLEW_SGIS_texture_lod GLEW_GET_VAR(__GLEW_SGIS_texture_lod)
+
+#endif /* GL_SGIS_texture_lod */
+
+/* ------------------------- GL_SGIS_texture_select ------------------------ */
+
+#ifndef GL_SGIS_texture_select
+#define GL_SGIS_texture_select 1
+
+#define GLEW_SGIS_texture_select GLEW_GET_VAR(__GLEW_SGIS_texture_select)
+
+#endif /* GL_SGIS_texture_select */
+
+/* ----------------------------- GL_SGIX_async ----------------------------- */
+
+#ifndef GL_SGIX_async
+#define GL_SGIX_async 1
+
+#define GL_ASYNC_MARKER_SGIX 0x8329
+
+typedef void (GLAPIENTRY * PFNGLASYNCMARKERSGIXPROC) (GLuint marker);
+typedef void (GLAPIENTRY * PFNGLDELETEASYNCMARKERSSGIXPROC) (GLuint marker, GLsizei range);
+typedef GLint (GLAPIENTRY * PFNGLFINISHASYNCSGIXPROC) (GLuint* markerp);
+typedef GLuint (GLAPIENTRY * PFNGLGENASYNCMARKERSSGIXPROC) (GLsizei range);
+typedef GLboolean (GLAPIENTRY * PFNGLISASYNCMARKERSGIXPROC) (GLuint marker);
+typedef GLint (GLAPIENTRY * PFNGLPOLLASYNCSGIXPROC) (GLuint* markerp);
+
+#define glAsyncMarkerSGIX GLEW_GET_FUN(__glewAsyncMarkerSGIX)
+#define glDeleteAsyncMarkersSGIX GLEW_GET_FUN(__glewDeleteAsyncMarkersSGIX)
+#define glFinishAsyncSGIX GLEW_GET_FUN(__glewFinishAsyncSGIX)
+#define glGenAsyncMarkersSGIX GLEW_GET_FUN(__glewGenAsyncMarkersSGIX)
+#define glIsAsyncMarkerSGIX GLEW_GET_FUN(__glewIsAsyncMarkerSGIX)
+#define glPollAsyncSGIX GLEW_GET_FUN(__glewPollAsyncSGIX)
+
+#define GLEW_SGIX_async GLEW_GET_VAR(__GLEW_SGIX_async)
+
+#endif /* GL_SGIX_async */
+
+/* ------------------------ GL_SGIX_async_histogram ------------------------ */
+
+#ifndef GL_SGIX_async_histogram
+#define GL_SGIX_async_histogram 1
+
+#define GL_ASYNC_HISTOGRAM_SGIX 0x832C
+#define GL_MAX_ASYNC_HISTOGRAM_SGIX 0x832D
+
+#define GLEW_SGIX_async_histogram GLEW_GET_VAR(__GLEW_SGIX_async_histogram)
+
+#endif /* GL_SGIX_async_histogram */
+
+/* -------------------------- GL_SGIX_async_pixel -------------------------- */
+
+#ifndef GL_SGIX_async_pixel
+#define GL_SGIX_async_pixel 1
+
+#define GL_ASYNC_TEX_IMAGE_SGIX 0x835C
+#define GL_ASYNC_DRAW_PIXELS_SGIX 0x835D
+#define GL_ASYNC_READ_PIXELS_SGIX 0x835E
+#define GL_MAX_ASYNC_TEX_IMAGE_SGIX 0x835F
+#define GL_MAX_ASYNC_DRAW_PIXELS_SGIX 0x8360
+#define GL_MAX_ASYNC_READ_PIXELS_SGIX 0x8361
+
+#define GLEW_SGIX_async_pixel GLEW_GET_VAR(__GLEW_SGIX_async_pixel)
+
+#endif /* GL_SGIX_async_pixel */
+
+/* ----------------------- GL_SGIX_blend_alpha_minmax ---------------------- */
+
+#ifndef GL_SGIX_blend_alpha_minmax
+#define GL_SGIX_blend_alpha_minmax 1
+
+#define GL_ALPHA_MIN_SGIX 0x8320
+#define GL_ALPHA_MAX_SGIX 0x8321
+
+#define GLEW_SGIX_blend_alpha_minmax GLEW_GET_VAR(__GLEW_SGIX_blend_alpha_minmax)
+
+#endif /* GL_SGIX_blend_alpha_minmax */
+
+/* ---------------------------- GL_SGIX_clipmap ---------------------------- */
+
+#ifndef GL_SGIX_clipmap
+#define GL_SGIX_clipmap 1
+
+#define GLEW_SGIX_clipmap GLEW_GET_VAR(__GLEW_SGIX_clipmap)
+
+#endif /* GL_SGIX_clipmap */
+
+/* ------------------------- GL_SGIX_depth_texture ------------------------- */
+
+#ifndef GL_SGIX_depth_texture
+#define GL_SGIX_depth_texture 1
+
+#define GL_DEPTH_COMPONENT16_SGIX 0x81A5
+#define GL_DEPTH_COMPONENT24_SGIX 0x81A6
+#define GL_DEPTH_COMPONENT32_SGIX 0x81A7
+
+#define GLEW_SGIX_depth_texture GLEW_GET_VAR(__GLEW_SGIX_depth_texture)
+
+#endif /* GL_SGIX_depth_texture */
+
+/* -------------------------- GL_SGIX_flush_raster ------------------------- */
+
+#ifndef GL_SGIX_flush_raster
+#define GL_SGIX_flush_raster 1
+
+typedef void (GLAPIENTRY * PFNGLFLUSHRASTERSGIXPROC) (void);
+
+#define glFlushRasterSGIX GLEW_GET_FUN(__glewFlushRasterSGIX)
+
+#define GLEW_SGIX_flush_raster GLEW_GET_VAR(__GLEW_SGIX_flush_raster)
+
+#endif /* GL_SGIX_flush_raster */
+
+/* --------------------------- GL_SGIX_fog_offset -------------------------- */
+
+#ifndef GL_SGIX_fog_offset
+#define GL_SGIX_fog_offset 1
+
+#define GL_FOG_OFFSET_SGIX 0x8198
+#define GL_FOG_OFFSET_VALUE_SGIX 0x8199
+
+#define GLEW_SGIX_fog_offset GLEW_GET_VAR(__GLEW_SGIX_fog_offset)
+
+#endif /* GL_SGIX_fog_offset */
+
+/* -------------------------- GL_SGIX_fog_texture -------------------------- */
+
+#ifndef GL_SGIX_fog_texture
+#define GL_SGIX_fog_texture 1
+
+#define GL_TEXTURE_FOG_SGIX 0
+#define GL_FOG_PATCHY_FACTOR_SGIX 0
+#define GL_FRAGMENT_FOG_SGIX 0
+
+typedef void (GLAPIENTRY * PFNGLTEXTUREFOGSGIXPROC) (GLenum pname);
+
+#define glTextureFogSGIX GLEW_GET_FUN(__glewTextureFogSGIX)
+
+#define GLEW_SGIX_fog_texture GLEW_GET_VAR(__GLEW_SGIX_fog_texture)
+
+#endif /* GL_SGIX_fog_texture */
+
+/* ------------------- GL_SGIX_fragment_specular_lighting ------------------ */
+
+#ifndef GL_SGIX_fragment_specular_lighting
+#define GL_SGIX_fragment_specular_lighting 1
+
+typedef void (GLAPIENTRY * PFNGLFRAGMENTCOLORMATERIALSGIXPROC) (GLenum face, GLenum mode);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELFSGIXPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELFVSGIXPROC) (GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELISGIXPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTMODELIVSGIXPROC) (GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTFSGIXPROC) (GLenum light, GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTFVSGIXPROC) (GLenum light, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTISGIXPROC) (GLenum light, GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTLIGHTIVSGIXPROC) (GLenum light, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALFSGIXPROC) (GLenum face, GLenum pname, const GLfloat param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALFVSGIXPROC) (GLenum face, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALISGIXPROC) (GLenum face, GLenum pname, const GLint param);
+typedef void (GLAPIENTRY * PFNGLFRAGMENTMATERIALIVSGIXPROC) (GLenum face, GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTLIGHTFVSGIXPROC) (GLenum light, GLenum value, GLfloat* data);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTLIGHTIVSGIXPROC) (GLenum light, GLenum value, GLint* data);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTMATERIALFVSGIXPROC) (GLenum face, GLenum pname, const GLfloat* data);
+typedef void (GLAPIENTRY * PFNGLGETFRAGMENTMATERIALIVSGIXPROC) (GLenum face, GLenum pname, const GLint* data);
+
+#define glFragmentColorMaterialSGIX GLEW_GET_FUN(__glewFragmentColorMaterialSGIX)
+#define glFragmentLightModelfSGIX GLEW_GET_FUN(__glewFragmentLightModelfSGIX)
+#define glFragmentLightModelfvSGIX GLEW_GET_FUN(__glewFragmentLightModelfvSGIX)
+#define glFragmentLightModeliSGIX GLEW_GET_FUN(__glewFragmentLightModeliSGIX)
+#define glFragmentLightModelivSGIX GLEW_GET_FUN(__glewFragmentLightModelivSGIX)
+#define glFragmentLightfSGIX GLEW_GET_FUN(__glewFragmentLightfSGIX)
+#define glFragmentLightfvSGIX GLEW_GET_FUN(__glewFragmentLightfvSGIX)
+#define glFragmentLightiSGIX GLEW_GET_FUN(__glewFragmentLightiSGIX)
+#define glFragmentLightivSGIX GLEW_GET_FUN(__glewFragmentLightivSGIX)
+#define glFragmentMaterialfSGIX GLEW_GET_FUN(__glewFragmentMaterialfSGIX)
+#define glFragmentMaterialfvSGIX GLEW_GET_FUN(__glewFragmentMaterialfvSGIX)
+#define glFragmentMaterialiSGIX GLEW_GET_FUN(__glewFragmentMaterialiSGIX)
+#define glFragmentMaterialivSGIX GLEW_GET_FUN(__glewFragmentMaterialivSGIX)
+#define glGetFragmentLightfvSGIX GLEW_GET_FUN(__glewGetFragmentLightfvSGIX)
+#define glGetFragmentLightivSGIX GLEW_GET_FUN(__glewGetFragmentLightivSGIX)
+#define glGetFragmentMaterialfvSGIX GLEW_GET_FUN(__glewGetFragmentMaterialfvSGIX)
+#define glGetFragmentMaterialivSGIX GLEW_GET_FUN(__glewGetFragmentMaterialivSGIX)
+
+#define GLEW_SGIX_fragment_specular_lighting GLEW_GET_VAR(__GLEW_SGIX_fragment_specular_lighting)
+
+#endif /* GL_SGIX_fragment_specular_lighting */
+
+/* --------------------------- GL_SGIX_framezoom --------------------------- */
+
+#ifndef GL_SGIX_framezoom
+#define GL_SGIX_framezoom 1
+
+typedef void (GLAPIENTRY * PFNGLFRAMEZOOMSGIXPROC) (GLint factor);
+
+#define glFrameZoomSGIX GLEW_GET_FUN(__glewFrameZoomSGIX)
+
+#define GLEW_SGIX_framezoom GLEW_GET_VAR(__GLEW_SGIX_framezoom)
+
+#endif /* GL_SGIX_framezoom */
+
+/* --------------------------- GL_SGIX_interlace --------------------------- */
+
+#ifndef GL_SGIX_interlace
+#define GL_SGIX_interlace 1
+
+#define GL_INTERLACE_SGIX 0x8094
+
+#define GLEW_SGIX_interlace GLEW_GET_VAR(__GLEW_SGIX_interlace)
+
+#endif /* GL_SGIX_interlace */
+
+/* ------------------------- GL_SGIX_ir_instrument1 ------------------------ */
+
+#ifndef GL_SGIX_ir_instrument1
+#define GL_SGIX_ir_instrument1 1
+
+#define GLEW_SGIX_ir_instrument1 GLEW_GET_VAR(__GLEW_SGIX_ir_instrument1)
+

@@ -8488,3 +8488,295 @@ typedef void (GLAPIENTRY * PFNGLFRAMEZOOMSGIXPROC) (GLint factor);
 
 #define GLEW_SGIX_ir_instrument1 GLEW_GET_VAR(__GLEW_SGIX_ir_instrument1)
 
+#endif /* GL_SGIX_ir_instrument1 */
+
+/* ------------------------- GL_SGIX_list_priority ------------------------- */
+
+#ifndef GL_SGIX_list_priority
+#define GL_SGIX_list_priority 1
+
+#define GLEW_SGIX_list_priority GLEW_GET_VAR(__GLEW_SGIX_list_priority)
+
+#endif /* GL_SGIX_list_priority */
+
+/* ------------------------- GL_SGIX_pixel_texture ------------------------- */
+
+#ifndef GL_SGIX_pixel_texture
+#define GL_SGIX_pixel_texture 1
+
+typedef void (GLAPIENTRY * PFNGLPIXELTEXGENSGIXPROC) (GLenum mode);
+
+#define glPixelTexGenSGIX GLEW_GET_FUN(__glewPixelTexGenSGIX)
+
+#define GLEW_SGIX_pixel_texture GLEW_GET_VAR(__GLEW_SGIX_pixel_texture)
+
+#endif /* GL_SGIX_pixel_texture */
+
+/* ----------------------- GL_SGIX_pixel_texture_bits ---------------------- */
+
+#ifndef GL_SGIX_pixel_texture_bits
+#define GL_SGIX_pixel_texture_bits 1
+
+#define GLEW_SGIX_pixel_texture_bits GLEW_GET_VAR(__GLEW_SGIX_pixel_texture_bits)
+
+#endif /* GL_SGIX_pixel_texture_bits */
+
+/* ------------------------ GL_SGIX_reference_plane ------------------------ */
+
+#ifndef GL_SGIX_reference_plane
+#define GL_SGIX_reference_plane 1
+
+typedef void (GLAPIENTRY * PFNGLREFERENCEPLANESGIXPROC) (const GLdouble* equation);
+
+#define glReferencePlaneSGIX GLEW_GET_FUN(__glewReferencePlaneSGIX)
+
+#define GLEW_SGIX_reference_plane GLEW_GET_VAR(__GLEW_SGIX_reference_plane)
+
+#endif /* GL_SGIX_reference_plane */
+
+/* ---------------------------- GL_SGIX_resample --------------------------- */
+
+#ifndef GL_SGIX_resample
+#define GL_SGIX_resample 1
+
+#define GL_PACK_RESAMPLE_SGIX 0x842E
+#define GL_UNPACK_RESAMPLE_SGIX 0x842F
+#define GL_RESAMPLE_DECIMATE_SGIX 0x8430
+#define GL_RESAMPLE_REPLICATE_SGIX 0x8433
+#define GL_RESAMPLE_ZERO_FILL_SGIX 0x8434
+
+#define GLEW_SGIX_resample GLEW_GET_VAR(__GLEW_SGIX_resample)
+
+#endif /* GL_SGIX_resample */
+
+/* ----------------------------- GL_SGIX_shadow ---------------------------- */
+
+#ifndef GL_SGIX_shadow
+#define GL_SGIX_shadow 1
+
+#define GL_TEXTURE_COMPARE_SGIX 0x819A
+#define GL_TEXTURE_COMPARE_OPERATOR_SGIX 0x819B
+#define GL_TEXTURE_LEQUAL_R_SGIX 0x819C
+#define GL_TEXTURE_GEQUAL_R_SGIX 0x819D
+
+#define GLEW_SGIX_shadow GLEW_GET_VAR(__GLEW_SGIX_shadow)
+
+#endif /* GL_SGIX_shadow */
+
+/* ------------------------- GL_SGIX_shadow_ambient ------------------------ */
+
+#ifndef GL_SGIX_shadow_ambient
+#define GL_SGIX_shadow_ambient 1
+
+#define GL_SHADOW_AMBIENT_SGIX 0x80BF
+
+#define GLEW_SGIX_shadow_ambient GLEW_GET_VAR(__GLEW_SGIX_shadow_ambient)
+
+#endif /* GL_SGIX_shadow_ambient */
+
+/* ----------------------------- GL_SGIX_sprite ---------------------------- */
+
+#ifndef GL_SGIX_sprite
+#define GL_SGIX_sprite 1
+
+typedef void (GLAPIENTRY * PFNGLSPRITEPARAMETERFSGIXPROC) (GLenum pname, GLfloat param);
+typedef void (GLAPIENTRY * PFNGLSPRITEPARAMETERFVSGIXPROC) (GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLSPRITEPARAMETERISGIXPROC) (GLenum pname, GLint param);
+typedef void (GLAPIENTRY * PFNGLSPRITEPARAMETERIVSGIXPROC) (GLenum pname, GLint* params);
+
+#define glSpriteParameterfSGIX GLEW_GET_FUN(__glewSpriteParameterfSGIX)
+#define glSpriteParameterfvSGIX GLEW_GET_FUN(__glewSpriteParameterfvSGIX)
+#define glSpriteParameteriSGIX GLEW_GET_FUN(__glewSpriteParameteriSGIX)
+#define glSpriteParameterivSGIX GLEW_GET_FUN(__glewSpriteParameterivSGIX)
+
+#define GLEW_SGIX_sprite GLEW_GET_VAR(__GLEW_SGIX_sprite)
+
+#endif /* GL_SGIX_sprite */
+
+/* ----------------------- GL_SGIX_tag_sample_buffer ----------------------- */
+
+#ifndef GL_SGIX_tag_sample_buffer
+#define GL_SGIX_tag_sample_buffer 1
+
+typedef void (GLAPIENTRY * PFNGLTAGSAMPLEBUFFERSGIXPROC) (void);
+
+#define glTagSampleBufferSGIX GLEW_GET_FUN(__glewTagSampleBufferSGIX)
+
+#define GLEW_SGIX_tag_sample_buffer GLEW_GET_VAR(__GLEW_SGIX_tag_sample_buffer)
+
+#endif /* GL_SGIX_tag_sample_buffer */
+
+/* ------------------------ GL_SGIX_texture_add_env ------------------------ */
+
+#ifndef GL_SGIX_texture_add_env
+#define GL_SGIX_texture_add_env 1
+
+#define GLEW_SGIX_texture_add_env GLEW_GET_VAR(__GLEW_SGIX_texture_add_env)
+
+#endif /* GL_SGIX_texture_add_env */
+
+/* -------------------- GL_SGIX_texture_coordinate_clamp ------------------- */
+
+#ifndef GL_SGIX_texture_coordinate_clamp
+#define GL_SGIX_texture_coordinate_clamp 1
+
+#define GL_TEXTURE_MAX_CLAMP_S_SGIX 0x8369
+#define GL_TEXTURE_MAX_CLAMP_T_SGIX 0x836A
+#define GL_TEXTURE_MAX_CLAMP_R_SGIX 0x836B
+
+#define GLEW_SGIX_texture_coordinate_clamp GLEW_GET_VAR(__GLEW_SGIX_texture_coordinate_clamp)
+
+#endif /* GL_SGIX_texture_coordinate_clamp */
+
+/* ------------------------ GL_SGIX_texture_lod_bias ----------------------- */
+
+#ifndef GL_SGIX_texture_lod_bias
+#define GL_SGIX_texture_lod_bias 1
+
+#define GLEW_SGIX_texture_lod_bias GLEW_GET_VAR(__GLEW_SGIX_texture_lod_bias)
+
+#endif /* GL_SGIX_texture_lod_bias */
+
+/* ---------------------- GL_SGIX_texture_multi_buffer --------------------- */
+
+#ifndef GL_SGIX_texture_multi_buffer
+#define GL_SGIX_texture_multi_buffer 1
+
+#define GL_TEXTURE_MULTI_BUFFER_HINT_SGIX 0x812E
+
+#define GLEW_SGIX_texture_multi_buffer GLEW_GET_VAR(__GLEW_SGIX_texture_multi_buffer)
+
+#endif /* GL_SGIX_texture_multi_buffer */
+
+/* ------------------------- GL_SGIX_texture_range ------------------------- */
+
+#ifndef GL_SGIX_texture_range
+#define GL_SGIX_texture_range 1
+
+#define GL_RGB_SIGNED_SGIX 0x85E0
+#define GL_RGBA_SIGNED_SGIX 0x85E1
+#define GL_ALPHA_SIGNED_SGIX 0x85E2
+#define GL_LUMINANCE_SIGNED_SGIX 0x85E3
+#define GL_INTENSITY_SIGNED_SGIX 0x85E4
+#define GL_LUMINANCE_ALPHA_SIGNED_SGIX 0x85E5
+#define GL_RGB16_SIGNED_SGIX 0x85E6
+#define GL_RGBA16_SIGNED_SGIX 0x85E7
+#define GL_ALPHA16_SIGNED_SGIX 0x85E8
+#define GL_LUMINANCE16_SIGNED_SGIX 0x85E9
+#define GL_INTENSITY16_SIGNED_SGIX 0x85EA
+#define GL_LUMINANCE16_ALPHA16_SIGNED_SGIX 0x85EB
+#define GL_RGB_EXTENDED_RANGE_SGIX 0x85EC
+#define GL_RGBA_EXTENDED_RANGE_SGIX 0x85ED
+#define GL_ALPHA_EXTENDED_RANGE_SGIX 0x85EE
+#define GL_LUMINANCE_EXTENDED_RANGE_SGIX 0x85EF
+#define GL_INTENSITY_EXTENDED_RANGE_SGIX 0x85F0
+#define GL_LUMINANCE_ALPHA_EXTENDED_RANGE_SGIX 0x85F1
+#define GL_RGB16_EXTENDED_RANGE_SGIX 0x85F2
+#define GL_RGBA16_EXTENDED_RANGE_SGIX 0x85F3
+#define GL_ALPHA16_EXTENDED_RANGE_SGIX 0x85F4
+#define GL_LUMINANCE16_EXTENDED_RANGE_SGIX 0x85F5
+#define GL_INTENSITY16_EXTENDED_RANGE_SGIX 0x85F6
+#define GL_LUMINANCE16_ALPHA16_EXTENDED_RANGE_SGIX 0x85F7
+#define GL_MIN_LUMINANCE_SGIS 0x85F8
+#define GL_MAX_LUMINANCE_SGIS 0x85F9
+#define GL_MIN_INTENSITY_SGIS 0x85FA
+#define GL_MAX_INTENSITY_SGIS 0x85FB
+
+#define GLEW_SGIX_texture_range GLEW_GET_VAR(__GLEW_SGIX_texture_range)
+
+#endif /* GL_SGIX_texture_range */
+
+/* ----------------------- GL_SGIX_texture_scale_bias ---------------------- */
+
+#ifndef GL_SGIX_texture_scale_bias
+#define GL_SGIX_texture_scale_bias 1
+
+#define GL_POST_TEXTURE_FILTER_BIAS_SGIX 0x8179
+#define GL_POST_TEXTURE_FILTER_SCALE_SGIX 0x817A
+#define GL_POST_TEXTURE_FILTER_BIAS_RANGE_SGIX 0x817B
+#define GL_POST_TEXTURE_FILTER_SCALE_RANGE_SGIX 0x817C
+
+#define GLEW_SGIX_texture_scale_bias GLEW_GET_VAR(__GLEW_SGIX_texture_scale_bias)
+
+#endif /* GL_SGIX_texture_scale_bias */
+
+/* ------------------------- GL_SGIX_vertex_preclip ------------------------ */
+
+#ifndef GL_SGIX_vertex_preclip
+#define GL_SGIX_vertex_preclip 1
+
+#define GL_VERTEX_PRECLIP_SGIX 0x83EE
+#define GL_VERTEX_PRECLIP_HINT_SGIX 0x83EF
+
+#define GLEW_SGIX_vertex_preclip GLEW_GET_VAR(__GLEW_SGIX_vertex_preclip)
+
+#endif /* GL_SGIX_vertex_preclip */
+
+/* ---------------------- GL_SGIX_vertex_preclip_hint ---------------------- */
+
+#ifndef GL_SGIX_vertex_preclip_hint
+#define GL_SGIX_vertex_preclip_hint 1
+
+#define GL_VERTEX_PRECLIP_SGIX 0x83EE
+#define GL_VERTEX_PRECLIP_HINT_SGIX 0x83EF
+
+#define GLEW_SGIX_vertex_preclip_hint GLEW_GET_VAR(__GLEW_SGIX_vertex_preclip_hint)
+
+#endif /* GL_SGIX_vertex_preclip_hint */
+
+/* ----------------------------- GL_SGIX_ycrcb ----------------------------- */
+
+#ifndef GL_SGIX_ycrcb
+#define GL_SGIX_ycrcb 1
+
+#define GLEW_SGIX_ycrcb GLEW_GET_VAR(__GLEW_SGIX_ycrcb)
+
+#endif /* GL_SGIX_ycrcb */
+
+/* -------------------------- GL_SGI_color_matrix -------------------------- */
+
+#ifndef GL_SGI_color_matrix
+#define GL_SGI_color_matrix 1
+
+#define GL_COLOR_MATRIX_SGI 0x80B1
+#define GL_COLOR_MATRIX_STACK_DEPTH_SGI 0x80B2
+#define GL_MAX_COLOR_MATRIX_STACK_DEPTH_SGI 0x80B3
+#define GL_POST_COLOR_MATRIX_RED_SCALE_SGI 0x80B4
+#define GL_POST_COLOR_MATRIX_GREEN_SCALE_SGI 0x80B5
+#define GL_POST_COLOR_MATRIX_BLUE_SCALE_SGI 0x80B6
+#define GL_POST_COLOR_MATRIX_ALPHA_SCALE_SGI 0x80B7
+#define GL_POST_COLOR_MATRIX_RED_BIAS_SGI 0x80B8
+#define GL_POST_COLOR_MATRIX_GREEN_BIAS_SGI 0x80B9
+#define GL_POST_COLOR_MATRIX_BLUE_BIAS_SGI 0x80BA
+#define GL_POST_COLOR_MATRIX_ALPHA_BIAS_SGI 0x80BB
+
+#define GLEW_SGI_color_matrix GLEW_GET_VAR(__GLEW_SGI_color_matrix)
+
+#endif /* GL_SGI_color_matrix */
+
+/* --------------------------- GL_SGI_color_table -------------------------- */
+
+#ifndef GL_SGI_color_table
+#define GL_SGI_color_table 1
+
+#define GL_COLOR_TABLE_SGI 0x80D0
+#define GL_POST_CONVOLUTION_COLOR_TABLE_SGI 0x80D1
+#define GL_POST_COLOR_MATRIX_COLOR_TABLE_SGI 0x80D2
+#define GL_PROXY_COLOR_TABLE_SGI 0x80D3
+#define GL_PROXY_POST_CONVOLUTION_COLOR_TABLE_SGI 0x80D4
+#define GL_PROXY_POST_COLOR_MATRIX_COLOR_TABLE_SGI 0x80D5
+#define GL_COLOR_TABLE_SCALE_SGI 0x80D6
+#define GL_COLOR_TABLE_BIAS_SGI 0x80D7
+#define GL_COLOR_TABLE_FORMAT_SGI 0x80D8
+#define GL_COLOR_TABLE_WIDTH_SGI 0x80D9
+#define GL_COLOR_TABLE_RED_SIZE_SGI 0x80DA
+#define GL_COLOR_TABLE_GREEN_SIZE_SGI 0x80DB
+#define GL_COLOR_TABLE_BLUE_SIZE_SGI 0x80DC
+#define GL_COLOR_TABLE_ALPHA_SIZE_SGI 0x80DD
+#define GL_COLOR_TABLE_LUMINANCE_SIZE_SGI 0x80DE
+#define GL_COLOR_TABLE_INTENSITY_SIZE_SGI 0x80DF
+
+typedef void (GLAPIENTRY * PFNGLCOLORTABLEPARAMETERFVSGIPROC) (GLenum target, GLenum pname, const GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLCOLORTABLEPARAMETERIVSGIPROC) (GLenum target, GLenum pname, const GLint* params);
+typedef void (GLAPIENTRY * PFNGLCOLORTABLESGIPROC) (GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const void* table);
+typedef void (GLAPIENTRY * PFNGLCOPYCOLORTABLESGIPROC) (GLenum tar

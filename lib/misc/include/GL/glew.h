@@ -8779,4 +8779,196 @@ typedef void (GLAPIENTRY * PFNGLTAGSAMPLEBUFFERSGIXPROC) (void);
 typedef void (GLAPIENTRY * PFNGLCOLORTABLEPARAMETERFVSGIPROC) (GLenum target, GLenum pname, const GLfloat* params);
 typedef void (GLAPIENTRY * PFNGLCOLORTABLEPARAMETERIVSGIPROC) (GLenum target, GLenum pname, const GLint* params);
 typedef void (GLAPIENTRY * PFNGLCOLORTABLESGIPROC) (GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const void* table);
-typedef void (GLAPIENTRY * PFNGLCOPYCOLORTABLESGIPROC) (GLenum tar
+typedef void (GLAPIENTRY * PFNGLCOPYCOLORTABLESGIPROC) (GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width);
+typedef void (GLAPIENTRY * PFNGLGETCOLORTABLEPARAMETERFVSGIPROC) (GLenum target, GLenum pname, GLfloat* params);
+typedef void (GLAPIENTRY * PFNGLGETCOLORTABLEPARAMETERIVSGIPROC) (GLenum target, GLenum pname, GLint* params);
+typedef void (GLAPIENTRY * PFNGLGETCOLORTABLESGIPROC) (GLenum target, GLenum format, GLenum type, void* table);
+
+#define glColorTableParameterfvSGI GLEW_GET_FUN(__glewColorTableParameterfvSGI)
+#define glColorTableParameterivSGI GLEW_GET_FUN(__glewColorTableParameterivSGI)
+#define glColorTableSGI GLEW_GET_FUN(__glewColorTableSGI)
+#define glCopyColorTableSGI GLEW_GET_FUN(__glewCopyColorTableSGI)
+#define glGetColorTableParameterfvSGI GLEW_GET_FUN(__glewGetColorTableParameterfvSGI)
+#define glGetColorTableParameterivSGI GLEW_GET_FUN(__glewGetColorTableParameterivSGI)
+#define glGetColorTableSGI GLEW_GET_FUN(__glewGetColorTableSGI)
+
+#define GLEW_SGI_color_table GLEW_GET_VAR(__GLEW_SGI_color_table)
+
+#endif /* GL_SGI_color_table */
+
+/* ----------------------- GL_SGI_texture_color_table ---------------------- */
+
+#ifndef GL_SGI_texture_color_table
+#define GL_SGI_texture_color_table 1
+
+#define GL_TEXTURE_COLOR_TABLE_SGI 0x80BC
+#define GL_PROXY_TEXTURE_COLOR_TABLE_SGI 0x80BD
+
+#define GLEW_SGI_texture_color_table GLEW_GET_VAR(__GLEW_SGI_texture_color_table)
+
+#endif /* GL_SGI_texture_color_table */
+
+/* ------------------------- GL_SUNX_constant_data ------------------------- */
+
+#ifndef GL_SUNX_constant_data
+#define GL_SUNX_constant_data 1
+
+#define GL_UNPACK_CONSTANT_DATA_SUNX 0x81D5
+#define GL_TEXTURE_CONSTANT_DATA_SUNX 0x81D6
+
+typedef void (GLAPIENTRY * PFNGLFINISHTEXTURESUNXPROC) (void);
+
+#define glFinishTextureSUNX GLEW_GET_FUN(__glewFinishTextureSUNX)
+
+#define GLEW_SUNX_constant_data GLEW_GET_VAR(__GLEW_SUNX_constant_data)
+
+#endif /* GL_SUNX_constant_data */
+
+/* -------------------- GL_SUN_convolution_border_modes -------------------- */
+
+#ifndef GL_SUN_convolution_border_modes
+#define GL_SUN_convolution_border_modes 1
+
+#define GL_WRAP_BORDER_SUN 0x81D4
+
+#define GLEW_SUN_convolution_border_modes GLEW_GET_VAR(__GLEW_SUN_convolution_border_modes)
+
+#endif /* GL_SUN_convolution_border_modes */
+
+/* -------------------------- GL_SUN_global_alpha -------------------------- */
+
+#ifndef GL_SUN_global_alpha
+#define GL_SUN_global_alpha 1
+
+#define GL_GLOBAL_ALPHA_SUN 0x81D9
+#define GL_GLOBAL_ALPHA_FACTOR_SUN 0x81DA
+
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORBSUNPROC) (GLbyte factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORDSUNPROC) (GLdouble factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORFSUNPROC) (GLfloat factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORISUNPROC) (GLint factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORSSUNPROC) (GLshort factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORUBSUNPROC) (GLubyte factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORUISUNPROC) (GLuint factor);
+typedef void (GLAPIENTRY * PFNGLGLOBALALPHAFACTORUSSUNPROC) (GLushort factor);
+
+#define glGlobalAlphaFactorbSUN GLEW_GET_FUN(__glewGlobalAlphaFactorbSUN)
+#define glGlobalAlphaFactordSUN GLEW_GET_FUN(__glewGlobalAlphaFactordSUN)
+#define glGlobalAlphaFactorfSUN GLEW_GET_FUN(__glewGlobalAlphaFactorfSUN)
+#define glGlobalAlphaFactoriSUN GLEW_GET_FUN(__glewGlobalAlphaFactoriSUN)
+#define glGlobalAlphaFactorsSUN GLEW_GET_FUN(__glewGlobalAlphaFactorsSUN)
+#define glGlobalAlphaFactorubSUN GLEW_GET_FUN(__glewGlobalAlphaFactorubSUN)
+#define glGlobalAlphaFactoruiSUN GLEW_GET_FUN(__glewGlobalAlphaFactoruiSUN)
+#define glGlobalAlphaFactorusSUN GLEW_GET_FUN(__glewGlobalAlphaFactorusSUN)
+
+#define GLEW_SUN_global_alpha GLEW_GET_VAR(__GLEW_SUN_global_alpha)
+
+#endif /* GL_SUN_global_alpha */
+
+/* --------------------------- GL_SUN_mesh_array --------------------------- */
+
+#ifndef GL_SUN_mesh_array
+#define GL_SUN_mesh_array 1
+
+#define GL_QUAD_MESH_SUN 0x8614
+#define GL_TRIANGLE_MESH_SUN 0x8615
+
+#define GLEW_SUN_mesh_array GLEW_GET_VAR(__GLEW_SUN_mesh_array)
+
+#endif /* GL_SUN_mesh_array */
+
+/* ------------------------ GL_SUN_read_video_pixels ----------------------- */
+
+#ifndef GL_SUN_read_video_pixels
+#define GL_SUN_read_video_pixels 1
+
+typedef void (GLAPIENTRY * PFNGLREADVIDEOPIXELSSUNPROC) (GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* pixels);
+
+#define glReadVideoPixelsSUN GLEW_GET_FUN(__glewReadVideoPixelsSUN)
+
+#define GLEW_SUN_read_video_pixels GLEW_GET_VAR(__GLEW_SUN_read_video_pixels)
+
+#endif /* GL_SUN_read_video_pixels */
+
+/* --------------------------- GL_SUN_slice_accum -------------------------- */
+
+#ifndef GL_SUN_slice_accum
+#define GL_SUN_slice_accum 1
+
+#define GL_SLICE_ACCUM_SUN 0x85CC
+
+#define GLEW_SUN_slice_accum GLEW_GET_VAR(__GLEW_SUN_slice_accum)
+
+#endif /* GL_SUN_slice_accum */
+
+/* -------------------------- GL_SUN_triangle_list ------------------------- */
+
+#ifndef GL_SUN_triangle_list
+#define GL_SUN_triangle_list 1
+
+#define GL_RESTART_SUN 0x01
+#define GL_REPLACE_MIDDLE_SUN 0x02
+#define GL_REPLACE_OLDEST_SUN 0x03
+#define GL_TRIANGLE_LIST_SUN 0x81D7
+#define GL_REPLACEMENT_CODE_SUN 0x81D8
+#define GL_REPLACEMENT_CODE_ARRAY_SUN 0x85C0
+#define GL_REPLACEMENT_CODE_ARRAY_TYPE_SUN 0x85C1
+#define GL_REPLACEMENT_CODE_ARRAY_STRIDE_SUN 0x85C2
+#define GL_REPLACEMENT_CODE_ARRAY_POINTER_SUN 0x85C3
+#define GL_R1UI_V3F_SUN 0x85C4
+#define GL_R1UI_C4UB_V3F_SUN 0x85C5
+#define GL_R1UI_C3F_V3F_SUN 0x85C6
+#define GL_R1UI_N3F_V3F_SUN 0x85C7
+#define GL_R1UI_C4F_N3F_V3F_SUN 0x85C8
+#define GL_R1UI_T2F_V3F_SUN 0x85C9
+#define GL_R1UI_T2F_N3F_V3F_SUN 0x85CA
+#define GL_R1UI_T2F_C4F_N3F_V3F_SUN 0x85CB
+
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEPOINTERSUNPROC) (GLenum type, GLsizei stride, const void* pointer);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUBSUNPROC) (GLubyte code);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUBVSUNPROC) (const GLubyte* code);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUISUNPROC) (GLuint code);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUIVSUNPROC) (const GLuint* code);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUSSUNPROC) (GLushort code);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUSVSUNPROC) (const GLushort* code);
+
+#define glReplacementCodePointerSUN GLEW_GET_FUN(__glewReplacementCodePointerSUN)
+#define glReplacementCodeubSUN GLEW_GET_FUN(__glewReplacementCodeubSUN)
+#define glReplacementCodeubvSUN GLEW_GET_FUN(__glewReplacementCodeubvSUN)
+#define glReplacementCodeuiSUN GLEW_GET_FUN(__glewReplacementCodeuiSUN)
+#define glReplacementCodeuivSUN GLEW_GET_FUN(__glewReplacementCodeuivSUN)
+#define glReplacementCodeusSUN GLEW_GET_FUN(__glewReplacementCodeusSUN)
+#define glReplacementCodeusvSUN GLEW_GET_FUN(__glewReplacementCodeusvSUN)
+
+#define GLEW_SUN_triangle_list GLEW_GET_VAR(__GLEW_SUN_triangle_list)
+
+#endif /* GL_SUN_triangle_list */
+
+/* ----------------------------- GL_SUN_vertex ----------------------------- */
+
+#ifndef GL_SUN_vertex
+#define GL_SUN_vertex 1
+
+typedef void (GLAPIENTRY * PFNGLCOLOR3FVERTEX3FSUNPROC) (GLfloat r, GLfloat g, GLfloat b, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLCOLOR3FVERTEX3FVSUNPROC) (const GLfloat* c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLCOLOR4FNORMAL3FVERTEX3FSUNPROC) (GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLCOLOR4FNORMAL3FVERTEX3FVSUNPROC) (const GLfloat* c, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLCOLOR4UBVERTEX2FSUNPROC) (GLubyte r, GLubyte g, GLubyte b, GLubyte a, GLfloat x, GLfloat y);
+typedef void (GLAPIENTRY * PFNGLCOLOR4UBVERTEX2FVSUNPROC) (const GLubyte* c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLCOLOR4UBVERTEX3FSUNPROC) (GLubyte r, GLubyte g, GLubyte b, GLubyte a, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLCOLOR4UBVERTEX3FVSUNPROC) (const GLubyte* c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLNORMAL3FVERTEX3FSUNPROC) (GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLNORMAL3FVERTEX3FVSUNPROC) (const GLfloat* n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUICOLOR3FVERTEX3FSUNPROC) (GLuint rc, GLfloat r, GLfloat g, GLfloat b, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUICOLOR3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUICOLOR4FNORMAL3FVERTEX3FSUNPROC) (GLuint rc, GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUICOLOR4FNORMAL3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *c, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUICOLOR4UBVERTEX3FSUNPROC) (GLuint rc, GLubyte r, GLubyte g, GLubyte b, GLubyte a, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUICOLOR4UBVERTEX3FVSUNPROC) (const GLuint* rc, const GLubyte *c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUINORMAL3FVERTEX3FSUNPROC) (GLuint rc, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUINORMAL3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX3FSUNPROC) (GLuint rc, GLfloat s, GLfloat t, GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *tc, const GLfloat *c, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FNORMAL3FVERTEX3FSUNPROC) (GLuint rc, GLfloat s, GLfloat t, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FNORMAL3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *tc, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2F

@@ -8971,4 +8971,159 @@ typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX
 typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FCOLOR4FNORMAL3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *tc, const GLfloat *c, const GLfloat *n, const GLfloat *v);
 typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FNORMAL3FVERTEX3FSUNPROC) (GLuint rc, GLfloat s, GLfloat t, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
 typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FNORMAL3FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *tc, const GLfloat *n, const GLfloat *v);
-typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2F
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FVERTEX3FSUNPROC) (GLuint rc, GLfloat s, GLfloat t, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUITEXCOORD2FVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *tc, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUIVERTEX3FSUNPROC) (GLuint rc, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLREPLACEMENTCODEUIVERTEX3FVSUNPROC) (const GLuint* rc, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FCOLOR3FVERTEX3FSUNPROC) (GLfloat s, GLfloat t, GLfloat r, GLfloat g, GLfloat b, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FCOLOR3FVERTEX3FVSUNPROC) (const GLfloat* tc, const GLfloat *c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FCOLOR4FNORMAL3FVERTEX3FSUNPROC) (GLfloat s, GLfloat t, GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FCOLOR4FNORMAL3FVERTEX3FVSUNPROC) (const GLfloat* tc, const GLfloat *c, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FCOLOR4UBVERTEX3FSUNPROC) (GLfloat s, GLfloat t, GLubyte r, GLubyte g, GLubyte b, GLubyte a, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FCOLOR4UBVERTEX3FVSUNPROC) (const GLfloat* tc, const GLubyte *c, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FNORMAL3FVERTEX3FSUNPROC) (GLfloat s, GLfloat t, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FNORMAL3FVERTEX3FVSUNPROC) (const GLfloat* tc, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FVERTEX3FSUNPROC) (GLfloat s, GLfloat t, GLfloat x, GLfloat y, GLfloat z);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD2FVERTEX3FVSUNPROC) (const GLfloat* tc, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD4FCOLOR4FNORMAL3FVERTEX4FSUNPROC) (GLfloat s, GLfloat t, GLfloat p, GLfloat q, GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat nx, GLfloat ny, GLfloat nz, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD4FCOLOR4FNORMAL3FVERTEX4FVSUNPROC) (const GLfloat* tc, const GLfloat *c, const GLfloat *n, const GLfloat *v);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD4FVERTEX4FSUNPROC) (GLfloat s, GLfloat t, GLfloat p, GLfloat q, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+typedef void (GLAPIENTRY * PFNGLTEXCOORD4FVERTEX4FVSUNPROC) (const GLfloat* tc, const GLfloat *v);
+
+#define glColor3fVertex3fSUN GLEW_GET_FUN(__glewColor3fVertex3fSUN)
+#define glColor3fVertex3fvSUN GLEW_GET_FUN(__glewColor3fVertex3fvSUN)
+#define glColor4fNormal3fVertex3fSUN GLEW_GET_FUN(__glewColor4fNormal3fVertex3fSUN)
+#define glColor4fNormal3fVertex3fvSUN GLEW_GET_FUN(__glewColor4fNormal3fVertex3fvSUN)
+#define glColor4ubVertex2fSUN GLEW_GET_FUN(__glewColor4ubVertex2fSUN)
+#define glColor4ubVertex2fvSUN GLEW_GET_FUN(__glewColor4ubVertex2fvSUN)
+#define glColor4ubVertex3fSUN GLEW_GET_FUN(__glewColor4ubVertex3fSUN)
+#define glColor4ubVertex3fvSUN GLEW_GET_FUN(__glewColor4ubVertex3fvSUN)
+#define glNormal3fVertex3fSUN GLEW_GET_FUN(__glewNormal3fVertex3fSUN)
+#define glNormal3fVertex3fvSUN GLEW_GET_FUN(__glewNormal3fVertex3fvSUN)
+#define glReplacementCodeuiColor3fVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiColor3fVertex3fSUN)
+#define glReplacementCodeuiColor3fVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiColor3fVertex3fvSUN)
+#define glReplacementCodeuiColor4fNormal3fVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiColor4fNormal3fVertex3fSUN)
+#define glReplacementCodeuiColor4fNormal3fVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiColor4fNormal3fVertex3fvSUN)
+#define glReplacementCodeuiColor4ubVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiColor4ubVertex3fSUN)
+#define glReplacementCodeuiColor4ubVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiColor4ubVertex3fvSUN)
+#define glReplacementCodeuiNormal3fVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiNormal3fVertex3fSUN)
+#define glReplacementCodeuiNormal3fVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiNormal3fVertex3fvSUN)
+#define glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN)
+#define glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN)
+#define glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiTexCoord2fNormal3fVertex3fSUN)
+#define glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN)
+#define glReplacementCodeuiTexCoord2fVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiTexCoord2fVertex3fSUN)
+#define glReplacementCodeuiTexCoord2fVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiTexCoord2fVertex3fvSUN)
+#define glReplacementCodeuiVertex3fSUN GLEW_GET_FUN(__glewReplacementCodeuiVertex3fSUN)
+#define glReplacementCodeuiVertex3fvSUN GLEW_GET_FUN(__glewReplacementCodeuiVertex3fvSUN)
+#define glTexCoord2fColor3fVertex3fSUN GLEW_GET_FUN(__glewTexCoord2fColor3fVertex3fSUN)
+#define glTexCoord2fColor3fVertex3fvSUN GLEW_GET_FUN(__glewTexCoord2fColor3fVertex3fvSUN)
+#define glTexCoord2fColor4fNormal3fVertex3fSUN GLEW_GET_FUN(__glewTexCoord2fColor4fNormal3fVertex3fSUN)
+#define glTexCoord2fColor4fNormal3fVertex3fvSUN GLEW_GET_FUN(__glewTexCoord2fColor4fNormal3fVertex3fvSUN)
+#define glTexCoord2fColor4ubVertex3fSUN GLEW_GET_FUN(__glewTexCoord2fColor4ubVertex3fSUN)
+#define glTexCoord2fColor4ubVertex3fvSUN GLEW_GET_FUN(__glewTexCoord2fColor4ubVertex3fvSUN)
+#define glTexCoord2fNormal3fVertex3fSUN GLEW_GET_FUN(__glewTexCoord2fNormal3fVertex3fSUN)
+#define glTexCoord2fNormal3fVertex3fvSUN GLEW_GET_FUN(__glewTexCoord2fNormal3fVertex3fvSUN)
+#define glTexCoord2fVertex3fSUN GLEW_GET_FUN(__glewTexCoord2fVertex3fSUN)
+#define glTexCoord2fVertex3fvSUN GLEW_GET_FUN(__glewTexCoord2fVertex3fvSUN)
+#define glTexCoord4fColor4fNormal3fVertex4fSUN GLEW_GET_FUN(__glewTexCoord4fColor4fNormal3fVertex4fSUN)
+#define glTexCoord4fColor4fNormal3fVertex4fvSUN GLEW_GET_FUN(__glewTexCoord4fColor4fNormal3fVertex4fvSUN)
+#define glTexCoord4fVertex4fSUN GLEW_GET_FUN(__glewTexCoord4fVertex4fSUN)
+#define glTexCoord4fVertex4fvSUN GLEW_GET_FUN(__glewTexCoord4fVertex4fvSUN)
+
+#define GLEW_SUN_vertex GLEW_GET_VAR(__GLEW_SUN_vertex)
+
+#endif /* GL_SUN_vertex */
+
+/* -------------------------- GL_WIN_phong_shading ------------------------- */
+
+#ifndef GL_WIN_phong_shading
+#define GL_WIN_phong_shading 1
+
+#define GL_PHONG_WIN 0x80EA
+#define GL_PHONG_HINT_WIN 0x80EB
+
+#define GLEW_WIN_phong_shading GLEW_GET_VAR(__GLEW_WIN_phong_shading)
+
+#endif /* GL_WIN_phong_shading */
+
+/* -------------------------- GL_WIN_specular_fog -------------------------- */
+
+#ifndef GL_WIN_specular_fog
+#define GL_WIN_specular_fog 1
+
+#define GL_FOG_SPECULAR_TEXTURE_WIN 0x80EC
+
+#define GLEW_WIN_specular_fog GLEW_GET_VAR(__GLEW_WIN_specular_fog)
+
+#endif /* GL_WIN_specular_fog */
+
+/* ---------------------------- GL_WIN_swap_hint --------------------------- */
+
+#ifndef GL_WIN_swap_hint
+#define GL_WIN_swap_hint 1
+
+typedef void (GLAPIENTRY * PFNGLADDSWAPHINTRECTWINPROC) (GLint x, GLint y, GLsizei width, GLsizei height);
+
+#define glAddSwapHintRectWIN GLEW_GET_FUN(__glewAddSwapHintRectWIN)
+
+#define GLEW_WIN_swap_hint GLEW_GET_VAR(__GLEW_WIN_swap_hint)
+
+#endif /* GL_WIN_swap_hint */
+
+/* ------------------------------------------------------------------------- */
+
+#if defined(GLEW_MX) && defined(_WIN32)
+#define GLEW_FUN_EXPORT
+#else
+#define GLEW_FUN_EXPORT GLEWAPI
+#endif /* GLEW_MX */
+
+#if defined(GLEW_MX)
+#define GLEW_VAR_EXPORT
+#else
+#define GLEW_VAR_EXPORT GLEWAPI
+#endif /* GLEW_MX */
+
+#if defined(GLEW_MX) && defined(_WIN32)
+struct GLEWContextStruct
+{
+#endif /* GLEW_MX */
+
+GLEW_FUN_EXPORT PFNGLCOPYTEXSUBIMAGE3DPROC __glewCopyTexSubImage3D;
+GLEW_FUN_EXPORT PFNGLDRAWRANGEELEMENTSPROC __glewDrawRangeElements;
+GLEW_FUN_EXPORT PFNGLTEXIMAGE3DPROC __glewTexImage3D;
+GLEW_FUN_EXPORT PFNGLTEXSUBIMAGE3DPROC __glewTexSubImage3D;
+
+GLEW_FUN_EXPORT PFNGLACTIVETEXTUREPROC __glewActiveTexture;
+GLEW_FUN_EXPORT PFNGLCLIENTACTIVETEXTUREPROC __glewClientActiveTexture;
+GLEW_FUN_EXPORT PFNGLCOMPRESSEDTEXIMAGE1DPROC __glewCompressedTexImage1D;
+GLEW_FUN_EXPORT PFNGLCOMPRESSEDTEXIMAGE2DPROC __glewCompressedTexImage2D;
+GLEW_FUN_EXPORT PFNGLCOMPRESSEDTEXIMAGE3DPROC __glewCompressedTexImage3D;
+GLEW_FUN_EXPORT PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC __glewCompressedTexSubImage1D;
+GLEW_FUN_EXPORT PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC __glewCompressedTexSubImage2D;
+GLEW_FUN_EXPORT PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC __glewCompressedTexSubImage3D;
+GLEW_FUN_EXPORT PFNGLGETCOMPRESSEDTEXIMAGEPROC __glewGetCompressedTexImage;
+GLEW_FUN_EXPORT PFNGLLOADTRANSPOSEMATRIXDPROC __glewLoadTransposeMatrixd;
+GLEW_FUN_EXPORT PFNGLLOADTRANSPOSEMATRIXFPROC __glewLoadTransposeMatrixf;
+GLEW_FUN_EXPORT PFNGLMULTTRANSPOSEMATRIXDPROC __glewMultTransposeMatrixd;
+GLEW_FUN_EXPORT PFNGLMULTTRANSPOSEMATRIXFPROC __glewMultTransposeMatrixf;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1DPROC __glewMultiTexCoord1d;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1DVPROC __glewMultiTexCoord1dv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1FPROC __glewMultiTexCoord1f;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1FVPROC __glewMultiTexCoord1fv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1IPROC __glewMultiTexCoord1i;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1IVPROC __glewMultiTexCoord1iv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1SPROC __glewMultiTexCoord1s;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD1SVPROC __glewMultiTexCoord1sv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2DPROC __glewMultiTexCoord2d;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2DVPROC __glewMultiTexCoord2dv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2FPROC __glewMultiTexCoord2f;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2FVPROC __glewMultiTexCoord2fv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2IPROC __glewMultiTexCoord2i;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2IVPROC __glewMultiTexCoord2iv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2SPROC __glewMultiTexCoord2s;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD2SVPROC __glewMultiTexCoord2sv;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3DPROC __glewMultiTexCoord3d;
+GLEW_FUN_EXPORT PFNGLMULTITEXCOORD3DVPROC __glewMultiTexCoord3dv;
+GLEW_FUN_EXPORT PFN

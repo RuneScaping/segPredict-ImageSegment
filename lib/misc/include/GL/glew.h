@@ -10601,4 +10601,183 @@ GLEW_VAR_EXPORT GLboolean __GLEW_NV_fragment_program;
 GLEW_VAR_EXPORT GLboolean __GLEW_NV_fragment_program2;
 GLEW_VAR_EXPORT GLboolean __GLEW_NV_fragment_program4;
 GLEW_VAR_EXPORT GLboolean __GLEW_NV_fragment_program_option;
-GLEW_VAR_EXPORT GLboolean __G
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_framebuffer_multisample_coverage;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_geometry_program4;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_geometry_shader4;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_gpu_program4;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_half_float;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_light_max_exponent;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_multisample_filter_hint;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_occlusion_query;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_packed_depth_stencil;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_parameter_buffer_object;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_pixel_data_range;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_point_sprite;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_primitive_restart;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_register_combiners;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_register_combiners2;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texgen_emboss;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texgen_reflection;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_compression_vtc;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_env_combine4;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_expand_normal;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_rectangle;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_shader;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_shader2;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_texture_shader3;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_transform_feedback;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_array_range;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_array_range2;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program1_1;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program2;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program2_option;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program3;
+GLEW_VAR_EXPORT GLboolean __GLEW_NV_vertex_program4;
+GLEW_VAR_EXPORT GLboolean __GLEW_OES_byte_coordinates;
+GLEW_VAR_EXPORT GLboolean __GLEW_OES_compressed_paletted_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_OES_read_format;
+GLEW_VAR_EXPORT GLboolean __GLEW_OES_single_precision;
+GLEW_VAR_EXPORT GLboolean __GLEW_OML_interlace;
+GLEW_VAR_EXPORT GLboolean __GLEW_OML_resample;
+GLEW_VAR_EXPORT GLboolean __GLEW_OML_subsample;
+GLEW_VAR_EXPORT GLboolean __GLEW_PGI_misc_hints;
+GLEW_VAR_EXPORT GLboolean __GLEW_PGI_vertex_hints;
+GLEW_VAR_EXPORT GLboolean __GLEW_REND_screen_coordinates;
+GLEW_VAR_EXPORT GLboolean __GLEW_S3_s3tc;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_color_range;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_detail_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_fog_function;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_generate_mipmap;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_multisample;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_pixel_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_sharpen_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_texture4D;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_texture_border_clamp;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_texture_edge_clamp;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_texture_filter4;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_texture_lod;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIS_texture_select;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_async;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_async_histogram;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_async_pixel;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_blend_alpha_minmax;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_clipmap;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_depth_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_flush_raster;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_fog_offset;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_fog_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_fragment_specular_lighting;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_framezoom;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_interlace;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_ir_instrument1;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_list_priority;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_pixel_texture;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_pixel_texture_bits;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_reference_plane;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_resample;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_shadow;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_shadow_ambient;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_sprite;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_tag_sample_buffer;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_texture_add_env;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_texture_coordinate_clamp;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_texture_lod_bias;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_texture_multi_buffer;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_texture_range;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_texture_scale_bias;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_vertex_preclip;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_vertex_preclip_hint;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGIX_ycrcb;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGI_color_matrix;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGI_color_table;
+GLEW_VAR_EXPORT GLboolean __GLEW_SGI_texture_color_table;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUNX_constant_data;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_convolution_border_modes;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_global_alpha;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_mesh_array;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_read_video_pixels;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_slice_accum;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_triangle_list;
+GLEW_VAR_EXPORT GLboolean __GLEW_SUN_vertex;
+GLEW_VAR_EXPORT GLboolean __GLEW_WIN_phong_shading;
+GLEW_VAR_EXPORT GLboolean __GLEW_WIN_specular_fog;
+GLEW_VAR_EXPORT GLboolean __GLEW_WIN_swap_hint;
+
+#ifdef GLEW_MX
+}; /* GLEWContextStruct */
+#endif /* GLEW_MX */
+
+/* ------------------------------------------------------------------------- */
+
+/* error codes */
+#define GLEW_OK 0
+#define GLEW_NO_ERROR 0
+#define GLEW_ERROR_NO_GL_VERSION 1  /* missing GL version */
+#define GLEW_ERROR_GL_VERSION_10_ONLY 2  /* GL 1.1 and up are not supported */
+#define GLEW_ERROR_GLX_VERSION_11_ONLY 3  /* GLX 1.2 and up are not supported */
+
+/* string codes */
+#define GLEW_VERSION 1
+#define GLEW_VERSION_MAJOR 2
+#define GLEW_VERSION_MINOR 3
+#define GLEW_VERSION_MICRO 4
+
+/* API */
+#ifdef GLEW_MX
+
+typedef struct GLEWContextStruct GLEWContext;
+GLEWAPI GLenum glewContextInit (GLEWContext* ctx);
+GLEWAPI GLboolean glewContextIsSupported (GLEWContext* ctx, const char* name);
+
+#define glewInit() glewContextInit(glewGetContext())
+#define glewIsSupported(x) glewContextIsSupported(glewGetContext(), x)
+#define glewIsExtensionSupported(x) glewIsSupported(x)
+
+#define GLEW_GET_VAR(x) (*(const GLboolean*)&(glewGetContext()->x))
+#ifdef _WIN32
+#  define GLEW_GET_FUN(x) glewGetContext()->x
+#else
+#  define GLEW_GET_FUN(x) x
+#endif
+
+#else /* GLEW_MX */
+
+GLEWAPI GLenum glewInit ();
+GLEWAPI GLboolean glewIsSupported (const char* name);
+#define glewIsExtensionSupported(x) glewIsSupported(x)
+
+#define GLEW_GET_VAR(x) (*(const GLboolean*)&x)
+#define GLEW_GET_FUN(x) x
+
+#endif /* GLEW_MX */
+
+GLEWAPI GLboolean glewExperimental;
+GLEWAPI GLboolean glewGetExtension (const char* name);
+GLEWAPI const GLubyte* glewGetErrorString (GLenum error);
+GLEWAPI const GLubyte* glewGetString (GLenum name);
+
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef GLEW_APIENTRY_DEFINED
+#undef GLEW_APIENTRY_DEFINED
+#undef APIENTRY
+#undef GLAPIENTRY
+#endif
+
+#ifdef GLEW_CALLBACK_DEFINED
+#undef GLEW_CALLBACK_DEFINED
+#undef CALLBACK
+#endif
+
+#ifdef GLEW_WINGDIAPI_DEFINED
+#undef GLEW_WINGDIAPI_DEFINED
+#undef WINGDIAPI
+#endif
+
+#undef GLAPI
+/* #undef GLEWAPI */
+
+#endif /* __glew_h__ */

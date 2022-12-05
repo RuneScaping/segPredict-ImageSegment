@@ -434,4 +434,195 @@ ZEXTERN int ZEXPORT inflate OF((z_streamp strm, int flush));
   total_out bytes) and returns Z_OK, Z_STREAM_END or an error code as described
   below. At the end of the stream, inflate() checks that its computed adler32
   checksum is equal to that saved by the compressor and returns Z_STREAM_END
-  only if the checksum is 
+  only if the checksum is correct.
+
+    inflate() will decompress and check either zlib-wrapped or gzip-wrapped
+  deflate data.  The header type is detected automatically.  Any information
+  contained in the gzip header is not retained, so applications that need that
+  information should instead use raw inflate, see inflateInit2() below, or
+  inflateBack() and perform their own processing of the gzip header and
+  trailer.
+
+    inflate() returns Z_OK if some progress has been made (more input processed
+  or more output produced), Z_STREAM_END if the end of the compressed data has
+  been reached and all uncompressed output has been produced, Z_NEED_DICT if a
+  preset dictionary is needed at this point, Z_DATA_ERROR if the input data was
+  corrupted (input stream not conforming to the zlib format or incorrect check
+  value), Z_STREAM_ERROR if the stream structure was inconsistent (for example
+  if next_in or next_out was NULL), Z_MEM_ERROR if there was not enough memory,
+  Z_BUF_ERROR if no progress is possible or if there was not enough room in the
+  output buffer when Z_FINISH is used. Note that Z_BUF_ERROR is not fatal, and
+  inflate() can be called again with more input and more output space to
+  continue decompressing. If Z_DATA_ERROR is returned, the application may then
+  call inflateSync() to look for a good compression block if a partial recovery
+  of the data is desired.
+*/
+
+
+ZEXTERN int ZEXPORT inflateEnd OF((z_streamp strm));
+/*
+     All dynamically allocated data structures for this stream are freed.
+   This function discards any unprocessed input and does not flush any
+   pending output.
+
+     inflateEnd returns Z_OK if success, Z_STREAM_ERROR if the stream state
+   was inconsistent. In the error case, msg may be set but then points to a
+   static string (which must not be deallocated).
+*/
+
+                        /* Advanced functions */
+
+/*
+    The following functions are needed only in some special applications.
+*/
+
+/*
+ZEXTERN int ZEXPORT deflateInit2 OF((z_streamp strm,
+                                     int  level,
+                                     int  method,
+                                     int  windowBits,
+                                     int  memLevel,
+                                     int  strategy));
+
+     This is another version of deflateInit with more compression options. The
+   fields next_in, zalloc, zfree and opaque must be initialized before by
+   the caller.
+
+     The method parameter is the compression method. It must be Z_DEFLATED in
+   this version of the library.
+
+     The windowBits parameter is the base two logarithm of the window size
+   (the size of the history buffer). It should be in the range 8..15 for this
+   version of the library. Larger values of this parameter result in better
+   compression at the expense of memory usage. The default value is 15 if
+   deflateInit is used instead.
+
+     windowBits can also be -8..-15 for raw deflate. In this case, -windowBits
+   determines the window size. deflate() will then generate raw deflate data
+   with no zlib header or trailer, and will not compute an adler32 check value.
+
+     windowBits can also be greater than 15 for optional gzip encoding. Add
+   16 to windowBits to write a simple gzip header and trailer around the
+   compressed data instead of a zlib wrapper. The gzip header will have no
+   file name, no extra data, no comment, no modification time (set to zero),
+   no header crc, and the operating system will be set to 255 (unknown).  If a
+   gzip stream is being written, strm->adler is a crc32 instead of an adler32.
+
+     The memLevel parameter specifies how much memory should be allocated
+   for the internal compression state. memLevel=1 uses minimum memory but
+   is slow and reduces compression ratio; memLevel=9 uses maximum memory
+   for optimal speed. The default value is 8. See zconf.h for total memory
+   usage as a function of windowBits and memLevel.
+
+     The strategy parameter is used to tune the compression algorithm. Use the
+   value Z_DEFAULT_STRATEGY for normal data, Z_FILTERED for data produced by a
+   filter (or predictor), Z_HUFFMAN_ONLY to force Huffman encoding only (no
+   string match), or Z_RLE to limit match distances to one (run-length
+   encoding). Filtered data consists mostly of small values with a somewhat
+   random distribution. In this case, the compression algorithm is tuned to
+   compress them better. The effect of Z_FILTERED is to force more Huffman
+   coding and less string matching; it is somewhat intermediate between
+   Z_DEFAULT and Z_HUFFMAN_ONLY. Z_RLE is designed to be almost as fast as
+   Z_HUFFMAN_ONLY, but give better compression for PNG image data. The strategy
+   parameter only affects the compression ratio but not the correctness of the
+   compressed output even if it is not set appropriately.  Z_FIXED prevents the
+   use of dynamic Huffman codes, allowing for a simpler decoder for special
+   applications.
+
+      deflateInit2 returns Z_OK if success, Z_MEM_ERROR if there was not enough
+   memory, Z_STREAM_ERROR if a parameter is invalid (such as an invalid
+   method). msg is set to null if there is no error message.  deflateInit2 does
+   not perform any compression: this will be done by deflate().
+*/
+
+ZEXTERN int ZEXPORT deflateSetDictionary OF((z_streamp strm,
+                                             const Bytef *dictionary,
+                                             uInt  dictLength));
+/*
+     Initializes the compression dictionary from the given byte sequence
+   without producing any compressed output. This function must be called
+   immediately after deflateInit, deflateInit2 or deflateReset, before any
+   call of deflate. The compressor and decompressor must use exactly the same
+   dictionary (see inflateSetDictionary).
+
+     The dictionary should consist of strings (byte sequences) that are likely
+   to be encountered later in the data to be compressed, with the most commonly
+   used strings preferably put towards the end of the dictionary. Using a
+   dictionary is most useful when the data to be compressed is short and can be
+   predicted with good accuracy; the data can then be compressed better than
+   with the default empty dictionary.
+
+     Depending on the size of the compression data structures selected by
+   deflateInit or deflateInit2, a part of the dictionary may in effect be
+   discarded, for example if the dictionary is larger than the window size in
+   deflate or deflate2. Thus the strings most likely to be useful should be
+   put at the end of the dictionary, not at the front. In addition, the
+   current implementation of deflate will use at most the window size minus
+   262 bytes of the provided dictionary.
+
+     Upon return of this function, strm->adler is set to the adler32 value
+   of the dictionary; the decompressor may later use this value to determine
+   which dictionary has been used by the compressor. (The adler32 value
+   applies to the whole dictionary even if only a subset of the dictionary is
+   actually used by the compressor.) If a raw deflate was requested, then the
+   adler32 value is not computed and strm->adler is not set.
+
+     deflateSetDictionary returns Z_OK if success, or Z_STREAM_ERROR if a
+   parameter is invalid (such as NULL dictionary) or the stream state is
+   inconsistent (for example if deflate has already been called for this stream
+   or if the compression method is bsort). deflateSetDictionary does not
+   perform any compression: this will be done by deflate().
+*/
+
+ZEXTERN int ZEXPORT deflateCopy OF((z_streamp dest,
+                                    z_streamp source));
+/*
+     Sets the destination stream as a complete copy of the source stream.
+
+     This function can be useful when several compression strategies will be
+   tried, for example when there are several ways of pre-processing the input
+   data with a filter. The streams that will be discarded should then be freed
+   by calling deflateEnd.  Note that deflateCopy duplicates the internal
+   compression state which can be quite large, so this strategy is slow and
+   can consume lots of memory.
+
+     deflateCopy returns Z_OK if success, Z_MEM_ERROR if there was not
+   enough memory, Z_STREAM_ERROR if the source stream state was inconsistent
+   (such as zalloc being NULL). msg is left unchanged in both source and
+   destination.
+*/
+
+ZEXTERN int ZEXPORT deflateReset OF((z_streamp strm));
+/*
+     This function is equivalent to deflateEnd followed by deflateInit,
+   but does not free and reallocate all the internal compression state.
+   The stream will keep the same compression level and any other attributes
+   that may have been set by deflateInit2.
+
+      deflateReset returns Z_OK if success, or Z_STREAM_ERROR if the source
+   stream state was inconsistent (such as zalloc or state being NULL).
+*/
+
+ZEXTERN int ZEXPORT deflateParams OF((z_streamp strm,
+                                      int level,
+                                      int strategy));
+/*
+     Dynamically update the compression level and compression strategy.  The
+   interpretation of level and strategy is as in deflateInit2.  This can be
+   used to switch between compression and straight copy of the input data, or
+   to switch to a different kind of input data requiring a different
+   strategy. If the compression level is changed, the input available so far
+   is compressed with the old level (and may be flushed); the new level will
+   take effect only at the next call of deflate().
+
+     Before the call of deflateParams, the stream state must be set as for
+   a call of deflate(), since the currently available input may have to
+   be compressed and flushed. In particular, strm->avail_out must be non-zero.
+
+     deflateParams returns Z_OK if success, Z_STREAM_ERROR if the source
+   stream state was inconsistent or if a parameter was invalid, Z_BUF_ERROR
+   if strm->avail_out was zero.
+*/
+
+ZEXTERN int ZEXPORT deflateTune OF((z_streamp strm,
+                                    i

@@ -252,4 +252,186 @@ ZEXTERN int ZEXPORT deflate OF((z_streamp strm, int flush));
   - Compress more input starting at next_in and update next_in and avail_in
     accordingly. If not all input can be processed (because there is not
     enough room in the output buffer), next_in and avail_in are updated and
-    p
+    processing will resume at this point for the next call of deflate().
+
+  - Provide more output starting at next_out and update next_out and avail_out
+    accordingly. This action is forced if the parameter flush is non zero.
+    Forcing flush frequently degrades the compression ratio, so this parameter
+    should be set only when necessary (in interactive applications).
+    Some output may be provided even if flush is not set.
+
+  Before the call of deflate(), the application should ensure that at least
+  one of the actions is possible, by providing more input and/or consuming
+  more output, and updating avail_in or avail_out accordingly; avail_out
+  should never be zero before the call. The application can consume the
+  compressed output when it wants, for example when the output buffer is full
+  (avail_out == 0), or after each call of deflate(). If deflate returns Z_OK
+  and with zero avail_out, it must be called again after making room in the
+  output buffer because there might be more output pending.
+
+    Normally the parameter flush is set to Z_NO_FLUSH, which allows deflate to
+  decide how much data to accumualte before producing output, in order to
+  maximize compression.
+
+    If the parameter flush is set to Z_SYNC_FLUSH, all pending output is
+  flushed to the output buffer and the output is aligned on a byte boundary, so
+  that the decompressor can get all input data available so far. (In particular
+  avail_in is zero after the call if enough output space has been provided
+  before the call.)  Flushing may degrade compression for some compression
+  algorithms and so it should be used only when necessary.
+
+    If flush is set to Z_FULL_FLUSH, all output is flushed as with
+  Z_SYNC_FLUSH, and the compression state is reset so that decompression can
+  restart from this point if previous compressed data has been damaged or if
+  random access is desired. Using Z_FULL_FLUSH too often can seriously degrade
+  compression.
+
+    If deflate returns with avail_out == 0, this function must be called again
+  with the same value of the flush parameter and more output space (updated
+  avail_out), until the flush is complete (deflate returns with non-zero
+  avail_out). In the case of a Z_FULL_FLUSH or Z_SYNC_FLUSH, make sure that
+  avail_out is greater than six to avoid repeated flush markers due to
+  avail_out == 0 on return.
+
+    If the parameter flush is set to Z_FINISH, pending input is processed,
+  pending output is flushed and deflate returns with Z_STREAM_END if there
+  was enough output space; if deflate returns with Z_OK, this function must be
+  called again with Z_FINISH and more output space (updated avail_out) but no
+  more input data, until it returns with Z_STREAM_END or an error. After
+  deflate has returned Z_STREAM_END, the only possible operations on the
+  stream are deflateReset or deflateEnd.
+
+    Z_FINISH can be used immediately after deflateInit if all the compression
+  is to be done in a single step. In this case, avail_out must be at least
+  the value returned by deflateBound (see below). If deflate does not return
+  Z_STREAM_END, then it must be called again as described above.
+
+    deflate() sets strm->adler to the adler32 checksum of all input read
+  so far (that is, total_in bytes).
+
+    deflate() may update strm->data_type if it can make a good guess about
+  the input data type (Z_BINARY or Z_TEXT). In doubt, the data is considered
+  binary. This field is only for information purposes and does not affect
+  the compression algorithm in any manner.
+
+    deflate() returns Z_OK if some progress has been made (more input
+  processed or more output produced), Z_STREAM_END if all input has been
+  consumed and all output has been produced (only when flush is set to
+  Z_FINISH), Z_STREAM_ERROR if the stream state was inconsistent (for example
+  if next_in or next_out was NULL), Z_BUF_ERROR if no progress is possible
+  (for example avail_in or avail_out was zero). Note that Z_BUF_ERROR is not
+  fatal, and deflate() can be called again with more input and more output
+  space to continue compressing.
+*/
+
+
+ZEXTERN int ZEXPORT deflateEnd OF((z_streamp strm));
+/*
+     All dynamically allocated data structures for this stream are freed.
+   This function discards any unprocessed input and does not flush any
+   pending output.
+
+     deflateEnd returns Z_OK if success, Z_STREAM_ERROR if the
+   stream state was inconsistent, Z_DATA_ERROR if the stream was freed
+   prematurely (some input or output was discarded). In the error case,
+   msg may be set but then points to a static string (which must not be
+   deallocated).
+*/
+
+
+/*
+ZEXTERN int ZEXPORT inflateInit OF((z_streamp strm));
+
+     Initializes the internal stream state for decompression. The fields
+   next_in, avail_in, zalloc, zfree and opaque must be initialized before by
+   the caller. If next_in is not Z_NULL and avail_in is large enough (the exact
+   value depends on the compression method), inflateInit determines the
+   compression method from the zlib header and allocates all data structures
+   accordingly; otherwise the allocation will be deferred to the first call of
+   inflate.  If zalloc and zfree are set to Z_NULL, inflateInit updates them to
+   use default allocation functions.
+
+     inflateInit returns Z_OK if success, Z_MEM_ERROR if there was not enough
+   memory, Z_VERSION_ERROR if the zlib library version is incompatible with the
+   version assumed by the caller.  msg is set to null if there is no error
+   message. inflateInit does not perform any decompression apart from reading
+   the zlib header if present: this will be done by inflate().  (So next_in and
+   avail_in may be modified, but next_out and avail_out are unchanged.)
+*/
+
+
+ZEXTERN int ZEXPORT inflate OF((z_streamp strm, int flush));
+/*
+    inflate decompresses as much data as possible, and stops when the input
+  buffer becomes empty or the output buffer becomes full. It may introduce
+  some output latency (reading input without producing any output) except when
+  forced to flush.
+
+  The detailed semantics are as follows. inflate performs one or both of the
+  following actions:
+
+  - Decompress more input starting at next_in and update next_in and avail_in
+    accordingly. If not all input can be processed (because there is not
+    enough room in the output buffer), next_in is updated and processing
+    will resume at this point for the next call of inflate().
+
+  - Provide more output starting at next_out and update next_out and avail_out
+    accordingly.  inflate() provides as much output as possible, until there
+    is no more input data or no more space in the output buffer (see below
+    about the flush parameter).
+
+  Before the call of inflate(), the application should ensure that at least
+  one of the actions is possible, by providing more input and/or consuming
+  more output, and updating the next_* and avail_* values accordingly.
+  The application can consume the uncompressed output when it wants, for
+  example when the output buffer is full (avail_out == 0), or after each
+  call of inflate(). If inflate returns Z_OK and with zero avail_out, it
+  must be called again after making room in the output buffer because there
+  might be more output pending.
+
+    The flush parameter of inflate() can be Z_NO_FLUSH, Z_SYNC_FLUSH,
+  Z_FINISH, or Z_BLOCK. Z_SYNC_FLUSH requests that inflate() flush as much
+  output as possible to the output buffer. Z_BLOCK requests that inflate() stop
+  if and when it gets to the next deflate block boundary. When decoding the
+  zlib or gzip format, this will cause inflate() to return immediately after
+  the header and before the first block. When doing a raw inflate, inflate()
+  will go ahead and process the first block, and will return when it gets to
+  the end of that block, or when it runs out of data.
+
+    The Z_BLOCK option assists in appending to or combining deflate streams.
+  Also to assist in this, on return inflate() will set strm->data_type to the
+  number of unused bits in the last byte taken from strm->next_in, plus 64
+  if inflate() is currently decoding the last block in the deflate stream,
+  plus 128 if inflate() returned immediately after decoding an end-of-block
+  code or decoding the complete header up to just before the first byte of the
+  deflate stream. The end-of-block will not be indicated until all of the
+  uncompressed data from that block has been written to strm->next_out.  The
+  number of unused bits may in general be greater than seven, except when
+  bit 7 of data_type is set, in which case the number of unused bits will be
+  less than eight.
+
+    inflate() should normally be called until it returns Z_STREAM_END or an
+  error. However if all decompression is to be performed in a single step
+  (a single call of inflate), the parameter flush should be set to
+  Z_FINISH. In this case all pending input is processed and all pending
+  output is flushed; avail_out must be large enough to hold all the
+  uncompressed data. (The size of the uncompressed data may have been saved
+  by the compressor for this purpose.) The next operation on this stream must
+  be inflateEnd to deallocate the decompression state. The use of Z_FINISH
+  is never required, but can be used to inform inflate that a faster approach
+  may be used for the single inflate() call.
+
+     In this implementation, inflate() always flushes as much output as
+  possible to the output buffer, and always uses the faster approach on the
+  first call. So the only effect of the flush parameter in this implementation
+  is on the return value of inflate(), as noted below, or when it returns early
+  because Z_BLOCK is used.
+
+     If a preset dictionary is needed after this call (see inflateSetDictionary
+  below), inflate sets strm->adler to the adler32 checksum of the dictionary
+  chosen by the compressor and returns Z_NEED_DICT; otherwise it sets
+  strm->adler to the adler32 checksum of all output produced so far (that is,
+  total_out bytes) and returns Z_OK, Z_STREAM_END or an error code as described
+  below. At the end of the stream, inflate() checks that its computed adler32
+  checksum is equal to that saved by the compressor and returns Z_STREAM_END
+  only if the checksum is 

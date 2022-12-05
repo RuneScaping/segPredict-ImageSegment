@@ -1,3 +1,4 @@
+
 //========================================================================
 // This is a sample main function for using the implementation and header
 // files LKM.cpp and LKM.h respectively
@@ -6,13 +7,14 @@
 #include <vector>
 #include <string>
 #include "LKM.h"
-#include "mex.h"
 #ifdef WINDOWS
 #include "BMPhandler.h"
 #else
 #include <cv.h>
 #include <highgui.h>
 #include <fstream>
+#include <ostream>
+#include <sstream>
 //#include "utils.h"
 #endif
 
@@ -147,30 +149,25 @@ void SaveUINTBuffer(
 
 #endif
 
-void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+int main(int argc, char* argv[])
 {
-  if (nrhs < 1 || nrhs > 3)
-    mexErrMsgTxt("Incorrect input format.. find_superpixel(input_file_name,step_size[optional],verbosity[optional]) \n");
-
   char* input_file;
-  int n = mxGetN(prhs[0]);
-  input_file = (char *)mxCalloc(n+1,sizeof(char));
-  mxGetString(prhs[0],input_file,n+1);
-  bool verbosity = false;
-  
-  //const int STEP = 10;//STEP decides superpixel size (which will roughly be STEP^2 pixels)
-  int STEP = 15;
-  if(nrhs > 1)
-    STEP = (int)(mxGetScalar(prhs[1]));
+  if(argc > 1)
+    input_file = argv[1];
+  else
+    {
+      printf("Error : no filename given as input");
+      printf("Usage : %s image_name <number_of_superpixels> <spatial_proximity_weight>\n",argv[0]);
+      return -1;
+    }
 
-  double M = 10;
-  if(nrhs > 2)
-    M = (double)(mxGetScalar(prhs[2]));
+  int K = 100;
+  if(argc > 2)
+    K = atoi(argv[2]);
 
-  if(nrhs > 3)
-    if ((int)(mxGetScalar(prhs[3]))>0)
-      verbosity=true;
-
+  double M = 10.0;
+  if(argc > 3)
+    M = atof(argv[3]);
 
   int numlabels = 10;
   int width(0), height(0);
@@ -186,8 +183,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   LKM lkm;
   lkm.DoSuperpixelSegmentation(ubuff, width, height, labels, numlabels, K, M);
 
-  //DrawContoursAroundSegments(ubuff, labels, width, height, 0xff0000);//0xff0000 draws red contours
-  DrawContoursAroundSegments(ubuff, labels, width, height, 0x0000ff);//0xff0000 draws red contours
+  DrawContoursAroundSegments(ubuff, labels, width, height, 0xff0000);//0xff0000 draws red contours
+  //DrawContoursAroundSegments(ubuff, labels, width, height, 0x0000ff);//0xff0000 draws red contours
 
   bh.SaveUINTBuffer(ubuff, width, height, string("myfile.bmp"), savepath /*, "_optional_suffiex.bmp"*/);
 
@@ -196,21 +193,24 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   IplImage* img = cvLoadImage(input_file);
   if(!img)
     {
-      mexPrintf("Error while opening %s\n", input_file);
-      return;
+      printf("Error while opening %s\n", input_file);
+      return -1;
     }
-
-  if(verbosity==true)
-    mexPrintf("Image loaded %d\n",img->nChannels);
 
   width = img->width;
   height = img->height;
   int sz = height*width;
 
+  int STEP = 10;//STEP decides superpixel size (which will roughly be STEP^2 pixels)
 
-  double K = ((width*height)/(double)(STEP*STEP)+0.5);
+  // HACK AL
+  if(argc > 2)
+    STEP = atoi(argv[2]);
+  // HACK AL
 
-  //printf("Image loaded %d\n",img->nChannels);
+  K = ((width*height)/(double)(STEP*STEP)+0.5);
+
+  printf("Image loaded %d\n",img->nChannels);
 
 
   UINT* ubuff = new UINT[sz];
@@ -237,8 +237,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
           }
         else
           {
-            mexPrintf("Unknown number of channels %d\n", img->nChannels);
-            return;
+            printf("Unknown number of channels %d\n", img->nChannels);
+            return -1;
           }          
         ubuff[idx] = pValue;
         idx++;
@@ -247,28 +247,66 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   sidType* labels = new sidType[sz]; //will contain unique labels for segments.
   LKM lkm;
 
-  if(verbosity==true)
-    mexPrintf("Generating superpixels. STEP=%d, M=%f\n", STEP, M);
-
+  printf("Generating superpixels. STEP=%d, M=%f\n", STEP, M);
   lkm.DoSuperpixelSegmentation(ubuff, width, height, labels, numlabels, STEP, M);
 
-  // Prepare Output
-  double *output_labels;
-  plhs[0] = mxCreateDoubleMatrix(img->width,img->height,mxREAL);
-  output_labels = mxGetPr(plhs[0]);
+  printf("Draw Contours Around Segments\n");
+  DrawContoursAroundSegments(ubuff, labels, width, height, 0xff0000);//0xff0000 draws red contours
+  //DrawContoursAroundSegments(ubuff, labels, width, height,0xaeacac);
 
-  for(int i=0;i<img->height;i++){
-    for(int j=0;j<img->width;j++){
-      output_labels[i*img->width+j]=labels[i*img->width+j];
-    }
-  }
+  //string imageFileName = getNameFromPathWithoutExtension(string(input_file));
+  //imageFileName += "_slic.png";
+  stringstream imageFileName;
+  imageFileName << getNameFromPathWithoutExtension(string(input_file));
+  imageFileName << "_slic_";
+  imageFileName << STEP << "_" << M;
+  imageFileName << ".png";
+
+  printf("Saving image %s\n",imageFileName.str().c_str());
+  SaveImage(ubuff, width, height,
+            imageFileName.str().c_str());
+
+  /*
+  string labelFileName2 = getNameFromPathWithoutExtension(string(input_file));
+  labelFileName2 += "a.dat";
+  printf("Saving output file %s\n",labelFileName2.c_str());
+  SaveUINTBuffer(ubuff, width, height, string("myfile.bmp"),
+                 imageFileName.c_str(),"",labels, labelFileName2);
+  */
+
+  //string labelDir = "labels/";
+  string labelDir = "";
+
+  
+  string labelFileName = getNameFromPathWithoutExtension(string(input_file));
+  labelFileName += ".dat";
+  printf("Saving labels %s%s\n",labelDir.c_str(),labelFileName.c_str());
+  lkm.SaveLabels(labels,
+                 (const int)width, (const int)height,
+                 labelFileName,
+                 labelDir);
+  
+
+  /*
+  string labelFileNameTxt = getNameFromPathWithoutExtension(string(input_file));
+  labelFileNameTxt += ".seg";
+  printf("Saving text labels %s%s\n",labelDir.c_str(),labelFileNameTxt.c_str());
+  lkm.SaveLabels_Text(labels,
+                      (const int)width, (const int)height,
+                      labelFileNameTxt,
+                      labelDir);
+  */
+
+  //string adjFileName = "neighbors/" + labelFileName;
+  //printf("Saving adjacency matrix %s\n",adjFileName.c_str());
+  //lkm.SaveAdjacencyMatrix(labels,numlabels,width, height,adjFileName);
 
   delete[] ubuff;
   delete[] labels;
-  cvReleaseImage(&img);
 
 #endif
 
-  mxFree(input_file);
-  //printf("Done!\n");
+  printf("Done!\n");
+
+  return 0;
 }

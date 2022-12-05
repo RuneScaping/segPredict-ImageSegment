@@ -625,4 +625,197 @@ ZEXTERN int ZEXPORT deflateParams OF((z_streamp strm,
 */
 
 ZEXTERN int ZEXPORT deflateTune OF((z_streamp strm,
-                                    i
+                                    int good_length,
+                                    int max_lazy,
+                                    int nice_length,
+                                    int max_chain));
+/*
+     Fine tune deflate's internal compression parameters.  This should only be
+   used by someone who understands the algorithm used by zlib's deflate for
+   searching for the best matching string, and even then only by the most
+   fanatic optimizer trying to squeeze out the last compressed bit for their
+   specific input data.  Read the deflate.c source code for the meaning of the
+   max_lazy, good_length, nice_length, and max_chain parameters.
+
+     deflateTune() can be called after deflateInit() or deflateInit2(), and
+   returns Z_OK on success, or Z_STREAM_ERROR for an invalid deflate stream.
+ */
+
+ZEXTERN uLong ZEXPORT deflateBound OF((z_streamp strm,
+                                       uLong sourceLen));
+/*
+     deflateBound() returns an upper bound on the compressed size after
+   deflation of sourceLen bytes.  It must be called after deflateInit()
+   or deflateInit2().  This would be used to allocate an output buffer
+   for deflation in a single pass, and so would be called before deflate().
+*/
+
+ZEXTERN int ZEXPORT deflatePrime OF((z_streamp strm,
+                                     int bits,
+                                     int value));
+/*
+     deflatePrime() inserts bits in the deflate output stream.  The intent
+  is that this function is used to start off the deflate output with the
+  bits leftover from a previous deflate stream when appending to it.  As such,
+  this function can only be used for raw deflate, and must be used before the
+  first deflate() call after a deflateInit2() or deflateReset().  bits must be
+  less than or equal to 16, and that many of the least significant bits of
+  value will be inserted in the output.
+
+      deflatePrime returns Z_OK if success, or Z_STREAM_ERROR if the source
+   stream state was inconsistent.
+*/
+
+ZEXTERN int ZEXPORT deflateSetHeader OF((z_streamp strm,
+                                         gz_headerp head));
+/*
+      deflateSetHeader() provides gzip header information for when a gzip
+   stream is requested by deflateInit2().  deflateSetHeader() may be called
+   after deflateInit2() or deflateReset() and before the first call of
+   deflate().  The text, time, os, extra field, name, and comment information
+   in the provided gz_header structure are written to the gzip header (xflag is
+   ignored -- the extra flags are set according to the compression level).  The
+   caller must assure that, if not Z_NULL, name and comment are terminated with
+   a zero byte, and that if extra is not Z_NULL, that extra_len bytes are
+   available there.  If hcrc is true, a gzip header crc is included.  Note that
+   the current versions of the command-line version of gzip (up through version
+   1.3.x) do not support header crc's, and will report that it is a "multi-part
+   gzip file" and give up.
+
+      If deflateSetHeader is not used, the default gzip header has text false,
+   the time set to zero, and os set to 255, with no extra, name, or comment
+   fields.  The gzip header is returned to the default state by deflateReset().
+
+      deflateSetHeader returns Z_OK if success, or Z_STREAM_ERROR if the source
+   stream state was inconsistent.
+*/
+
+/*
+ZEXTERN int ZEXPORT inflateInit2 OF((z_streamp strm,
+                                     int  windowBits));
+
+     This is another version of inflateInit with an extra parameter. The
+   fields next_in, avail_in, zalloc, zfree and opaque must be initialized
+   before by the caller.
+
+     The windowBits parameter is the base two logarithm of the maximum window
+   size (the size of the history buffer).  It should be in the range 8..15 for
+   this version of the library. The default value is 15 if inflateInit is used
+   instead. windowBits must be greater than or equal to the windowBits value
+   provided to deflateInit2() while compressing, or it must be equal to 15 if
+   deflateInit2() was not used. If a compressed stream with a larger window
+   size is given as input, inflate() will return with the error code
+   Z_DATA_ERROR instead of trying to allocate a larger window.
+
+     windowBits can also be -8..-15 for raw inflate. In this case, -windowBits
+   determines the window size. inflate() will then process raw deflate data,
+   not looking for a zlib or gzip header, not generating a check value, and not
+   looking for any check values for comparison at the end of the stream. This
+   is for use with other formats that use the deflate compressed data format
+   such as zip.  Those formats provide their own check values. If a custom
+   format is developed using the raw deflate format for compressed data, it is
+   recommended that a check value such as an adler32 or a crc32 be applied to
+   the uncompressed data as is done in the zlib, gzip, and zip formats.  For
+   most applications, the zlib format should be used as is. Note that comments
+   above on the use in deflateInit2() applies to the magnitude of windowBits.
+
+     windowBits can also be greater than 15 for optional gzip decoding. Add
+   32 to windowBits to enable zlib and gzip decoding with automatic header
+   detection, or add 16 to decode only the gzip format (the zlib format will
+   return a Z_DATA_ERROR).  If a gzip stream is being decoded, strm->adler is
+   a crc32 instead of an adler32.
+
+     inflateInit2 returns Z_OK if success, Z_MEM_ERROR if there was not enough
+   memory, Z_STREAM_ERROR if a parameter is invalid (such as a null strm). msg
+   is set to null if there is no error message.  inflateInit2 does not perform
+   any decompression apart from reading the zlib header if present: this will
+   be done by inflate(). (So next_in and avail_in may be modified, but next_out
+   and avail_out are unchanged.)
+*/
+
+ZEXTERN int ZEXPORT inflateSetDictionary OF((z_streamp strm,
+                                             const Bytef *dictionary,
+                                             uInt  dictLength));
+/*
+     Initializes the decompression dictionary from the given uncompressed byte
+   sequence. This function must be called immediately after a call of inflate,
+   if that call returned Z_NEED_DICT. The dictionary chosen by the compressor
+   can be determined from the adler32 value returned by that call of inflate.
+   The compressor and decompressor must use exactly the same dictionary (see
+   deflateSetDictionary).  For raw inflate, this function can be called
+   immediately after inflateInit2() or inflateReset() and before any call of
+   inflate() to set the dictionary.  The application must insure that the
+   dictionary that was used for compression is provided.
+
+     inflateSetDictionary returns Z_OK if success, Z_STREAM_ERROR if a
+   parameter is invalid (such as NULL dictionary) or the stream state is
+   inconsistent, Z_DATA_ERROR if the given dictionary doesn't match the
+   expected one (incorrect adler32 value). inflateSetDictionary does not
+   perform any decompression: this will be done by subsequent calls of
+   inflate().
+*/
+
+ZEXTERN int ZEXPORT inflateSync OF((z_streamp strm));
+/*
+    Skips invalid compressed data until a full flush point (see above the
+  description of deflate with Z_FULL_FLUSH) can be found, or until all
+  available input is skipped. No output is provided.
+
+    inflateSync returns Z_OK if a full flush point has been found, Z_BUF_ERROR
+  if no more input was provided, Z_DATA_ERROR if no flush point has been found,
+  or Z_STREAM_ERROR if the stream structure was inconsistent. In the success
+  case, the application may save the current current value of total_in which
+  indicates where valid compressed data was found. In the error case, the
+  application may repeatedly call inflateSync, providing more input each time,
+  until success or end of the input data.
+*/
+
+ZEXTERN int ZEXPORT inflateCopy OF((z_streamp dest,
+                                    z_streamp source));
+/*
+     Sets the destination stream as a complete copy of the source stream.
+
+     This function can be useful when randomly accessing a large stream.  The
+   first pass through the stream can periodically record the inflate state,
+   allowing restarting inflate at those points when randomly accessing the
+   stream.
+
+     inflateCopy returns Z_OK if success, Z_MEM_ERROR if there was not
+   enough memory, Z_STREAM_ERROR if the source stream state was inconsistent
+   (such as zalloc being NULL). msg is left unchanged in both source and
+   destination.
+*/
+
+ZEXTERN int ZEXPORT inflateReset OF((z_streamp strm));
+/*
+     This function is equivalent to inflateEnd followed by inflateInit,
+   but does not free and reallocate all the internal decompression state.
+   The stream will keep attributes that may have been set by inflateInit2.
+
+      inflateReset returns Z_OK if success, or Z_STREAM_ERROR if the source
+   stream state was inconsistent (such as zalloc or state being NULL).
+*/
+
+ZEXTERN int ZEXPORT inflatePrime OF((z_streamp strm,
+                                     int bits,
+                                     int value));
+/*
+     This function inserts bits in the inflate input stream.  The intent is
+  that this function is used to start inflating at a bit position in the
+  middle of a byte.  The provided bits will be used before any bytes are used
+  from next_in.  This function should only be used with raw inflate, and
+  should be used before the first inflate() call after inflateInit2() or
+  inflateReset().  bits must be less than or equal to 16, and that many of the
+  least significant bits of value will be inserted in the input.
+
+      inflatePrime returns Z_OK if success, or Z_STREAM_ERROR if the source
+   stream state was inconsistent.
+*/
+
+ZEXTERN int ZEXPORT inflateGetHeader OF((z_streamp strm,
+                                         gz_headerp head));
+/*
+      inflateGetHeader() requests that gzip header information be stored in the
+   provided gz_header structure.  inflateGetHeader() may be called after
+   inflateInit2() or inflateReset(), and before the first call of inflate().
+   As inflate() processes the gzip
